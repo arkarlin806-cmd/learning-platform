@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{csrf_token()}}">
+    @vite(['resources/css/app.css','resources/js/app.js','resources/js/side_bar.js'])
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+
+    <title>Instructor Dashboard</title>
+
+</head>
+
+<body>
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Overlay -->
+        <div id="overlay"
+            class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden">
+        </div>
+
+        @include('sharedata.ins_side')
+
+        <div class="flex-1 min-h-screen overflow-y-auto bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.08),_transparent_24%),radial-gradient(circle_at_top_right,_rgba(236,72,153,0.08),_transparent_24%),linear-gradient(135deg,#f8fbff,#eef5ff_48%,#fdfbff)]">
+
+            <!-- Topbar -->
+            <header class="sticky top-0 z-30 border-b border-white/60 bg-white/75 backdrop-blur-xl shadow-sm">
+                <div class="h-20 px-4 md:px-6 flex items-center justify-between">
+                    <div class="flex items-center gap-4 min-w-0">
+                        <button id="openSidebar"
+                            class="lg:hidden w-11 h-11 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-700 hover:scale-105 transition">
+                            ☰
+                        </button>
+
+                        <div class="min-w-0">
+                            <h1 class="font-bold text-2xl text-slate-800 truncate">
+                                @yield('title')
+                            </h1>
+                            <p class="text-sm text-slate-500 hidden sm:block">
+                                @yield('page')
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-5">
+
+                        <button class="relative">
+
+                            <i class="ri-notification-2-line text-lg"></i>
+
+                            <span
+                                class="absolute -top-2 -right-2
+            bg-red-500 text-white
+            text-[10px]
+            px-1.5 rounded-full">
+
+                                3
+
+                            </span>
+
+                        </button>
+
+                        <div class="relative">
+
+                            <button id="profileBtn"
+                                class="flex items-center gap-3">
+
+                                <img
+                                    src="{{ asset('uploads/group/images (1).jpg') }}"
+                                    class="w-10 h-10 rounded-full">
+
+                            </button>
+
+                            <div id="profileMenu"
+                                class="hidden absolute right-0 mt-3
+            w-52 bg-white rounded-2xl
+            shadow-xl overflow-hidden">
+
+                                <a href="#"
+                                    class="block px-4 py-3 hover:bg-gray-100">
+                                    Profile
+                                </a>
+
+                                <a href="#"
+                                    class="block px-4 py-3 hover:bg-gray-100">
+                                    Settings
+                                </a><a href="#"
+                                    class="block px-4 py-3 hover:bg-red-50 text-red-500">
+                                    Logout
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <div class="bg-gradient-to-r from-sky-100 via-white to-indigo-100 px-4 md:px-12 min-h-screen">
+                @yield('content')
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

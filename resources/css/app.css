@@ -1,0 +1,297 @@
+@import "tailwindcss";
+
+/* Enable Dark Mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+*{
+    font-family: Cambria;
+}
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+body{
+    background: #f8fafc;
+    overflow-x: hidden;
+}
+
+.hero-bg{
+    background:
+    radial-gradient(circle at top left, rgba(99,102,241,.25), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(168,85,247,.25), transparent 30%),
+    linear-gradient(135deg,#0f172a,#111827,#1e1b4b);
+}
+
+.glass{
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.floating{
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%{
+        transform: translateY(0px);
+    }
+    50%{
+        transform: translateY(-15px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+}
+
+.course-card:hover{
+    transform: translateY(-10px) scale(1.02);
+}
+
+.course-card{
+    transition: .4s;
+}
+
+.shine{
+    position: relative;
+    overflow: hidden;
+}
+
+.shine::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,.2);
+    transform: skewX(-20deg);
+    transition: .8s;
+}
+
+.shine:hover::before{
+    left: 120%;
+}
+
+
+
+/* course start */
+.gradient-bg{
+    background: linear-gradient(135deg,#4f46e5,#7c3aed,#06b6d4);
+}
+
+.course-card{
+    transition: all .4s ease;
+}
+
+.course-card:hover{
+    transform: translateY(-10px) scale(1.02);
+}
+
+.glass{
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.7);
+}
+
+/* course end   */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 1s ease;
+}
+
+/* admin nav bar */
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+}
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* body {
+  
+  font-family:Cambria;
+} */
+
+/* Admin card desing */
+.card-animate{
+    animation: fadeUp 0.8s ease forwards;
+    opacity: 0;
+}
+
+.card-animate:nth-child(1){
+    animation-delay: 0.2s;
+}
+
+.card-animate:nth-child(2){
+    animation-delay: 0.5s;
+}
+
+.card-animate:nth-child(3){
+    animation-delay: 0.8s;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform: translateY(60px);
+    }
+    to{
+        opacity:1;
+        transform: translateY(0);
+    }
+}
+
+.glow{
+    position:absolute;
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    filter: blur(70px);
+    opacity:0.5;
+}
+/* Admin card desing */
+
+
+/* Admin user and instructor show desing */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+@keyframes slideUp{
+
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+.animate-fadeIn{
+    animation:fadeIn 1s ease;
+}
+
+.animate-slideUp{
+    animation:slideUp 1s ease;
+}
+
+
+/* admin text color  */
+
+
+@layer utilities {
+
+    .gradient-shine{
+        @apply inline-block text-transparent bg-clip-text;
+        background-image: linear-gradient(
+            90deg,
+            #6366f1 0%,
+            #8b5cf6 20%,
+            #ec4899 40%,
+            #ffffff 50%,
+            #ec4899 60%,
+            #8b5cf6 80%,
+            #6366f1 100%
+        );
+
+        background-size: 300% 100%;
+        animation: text-shine 8s linear infinite;
+    }
+
+    @keyframes text-shine{
+        from{
+            background-position: 300% 0;
+        }
+        to{
+            background-position: -300% 0;
+        }
+    }
+}
+
+/* side bar  */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sidebar-animation {
+    animation: slideIn .5s ease;
+}
+
+.content-animation {
+    animation: fadeIn .8s ease;
+}
+
+/* statics card each animation  */
+@keyframes stat-in {
+
+    from {
+        opacity: 0;
+        transform: translateY(35px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+.animate-stat-in {
+
+    animation: stat-in 0.7s ease-out forwards;
+
+}

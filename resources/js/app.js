@@ -1,5 +1,5 @@
 import './bootstrap';
-
+import '../css/app.css';
         //theme
         document.addEventListener("DOMContentLoaded", () => {
 

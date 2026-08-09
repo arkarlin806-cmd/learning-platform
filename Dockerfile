@@ -43,15 +43,15 @@
 
 # CMD php artisan serve --host=0.0.0.0 --port=8080
 
+
 # =========================
-# Frontend Build
+# Node / Vite Build
 # =========================
 FROM node:20 AS frontend
 
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
@@ -68,26 +68,7 @@ FROM php:8.3-cli
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    libonig-dev \
-    && docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
-    && docker-php-ext-install \
-        pdo_mysql \
-        mbstring \
-        exif \
-        pcntl \
-        bcmath \
-        gd \
-        zip \
-    && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install pdo pdo_mysql
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -98,20 +79,16 @@ COPY --from=frontend /app/public/build /var/www/html/public/build
 
 RUN composer install \
     --no-dev \
-    --no-interaction \
-    --prefer-dist \
-    --optimize-autoloader
-
-RUN mkdir -p \
-    storage/framework/cache \
-    storage/framework/sessions \
-    storage/framework/views \
-    storage/logs \
-    bootstrap/cache
-
-RUN chmod -R 775 storage bootstrap/cache
+    --optimize-autoloader \
+    --no-interaction
 
 RUN php artisan optimize:clear
+
+RUN php artisan config:cache
+
+RUN php artisan view:cache
+
+RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
 

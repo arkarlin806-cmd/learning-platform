@@ -44,4 +44,4 @@ RUN chmod -R 775 storage bootstrap/cache
 
 RUN php artisan optimize:clear
 
-CMD ["sh", "-c", "echo '=== MY CMD STARTED ===' && echo PORT=$PORT && php -S 0.0.0.0:${PORT} -t public"]
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT} -t public"]

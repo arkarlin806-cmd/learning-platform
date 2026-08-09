@@ -45,7 +45,7 @@
 
 
 # =========================
-# Node / Vite Build
+# Frontend Build
 # =========================
 FROM node:20 AS frontend
 
@@ -62,7 +62,7 @@ RUN test -f public/build/manifest.json
 
 
 # =========================
-# Laravel
+# Laravel Application
 # =========================
 FROM php:8.3-cli
 
@@ -74,7 +74,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
-# Copy Vite production files
+# IMPORTANT: Copy Vite build into final image
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
 RUN composer install \

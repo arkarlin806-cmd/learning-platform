@@ -45,56 +45,49 @@
 
 
 # =========================
-# Frontend Build
+# Node / Vite Build
 # =========================
 FROM node:20 AS frontend
 
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
 
 RUN npm run build
 
-# Make sure Vite manifest exists
 RUN test -f public/build/manifest.json
 
 
 # =========================
-# Laravel Application
+# Laravel
 # =========================
 FROM php:8.3-cli
 
 WORKDIR /var/www/html
 
-# PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy Laravel application
 COPY . .
 
-# Copy Vite production build
-COPY --from=frontend /app/public/build ./public/build
+# Copy Vite production files
+COPY --from=frontend /app/public/build /var/www/html/public/build
 
-# Install PHP dependencies
 RUN composer install \
     --no-dev \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --no-interaction
 
-# Laravel cache
 RUN php artisan optimize:clear
 
 RUN php artisan config:cache
 
 RUN php artisan view:cache
 
-# Storage permissions
 RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080

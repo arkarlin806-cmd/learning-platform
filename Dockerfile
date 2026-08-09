@@ -1,12 +1,33 @@
+# =========================
+# Frontend Build
+# =========================
+FROM node:20 AS frontend
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+# Verify Vite manifest
+RUN test -f public/build/manifest.json
+
+
+# =========================
+# Laravel Application
+# =========================
 FROM php:8.3-cli
 
 WORKDIR /var/www/html
 
-# System dependencies
+# PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
-    curl \
     libzip-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -25,19 +46,28 @@ RUN apt-get update && apt-get install -y \
         zip \
     && rm -rf /var/lib/apt/lists/*
 
-# Node.js 20 + npm
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && node -v \
-    && npm -v
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Laravel project
+
+# Copy Laravel project
 COPY . .
 
-# Create Laravel directories
+
+# Install Laravel dependencies
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader
+
+
+# Copy Vite production build
+COPY --from=frontend /app/public/build /var/www/html/public/build
+
+
+# Laravel directories
 RUN mkdir -p \
     storage/framework/cache \
     storage/framework/sessions \
@@ -45,8 +75,18 @@ RUN mkdir -p \
     storage/logs \
     bootstrap/cache
 
+
+# Permissions
 RUN chmod -R 775 storage bootstrap/cache
 
+
+# Clear Laravel cache
+RUN php artisan optimize:clear
+
+
+# Railway port
 EXPOSE 8080
 
-CMD ["sh", "-c", "composer install --no-dev --optimize-autoloader && npm install && npm run build && php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=8080"]
+
+# Start Laravel
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]

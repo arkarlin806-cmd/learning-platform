@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://learning-platform-production-fc82.up.railway.app'),
+    'url' =>  'https://learning-platform-production-fc82.up.railway.app',
 
     'asset_url' => env('ASSET_URL'),
 

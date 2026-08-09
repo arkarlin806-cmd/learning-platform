@@ -23,16 +23,17 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-COPY composer.json composer.lock ./
+# Copy Laravel project FIRST
+COPY . .
 
+# Install Composer dependencies
 RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader
 
-COPY . .
-
+# Laravel directories
 RUN mkdir -p \
     storage/framework/cache \
     storage/framework/sessions \
@@ -44,4 +45,6 @@ RUN chmod -R 775 storage bootstrap/cache
 
 RUN php artisan optimize:clear
 
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT} -t public"]
+EXPOSE 8080
+
+CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT}"]

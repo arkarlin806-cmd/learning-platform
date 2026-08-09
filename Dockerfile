@@ -105,4 +105,4 @@ RUN mkdir -p storage/framework/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # Railway uses its own PORT
-CMD php artisan serve --host=0.0.0.0 --port=${PORT}
+CMD php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=${PORT}

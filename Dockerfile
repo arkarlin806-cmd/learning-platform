@@ -2,9 +2,11 @@ FROM php:8.3-cli
 
 WORKDIR /var/www/html
 
+# System dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
+    curl \
     libzip-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -23,16 +25,19 @@ RUN apt-get update && apt-get install -y \
         zip \
     && rm -rf /var/lib/apt/lists/*
 
+# Node.js 20 + npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && node -v \
+    && npm -v
+
+# Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Laravel project
 COPY . .
 
-RUN composer install \
-    --no-dev \
-    --no-interaction \
-    --prefer-dist \
-    --optimize-autoloader
-
+# Create Laravel directories
 RUN mkdir -p \
     storage/framework/cache \
     storage/framework/sessions \
@@ -42,8 +47,6 @@ RUN mkdir -p \
 
 RUN chmod -R 775 storage bootstrap/cache
 
-RUN php artisan optimize:clear
-
 EXPOSE 8080
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+CMD ["sh", "-c", "composer install --no-dev --optimize-autoloader && npm install && npm run build && php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=8080"]

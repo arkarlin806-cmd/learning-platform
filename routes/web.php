@@ -457,3 +457,12 @@ Route::post(
     '/forgot-password/resend',
     [ForgotPasswordController::class, 'resendOtp']
 )->name('forgot.resendOtp');
+
+
+
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'Laravel is running'
+    ]);
+});

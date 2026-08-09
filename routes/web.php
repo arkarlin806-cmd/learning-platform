@@ -21,7 +21,6 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CertificateFrameController;
 use App\Http\Controllers\CertificateVerificationController;
 use App\Http\Controllers\ForgotPasswordController;
-use Intervention\Image\Colors\Profile;
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');

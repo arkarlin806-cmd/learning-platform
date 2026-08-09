@@ -15,28 +15,28 @@ class HomeController extends Controller
 
     public function index()
     {
-        $categories = Course::select(
-            'category',
-            DB::raw('COUNT(*) as total_courses')
-        )
-            ->whereNotNull('category')
-            ->where('category', '!=', '')
-            ->groupBy('category')
-            ->orderByDesc('total_courses')
-            ->get();
-        $topCourses = Course::select(
-            'courses.*',
-            DB::raw('ROUND(AVG(course_ratings.rating),1) as average_rating'),
-            DB::raw('COUNT(course_ratings.id) as total_ratings')
-        )
-            ->leftJoin('course_ratings', 'courses.id', '=', 'course_ratings.course_id')
-            ->groupBy('courses.id')
-            ->orderByDesc('average_rating')
-            ->orderByDesc('total_ratings')
-            ->take(3)
-            ->get();
-
-        return view('home.index', compact('categories', 'topCourses'));
+        // $categories = Course::select(
+        //     'category',
+        //     DB::raw('COUNT(*) as total_courses')
+        // )
+        //     ->whereNotNull('category')
+        //     ->where('category', '!=', '')
+        //     ->groupBy('category')
+        //     ->orderByDesc('total_courses')
+        //     ->get();
+        // $topCourses = Course::select(
+        //     'courses.*',
+        //     DB::raw('ROUND(AVG(course_ratings.rating),1) as average_rating'),
+        //     DB::raw('COUNT(course_ratings.id) as total_ratings')
+        // )
+        //     ->leftJoin('course_ratings', 'courses.id', '=', 'course_ratings.course_id')
+        //     ->groupBy('courses.id')
+        //     ->orderByDesc('average_rating')
+        //     ->orderByDesc('total_ratings')
+        //     ->take(3)
+        //     ->get();
+        return view('home.index');
+        // return view('home.index', compact('categories', 'topCourses'));
     }
     public function comparison()
     {

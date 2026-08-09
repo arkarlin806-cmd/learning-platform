@@ -60,13 +60,7 @@
 # =========================
 # Stage 1: Build Frontend
 # =========================
-
-
-
-# =========================
-# Stage 1: Build frontend
-# =========================
-FROM node:20 AS frontend
+FROM node:20-alpine AS frontend
 
 WORKDIR /app
 
@@ -74,7 +68,9 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY resources ./resources
+COPY public ./public
+COPY vite.config.js ./
 
 RUN npm run build
 
@@ -119,24 +115,24 @@ WORKDIR /var/www/html
 # Copy Laravel project
 COPY . .
 
-# Copy Vite production build
-COPY --from=frontend /app/public/build ./public/build
-
 # Install Laravel dependencies
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
     --no-interaction
 
+# Copy Vite build
+COPY --from=frontend /app/public/build ./public/build
+
 # Laravel permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
+
 RUN chmod -R 775 storage bootstrap/cache
 
-# Laravel cache
-RUN php artisan config:clear
-RUN php artisan route:clear
-RUN php artisan view:clear
+# Clear Laravel caches
+RUN php artisan optimize:clear
 
 EXPOSE 8080
 
+# Railway
 CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]

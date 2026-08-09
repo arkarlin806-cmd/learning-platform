@@ -1,3 +1,83 @@
+# FROM php:8.3-cli
+
+# # System dependencies
+# RUN apt-get update && apt-get install -y \
+#     git \
+#     unzip \
+#     libzip-dev \
+#     libpng-dev \
+#     libjpeg62-turbo-dev \
+#     libfreetype6-dev \
+#     libonig-dev \
+#     libxml2-dev \
+#     && rm -rf /var/lib/apt/lists/*
+
+# # GD
+# RUN docker-php-ext-configure gd \
+#     --with-freetype \
+#     --with-jpeg
+
+# # PHP extensions
+# RUN docker-php-ext-install \
+#     gd \
+#     pdo_mysql \
+#     mbstring \
+#     exif \
+#     pcntl \
+#     bcmath \
+#     zip
+
+# # Composer
+# COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# WORKDIR /var/www/html
+
+# # Copy Laravel project
+# COPY . .
+
+# # Install Laravel dependencies
+# RUN composer install \
+#     --no-dev \
+#     --optimize-autoloader \
+#     --no-interaction
+
+# # Laravel permissions
+# RUN chown -R www-data:www-data storage bootstrap/cache
+
+# RUN chmod -R 775 storage bootstrap/cache
+
+# # Laravel cache
+# RUN php artisan config:clear
+# RUN php artisan route:clear
+# RUN php artisan view:clear
+
+# EXPOSE 8080
+
+# # Railway PORT
+# CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+
+
+# =========================
+# Stage 1: Build Frontend
+# =========================
+FROM node:20-alpine AS frontend
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY resources ./resources
+COPY public ./public
+COPY vite.config.js ./
+
+RUN npm run build
+
+
+# =========================
+# Stage 2: Laravel
+# =========================
 FROM php:8.3-cli
 
 # System dependencies
@@ -41,17 +121,18 @@ RUN composer install \
     --optimize-autoloader \
     --no-interaction
 
+# Copy Vite build
+COPY --from=frontend /app/public/build ./public/build
+
 # Laravel permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 RUN chmod -R 775 storage bootstrap/cache
 
-# Laravel cache
-RUN php artisan config:clear
-RUN php artisan route:clear
-RUN php artisan view:clear
+# Clear Laravel caches
+RUN php artisan optimize:clear
 
 EXPOSE 8080
 
-# Railway PORT
+# Railway
 CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]

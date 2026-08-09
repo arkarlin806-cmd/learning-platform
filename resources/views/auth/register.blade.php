@@ -9,8 +9,10 @@
     <title>Register</title>
 
     {{-- Tailwind Css --}}
-    @vite(['resources/css/app.css','recource/js/app.js'])
-
+    @vite([
+    'resources/css/app.css',
+    'resources/js/app.js'
+    ])
 </head>
 
 <body class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen flex items-center justify-center p-4">

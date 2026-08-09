@@ -12,8 +12,10 @@
 
     <title>Login</title>
 
-    @vite('resources/css/app.css')
-
+    @vite([
+    'resources/css/app.css',
+    'resources/js/app.js'
+    ])
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center p-4">

@@ -8,7 +8,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css', 
                 'resources/js/app.js',
-                // 'resources/js/video-call/app.js',
+                'resources/js/side_bar.js',
             ],
             refresh: true,
         }),

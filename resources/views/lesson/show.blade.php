@@ -891,8 +891,7 @@ ${point.innerText}
     const video = document.getElementById("lessonVideo");
 
     const userId = "{{ auth()->id() }}";
-    const courseId = "{{ $lesson->course_id }}";
-    const lessonId = "{{ $lesson->id }}";
+
 
     const STORAGE_KEY = "lesson_video_progress";
 

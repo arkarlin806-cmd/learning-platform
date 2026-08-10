@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
-@source "../views";
-@source "../js";
-@custom-variant dark (&:where(.dark, .dark *));
+@source "../views/**/*.blade.php";
+@source "../js/**/*.js";
 
+@custom-variant dark (&:where(.dark, .dark *));
 *{
     font-family: Cambria;
 }

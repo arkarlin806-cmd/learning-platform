@@ -11,10 +11,7 @@
         content="width=device-width, initial-scale=1.0">
 
     <title>Login</title>
-    @vite([
-    'resources/css/app.css',
-    'resources/js/app.js'
-    ])
+    @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center p-4">
@@ -195,7 +192,9 @@
         </div>
 
     </div>
-
+    <div class="flex bg-red-500 rounded-xl p-10 text-white">
+        Tailwind Test
+    </div>
 
 </body>
 

@@ -192,9 +192,7 @@
         </div>
 
     </div>
-    <div class="flex bg-red-500 rounded-xl p-10 text-white">
-        Tailwind Test
-    </div>
+
 
 </body>
 

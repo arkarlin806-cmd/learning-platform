@@ -276,7 +276,12 @@ class LessonController extends Controller
             'description' => 'nullable|string|max:300',
             'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:512000',
         ]);
+        $course = Course::findOrFail($request->course_id);
 
+
+        if ($course->instructor_id != auth()->id()) {
+            abort(403);
+        }
         DB::beginTransaction();
 
         try {

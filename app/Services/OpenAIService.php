@@ -132,6 +132,11 @@ class OpenAIService
             @unlink($chunk);
         }
 
+        if (file_exists($audio)) {
+            unlink($audio);
+        }
+
+
         return trim($text);
     }
 

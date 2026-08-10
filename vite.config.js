@@ -11,8 +11,11 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+
     build: {
         manifest: true,
+        outDir: 'public/build',
+        emptyOutDir: true,
     },
 });
 // import { defineConfig } from 'vite';

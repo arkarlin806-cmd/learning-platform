@@ -162,7 +162,6 @@ RUN mkdir -p \
 
 RUN chmod -R 775 storage bootstrap/cache
 
-RUN php artisan optimize:clear
 
 EXPOSE 8080
 

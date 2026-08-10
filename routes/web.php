@@ -460,9 +460,11 @@ Route::post(
 
 
 
-Route::get('/health', function () {
-    return response()->json([
-        'status' => 'ok',
-        'message' => 'Laravel is running'
-    ]);
+Route::get('/debug-scheme', function () {
+    return [
+        'scheme' => request()->getScheme(),
+        'secure' => request()->secure(),
+        'forwarded_proto' => request()->header('x-forwarded-proto'),
+        'headers' => request()->headers->all(),
+    ];
 });

@@ -886,6 +886,7 @@ ${point.innerText}
         }, 200);
     }
 </script>
+@if(!empty($lessons))
 <script>
     const video = document.getElementById("lessonVideo");
 
@@ -987,4 +988,5 @@ ${point.innerText}
 
     });
 </script>
+@endif
 @endsection

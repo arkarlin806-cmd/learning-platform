@@ -991,7 +991,7 @@ font-bold">
                             .then(() => {
 
 
-                                window.location.href = "/learning_platform/public/login";
+                                window.location.href = "/login";
 
 
                             });

@@ -619,32 +619,7 @@
 
             </nav>
 
-            <!-- Profile -->
-            <div
-                class="absolute bottom-0 left-0 right-0
-                        p-4 border-t bg-white">
 
-                <div class="flex items-center gap-3">
-
-                    <img
-                        src="#"
-                        class="w-12 h-12 rounded-full">
-
-                    <div class="menu-text">
-
-                        <h4 class="font-semibold">
-                            Instructor
-                        </h4>
-
-                        <p class="text-xs text-gray-500">
-                            Premium Tutor
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
 
         </aside>
 

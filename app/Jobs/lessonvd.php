@@ -26,8 +26,8 @@ class lessonvd implements ShouldQueue
 
     public function handle(OpenAIService $aiService): void
     {
-        $lesson = Lesson::findOrFail($this->lessonId);
 
+        $lesson = Lesson::findOrFail($this->lessonId);
         try {
 
             $lesson->update([

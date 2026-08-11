@@ -14,15 +14,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('quiz:expire')->everyMinute();
 
-        // $schedule
-
-        //     ->command('course_schedule:reminder')
-
-        //     ->everyMinute()
-
-        //     ->withoutOverlapping()
-
-        //     ->runInBackground();
         $schedule
             ->command('course_schedule:reminder')
             ->everyMinute()

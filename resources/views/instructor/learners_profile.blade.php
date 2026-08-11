@@ -1345,7 +1345,7 @@ $performanceColor = "red";
     </div>
 </div>
 
-<div class="grid lg:grid-cols-2 gap-8 mt-8 max-w-6xl mx-auto md:w-100">
+<div class="grid lg:grid-cols-2 gap-8 mt-8 max-w-6xl mx-auto">
 
     <!-- Engagement Doughnut  -->
     <div class="bg-white rounded-3xl shadow-xl p-8">

@@ -160,7 +160,7 @@
                             class="absolute top-24 w-full text-center text-4xl font-bold "
                             style="color:{{ $certificateFrame->primary_color }} ">
 
-                            {{ $certificateFrame->text_color }}
+
                             Certificate Of Completion
                         </h1>
 

@@ -207,7 +207,7 @@
                     <!-- LOGO -->
                     <img
                         id="logoPreview"
-                        class="absolute top-14 left-14 w-18 z-30 hidden ">
+                        class="absolute top-15 left-15 w-18 z-30 hidden ">
 
 
                     <!-- SEAL -->
@@ -232,13 +232,13 @@
 
                     <div
                         id="qrPreview"
-                        class="absolute bottom-14 right-14 w-16 h-16 border-2 border-dashed z-40 flex items-center justify-center text-xs ">
+                        class="absolute bottom-15 right-15 w-15 h-15 border-2 border-dashed z-40 flex items-center justify-center text-xs ">
                         QR
                     </div>
 
                     <div
                         id="certificateIdPreview"
-                        class="absolute bottom-13 left-12 text-xs z-40 ">
+                        class="absolute bottom-15 left-15 text-xs z-40 ">
                         CERT-2026-XXXX
                     </div>
 

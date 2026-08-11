@@ -1,17 +1,20 @@
 <?php
-
 // namespace App\Console\Commands;
 
-// use App\Jobs\SendCourseScheduleReminderJob;
 // use App\Models\CourseSchedule;
+// use App\Models\CourseScheduleReminder;
+// use App\Jobs\SendCourseScheduleReminderJob;
 // use Carbon\Carbon;
 // use Illuminate\Console\Command;
 
 // class CourseScheduleReminderCommand extends Command
 // {
+
 //     protected $signature = 'course_schedule:reminder';
 
-//     protected $description = 'Send course reminder before 3 minutes';
+
+//     protected $description = 'Send course schedule reminder emails';
+
 
 //     public function handle()
 //     {
@@ -19,11 +22,11 @@
 //         $now = Carbon::now();
 
 
-//         // Today name
+//         // Today name (Sunday, Monday...)
 //         $today = $now->format('l');
 
 
-//         // 3 minutes window
+//         // 3 minutes before range
 //         $from = $now->copy()
 //             ->addMinutes(3)
 //             ->startOfMinute()
@@ -36,6 +39,7 @@
 //             ->format('H:i:s');
 
 
+
 //         $schedules = CourseSchedule::where('day', $today)
 
 //             ->whereBetween(
@@ -46,23 +50,44 @@
 //                 ]
 //             )
 
-//             ->where(
-//                 'reminder_sent',
-//                 false
+//             ->get();
+
+
+
+//         foreach ($schedules as $schedule) {
+
+
+//             // Check already sent today
+//             $exists = CourseScheduleReminder::where(
+//                 'course_schedule_id',
+//                 $schedule->id
 //             )
 
-//             ->pluck('id');
+//                 ->where(
+//                     'sent_date',
+//                     today()
+//                 )
+
+//                 ->exists();
 
 
-//         foreach ($schedules as $id) {
 
-//             SendCourseScheduleReminderJob::dispatch($id);
+//             if ($exists) {
+//                 continue;
+//             }
+
+
+
+//             SendCourseScheduleReminderJob::dispatch(
+//                 $schedule->id
+//             );
 //         }
+
 
 
 //         $this->info(
 //             $schedules->count()
-//                 . ' reminder jobs dispatched.'
+//                 . ' schedules checked.'
 //         );
 //     }
 // }
@@ -77,85 +102,69 @@ use Illuminate\Console\Command;
 
 class CourseScheduleReminderCommand extends Command
 {
-
     protected $signature = 'course_schedule:reminder';
-
 
     protected $description = 'Send course schedule reminder emails';
 
-
-    public function handle()
+    public function handle(): int
     {
-
         $now = Carbon::now();
 
-
-        // Today name (Sunday, Monday...)
+        // Today: Sunday, Monday, Tuesday...
         $today = $now->format('l');
 
+        /*
+         * Check schedules starting within the next 3 minutes.
+         *
+         * Example:
+         * Current time = 17:27
+         * We check 17:30:00 - 17:30:59
+         */
+        $target = $now->copy()->addMinutes(3);
 
-        // 3 minutes before range
-        $from = $now->copy()
-            ->addMinutes(3)
+        $from = $target->copy()
             ->startOfMinute()
             ->format('H:i:s');
 
-
-        $to = $now->copy()
-            ->addMinutes(3)
+        $to = $target->copy()
             ->endOfMinute()
             ->format('H:i:s');
 
-
-
         $schedules = CourseSchedule::where('day', $today)
-
-            ->whereBetween(
-                'start_time',
-                [
-                    $from,
-                    $to
-                ]
-            )
-
+            ->whereBetween('start_time', [$from, $to])
             ->get();
 
-
+        $dispatched = 0;
+        $skipped = 0;
 
         foreach ($schedules as $schedule) {
 
-
-            // Check already sent today
+            // Prevent duplicate reminder on the same day
             $exists = CourseScheduleReminder::where(
                 'course_schedule_id',
                 $schedule->id
             )
-
-                ->where(
-                    'sent_date',
-                    today()
-                )
-
+                ->whereDate('sent_date', today())
                 ->exists();
 
-
-
             if ($exists) {
+                $skipped++;
                 continue;
             }
-
-
 
             SendCourseScheduleReminderJob::dispatch(
                 $schedule->id
             );
+
+            $dispatched++;
         }
 
-
-
         $this->info(
-            $schedules->count()
-                . ' schedules checked.'
+            "Found: {$schedules->count()} | " .
+                "Dispatched: {$dispatched} | " .
+                "Skipped: {$skipped}"
         );
+
+        return self::SUCCESS;
     }
 }

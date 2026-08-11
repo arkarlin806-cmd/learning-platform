@@ -8,7 +8,8 @@ use App\Mail\ForgotPasswordOtpMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ForgotPasswordController extends Controller
 {
@@ -66,13 +67,17 @@ class ForgotPasswordController extends Controller
 
 
 
-        Mail::to($user->email)
-            ->send(
-                new ForgotPasswordOtpMail($otp)
-            );
+        // Mail::to($user->email)
+        //     ->send(
+        //         new ForgotPasswordOtpMail($otp)
+        //     );
 
 
-
+        if (!$this->sendOtpEmail($user->email, $otp)) {
+            return response()->json([
+                'message' => 'Unable to send OTP email.',
+            ], 500);
+        }
         return response()->json([
 
             'message' => 'OTP sent to your Gmail.',
@@ -83,7 +88,55 @@ class ForgotPasswordController extends Controller
     }
 
 
+    private function sendOtpEmail(string $email, int $otp): bool
+    {
+        try {
 
+            $response = Http::timeout(30)
+                ->withHeaders([
+                    'api-key' => config('services.brevo.key'),
+                    'accept' => 'application/json',
+                    'content-type' => 'application/json',
+                ])
+                ->post('https://api.brevo.com/v3/smtp/email', [
+                    'sender' => [
+                        'name' => config('mail.from.name'),
+                        'email' => config('mail.from.address'),
+                    ],
+
+                    'to' => [
+                        [
+                            'email' => $email,
+                        ],
+                    ],
+
+                    'subject' => 'Password Change Verification',
+
+                    'htmlContent' => view('auth.emails', [
+                        'otp' => $otp,
+                    ])->render(),
+                ]);
+
+            if ($response->failed()) {
+
+                Log::error('Brevo email failed', [
+                    'status' => $response->status(),
+                    'response' => $response->json(),
+                ]);
+
+                return false;
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+
+            Log::error('Brevo email exception', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
 
 
 
@@ -255,14 +308,20 @@ class ForgotPasswordController extends Controller
 
 
 
-        Mail::to(
-            session('forgot_email')
-        )
-            ->send(
-                new ForgotPasswordOtpMail($otp)
-            );
-
-
+        // Mail::to(
+        //     session('forgot_email')
+        // )
+        //     ->send(
+        //         new ForgotPasswordOtpMail($otp)
+        //     );
+        if (!$this->sendOtpEmail(
+            session('forgot_email'),
+            $otp
+        )) {
+            return response()->json([
+                'message' => 'Unable to send OTP email.',
+            ], 500);
+        }
 
 
 

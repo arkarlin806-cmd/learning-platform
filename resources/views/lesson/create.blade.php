@@ -1,15 +1,14 @@
 @extends('layout.course_ins')
-@section("title","Lesson Create")
-@section("page","Instructor Lesson Create And Add Summaries with AI.")
+@section("title","CREATE LESSON")
 
 @section('content')
 
-<meta name="csrf-token" content="{{csrf_token()}}">
 
 <div class="max-w-6xl mx-auto px-4">
+
     <!-- HEADER -->
     <div class="mb-8">
-        <h1 class="gradient-shine text-3xl font-extrabold">
+        <h1 class="gradient-shine text-4xl font-extrabold">
             All lessons ( {{ $course->title }} )
         </h1>
         <p class="text-slate-500 mt-2">
@@ -21,6 +20,7 @@
 
         <!-- FORM -->
         <div class="lg:col-span-2">
+
             <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
 
                 <!-- HEADER BAR -->
@@ -30,34 +30,43 @@
                 </div>
 
                 <form id="lessonForm" class="p-6 space-y-6">
+
                     @csrf
+
                     <input type="hidden" id="course_id" name="course_id" value="{{ $course->id }}">
 
+                    <!-- TITLE -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Title</label>
-                        <input type="text" name="title" id="title" required
+                        <input type="text" name="title" id="title"
                             class="w-full mt-2 px-4 py-3 rounded-2xl border focus:ring-4 focus:ring-indigo-100 outline-none"
                             placeholder="Enter lesson title">
                         <p class="text-red-500 text-sm mt-1 hidden" id="error_title"></p>
                     </div>
 
+                    <!-- DESCRIPTION -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Description</label>
-                        <textarea name="description" id="description" rows="4" required
+                        <textarea name="description" id="description" rows="4"
                             class="w-full mt-2 px-4 py-3 rounded-2xl border focus:ring-4 focus:ring-indigo-100 outline-none"
                             placeholder="Optional description"></textarea>
                     </div>
 
+                    <!-- FILE -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Upload File</label>
-                        <input type="file" name="file" id="file" required
+
+                        <input type="file" name="file" id="file"
                             class="w-full mt-2 px-4 py-3 border rounded-2xl bg-white">
+
                         <p class="text-xs text-slate-400 mt-1">
                             PDF / MP4 supported (AI will process automatically)
                         </p>
+
                         <p class="text-red-500 text-sm mt-1 hidden" id="error_file"></p>
                     </div>
 
+                    <!-- BUTTONS -->
                     <div class="flex gap-4">
                         <button type="submit"
                             id="submitBtn"
@@ -100,6 +109,8 @@
     </div>
 </div>
 
+<!-- SWEETALERT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -194,43 +205,6 @@
         // =========================
         // FORM SUBMIT (FETCH API)
         // =========================
-        // form.addEventListener('submit', async function(e) {
-        //     e.preventDefault();
-
-        //     submitBtn.disabled = true;
-        //     submitBtn.innerText = "Processing...";
-
-        //     const formData = new FormData(form);
-
-        //     try {
-        //         const res = await fetch("{{ route('lesson.store') }}", {
-        //             method: "POST",
-        //             headers: {
-        //                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
-        //             },
-        //             body: formData
-        //         });
-        //         const data = await res.json();
-
-        //         if (!res.ok) throw data;
-
-        //         showProgress();
-        //         updateProgress(10, 'start');
-
-        //         pollStatus(data.lesson_id);
-
-        //     } catch (err) {
-
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Error',
-        //             text: err.message || 'Something went wrong'
-        //         });
-
-        //         submitBtn.disabled = false;
-        //         submitBtn.innerText = "Create Lesson";
-        //     }
-        // });
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -268,7 +242,6 @@
                 submitBtn.innerText = "Create Lesson";
             }
         });
-
 
     });
 </script>

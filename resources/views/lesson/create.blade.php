@@ -29,8 +29,12 @@
                     <p class="text-white/70 text-sm">AI processing enabled</p>
                 </div>
 
-                <form id="lessonForm" class="p-6 space-y-6">
-
+                <form
+                    id="lessonForm"
+                    method="POST"
+                    action="{{ route('lesson.store') }}"
+                    enctype="multipart/form-data"
+                    class="p-6 space-y-6">
                     @csrf
 
                     <input type="hidden" id="course_id" name="course_id" value="{{ $course->id }}">
@@ -205,6 +209,71 @@
         // =========================
         // FORM SUBMIT (FETCH API)
         // =========================
+        // form.addEventListener('submit', async function(e) {
+        //     e.preventDefault();
+
+        //     submitBtn.disabled = true;
+        //     submitBtn.innerText = "Processing...";
+
+        //     const formData = new FormData(form);
+
+        //     try {
+        //         const res = await fetch("{{ route('lesson.store') }}", {
+        //             method: "POST",
+        //             headers: {
+        //                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
+        //             },
+        //             body: formData
+        //         });
+        //         const data = await res.json();
+
+        //         if (!res.ok) throw data;
+
+        //         showProgress();
+        //         updateProgress(10, 'start');
+
+        //         pollStatus(data.lesson_id);
+
+        //     } catch (err) {
+
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Error',
+        //             text: err.message || 'Something went wrong'
+        //         });
+
+        //         submitBtn.disabled = false;
+        //         submitBtn.innerText = "Create Lesson";
+        //     }
+
+        //     // const res = await fetch("{{ route('lesson.store') }}", {
+        //     //     method: "POST",
+        //     //     headers: {
+        //     //         "X-CSRF-TOKEN": "{{ csrf_token() }}",
+        //     //         "Accept": "application/json"
+        //     //     },
+        //     //     body: formData
+        //     // });
+
+        //     // const raw = await res.text();
+
+        //     // console.log("HTTP STATUS:", res.status);
+        //     // console.log("SERVER RESPONSE:", raw);
+
+        //     // let data;
+
+        //     // try {
+        //     //     data = JSON.parse(raw);
+        //     // } catch (e) {
+        //     //     throw new Error(
+        //     //         `Server returned HTTP ${res.status}. Check Console for full response.`
+        //     //     );
+        //     // }
+
+        //     // if (!res.ok) {
+        //     //     throw new Error(data.message || "Lesson creation failed");
+        //     // }
+        // });
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -213,37 +282,64 @@
 
             const formData = new FormData(form);
 
+            const storeUrl = `@json(route('lesson.store'))`;
 
-
-            const res = await fetch("{{ route('lesson.store') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    "Accept": "application/json"
-                },
-                body: formData
-            });
-
-            const raw = await res.text();
-
-            console.log("HTTP STATUS:", res.status);
-            console.log("SERVER RESPONSE:", raw);
-
-            let data;
+            console.log("POST URL:", storeUrl);
 
             try {
-                data = JSON.parse(raw);
-            } catch (e) {
-                throw new Error(
-                    `Server returned HTTP ${res.status}. Check Console for full response.`
-                );
-            }
+                const res = await fetch(storeUrl, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content,
+                        "Accept": "application/json"
+                    },
+                    body: formData
+                });
 
-            if (!res.ok) {
-                throw new Error(data.message || "Lesson creation failed");
+                const raw = await res.text();
+
+                console.log("HTTP STATUS:", res.status);
+                console.log("SERVER RESPONSE:", raw);
+
+                let data;
+
+                try {
+                    data = JSON.parse(raw);
+                } catch (e) {
+                    throw new Error(
+                        `Server returned HTTP ${res.status}. Check Console.`
+                    );
+                }
+
+                if (!res.ok) {
+                    throw new Error(
+                        data.message || "Lesson creation failed"
+                    );
+                }
+
+                console.log("LESSON CREATED:", data);
+
+                showProgress();
+                updateProgress(10, "start");
+
+                pollStatus(data.lesson_id);
+
+            } catch (err) {
+
+                console.error("LESSON CREATE ERROR:", err);
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: err.message || "Something went wrong"
+                });
+
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Create Lesson";
             }
         });
-
     });
 </script>
 

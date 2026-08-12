@@ -213,34 +213,63 @@
 
             const formData = new FormData(form);
 
+
+
+            const res = await fetch("{{ route('lesson.store') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Accept": "application/json"
+                },
+                body: formData
+            });
+
+            const raw = await res.text();
+
+            console.log("HTTP STATUS:", res.status);
+            console.log("SERVER RESPONSE:", raw);
+
+            let data;
+
             try {
-                const res = await fetch("{{ route('lesson.store') }}", {
-                    method: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    body: formData
-                });
-                const data = await res.json();
-
-                if (!res.ok) throw data;
-
-                showProgress();
-                updateProgress(10, 'start');
-
-                pollStatus(data.lesson_id);
-
-            } catch (err) {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: err.message || 'Something went wrong'
-                });
-
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Create Lesson";
+                data = JSON.parse(raw);
+            } catch (e) {
+                throw new Error(
+                    `Server returned HTTP ${res.status}. Check Console for full response.`
+                );
             }
+
+            if (!res.ok) {
+                throw new Error(data.message || "Lesson creation failed");
+            }
+            // try {
+            //     const res = await fetch("{{ route('lesson.store') }}", {
+            //         method: "POST",
+            //         headers: {
+            //             'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            //         },
+            //         body: formData
+            //     });
+            //     const data = await res.json();
+
+            //     if (!res.ok) throw data;
+
+            //     showProgress();
+            //     updateProgress(10, 'start');
+
+            //     pollStatus(data.lesson_id);
+
+            // } catch (err) {
+
+            //     Swal.fire({
+            //         icon: 'error',
+            //         title: 'Error',
+            //         text: err.message || 'Something went wrong'
+            //     });
+
+            //     submitBtn.disabled = false;
+            //     submitBtn.innerText = "Create Lesson";
+            // }
         });
 
     });

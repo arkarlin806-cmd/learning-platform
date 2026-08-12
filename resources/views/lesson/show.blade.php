@@ -183,17 +183,19 @@
             <!-- MEDIA -->
             <div class="mt-3">
                 @if($lesson->lesson_type == 'video')
-                <video controls id="lessonVideo" preload="metadata"
+                <video
+                    controls
+                    preload="metadata"
                     class="lesson-video w-full h-40"
                     data-course="{{ $lesson->course_id }}"
                     data-lesson="{{ $lesson->id }}">
-                    <source src="{{ asset('storage/'.$lesson->file_path) }}">
+                    <source src="{{ asset('storage/'.$lesson->file_path) }}" type="video/mp4">
+                    Your browser does not support the video tag.
                 </video>
-
                 @else
                 <div class="h-40 rounded-2xl w-full
-                                    bg-gradient-to-br from-indigo-50 to-sky-100
-                                    flex items-center justify-center text-5xl">
+                    bg-gradient-to-br from-indigo-50 to-sky-100
+                    flex items-center justify-center text-5xl">
                     📄
                 </div>
                 @endif
@@ -886,106 +888,311 @@ ${point.innerText}
         }, 200);
     }
 </script>
-@if(!empty($lessons))
+
+
+
+@if($lessons->count() > 0)
+
 <script>
-    const video = document.getElementById("lessonVideo");
+    document.addEventListener("DOMContentLoaded", function() {
 
-    const userId = "{{ auth()->id() }}";
+        const STORAGE_KEY = "lesson_video_progress";
 
+        const userId = "{{ auth()->id() }}";
 
-    const STORAGE_KEY = "lesson_video_progress";
+        const videos = document.querySelectorAll(".lesson-video");
 
-    function getData() {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    }
+        console.log("Videos found:", videos.length);
+        console.log("User ID:", userId);
 
-    function saveData(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }
-
-    const videos = document.querySelectorAll('.lesson-video');
-
-    videos.forEach(video => {
-
-        const courseId = video.dataset.course;
-        const lessonId = video.dataset.lesson;
-
-        function saveProgress() {
-
-            let data = getData();
-
-            data[userId] ??= {};
-            data[userId][courseId] ??= {};
-            data[userId][courseId][lessonId] = {
-                currentTime: video.currentTime,
-                duration: video.duration,
-                updatedAt: Date.now()
-            };
-
-            saveData(data);
+        if (!videos.length) {
+            console.log("No lesson videos found.");
+            return;
         }
 
-        function restoreProgress() {
-
-            let data = getData();
-
-            if (
-                data[userId] &&
-                data[userId][courseId] &&
-                data[userId][courseId][lessonId]
-            ) {
-                video.currentTime =
-                    data[userId][courseId][lessonId].currentTime;
+        function getData() {
+            try {
+                return JSON.parse(
+                    localStorage.getItem(STORAGE_KEY) || "{}"
+                );
+            } catch (error) {
+                console.error("localStorage read error:", error);
+                return {};
             }
         }
 
-        video.addEventListener("loadedmetadata", restoreProgress);
-
-        let lastSave = 0;
-
-        video.addEventListener("timeupdate", () => {
-
-            if (video.currentTime - lastSave >= 5) {
-                lastSave = video.currentTime;
-                saveProgress();
+        function saveData(data) {
+            try {
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(data)
+                );
+            } catch (error) {
+                console.error("localStorage save error:", error);
             }
+        }
 
-        });
 
-        window.addEventListener("beforeunload", saveProgress);
+        videos.forEach(function(video) {
 
-        document.addEventListener("visibilitychange", () => {
-            if (document.hidden) {
-                saveProgress();
-            }
-        });
+            const courseId = String(video.dataset.course);
+            const lessonId = String(video.dataset.lesson);
 
-        video.addEventListener("pause", saveProgress);
+            console.log(
+                "Initializing lesson:",
+                lessonId,
+                "course:",
+                courseId
+            );
 
-        video.addEventListener("ended", () => {
 
-            let data = getData();
+            // ==========================
+            // RESTORE PROGRESS
+            // ==========================
 
-            if (
-                data[userId] &&
-                data[userId][courseId]
-            ) {
-                delete data[userId][courseId][lessonId];
+            function restoreProgress() {
 
-                if (Object.keys(data[userId][courseId]).length === 0) {
-                    delete data[userId][courseId];
+                const data = getData();
+
+                const progress =
+                    data[userId]?.[courseId]?.[lessonId];
+
+                if (!progress) {
+                    console.log(
+                        "No saved progress for lesson:",
+                        lessonId
+                    );
+                    return;
                 }
 
-                if (Object.keys(data[userId]).length === 0) {
-                    delete data[userId];
+                if (
+                    typeof progress.currentTime !== "number" ||
+                    progress.currentTime <= 0
+                ) {
+                    return;
                 }
+
+                if (!video.duration || !isFinite(video.duration)) {
+                    return;
+                }
+
+                // Don't restore if already almost finished
+                if (
+                    progress.currentTime >=
+                    video.duration - 2
+                ) {
+                    return;
+                }
+
+                video.currentTime = Math.min(
+                    progress.currentTime,
+                    video.duration - 1
+                );
+
+                console.log(
+                    "Progress restored:",
+                    lessonId,
+                    progress.currentTime
+                );
             }
 
-            saveData(data);
+
+            // ==========================
+            // SAVE PROGRESS
+            // ==========================
+
+            function saveProgress() {
+
+                if (
+                    !video.duration ||
+                    !isFinite(video.duration) ||
+                    video.currentTime <= 0
+                ) {
+                    return;
+                }
+
+                let data = getData();
+
+                if (!data[userId]) {
+                    data[userId] = {};
+                }
+
+                if (!data[userId][courseId]) {
+                    data[userId][courseId] = {};
+                }
+
+                data[userId][courseId][lessonId] = {
+
+                    currentTime: Number(
+                        video.currentTime.toFixed(2)
+                    ),
+
+                    duration: Number(
+                        video.duration.toFixed(2)
+                    ),
+
+                    percentage: Number(
+                        (
+                            (video.currentTime /
+                                video.duration) * 100
+                        ).toFixed(2)
+                    ),
+
+                    updatedAt: Date.now()
+                };
+
+                saveData(data);
+
+                console.log(
+                    "Progress saved:",
+                    lessonId,
+                    video.currentTime
+                );
+            }
+
+
+            // ==========================
+            // RESTORE AFTER METADATA
+            // ==========================
+
+            video.addEventListener(
+                "loadedmetadata",
+                function() {
+
+                    restoreProgress();
+
+                }
+            );
+
+
+            // ==========================
+            // SAVE EVERY 5 SECONDS
+            // ==========================
+
+            let lastSavedTime = 0;
+
+            video.addEventListener(
+                "timeupdate",
+                function() {
+
+                    if (
+                        video.currentTime -
+                        lastSavedTime >= 5
+                    ) {
+
+                        lastSavedTime =
+                            video.currentTime;
+
+                        saveProgress();
+                    }
+
+                }
+            );
+
+
+            // ==========================
+            // SAVE WHEN PAUSED
+            // ==========================
+
+            video.addEventListener(
+                "pause",
+                function() {
+
+                    saveProgress();
+
+                }
+            );
+
+
+            // ==========================
+            // SAVE WHEN TAB HIDDEN
+            // ==========================
+
+            document.addEventListener(
+                "visibilitychange",
+                function() {
+
+                    if (document.hidden) {
+                        saveProgress();
+                    }
+
+                }
+            );
+
+
+            // ==========================
+            // SAVE BEFORE PAGE CLOSE
+            // ==========================
+
+            window.addEventListener(
+                "pagehide",
+                function() {
+
+                    saveProgress();
+
+                }
+            );
+
+
+            // ==========================
+            // LESSON COMPLETED
+            // ==========================
+
+            video.addEventListener(
+                "ended",
+                function() {
+
+                    let data = getData();
+
+                    if (
+                        data[userId] &&
+                        data[userId][courseId] &&
+                        data[userId][courseId][lessonId]
+                    ) {
+
+                        delete data[userId]
+                            [courseId]
+                            [lessonId];
+
+
+                        if (
+                            Object.keys(
+                                data[userId][courseId]
+                            ).length === 0
+                        ) {
+
+                            delete data[userId][courseId];
+
+                        }
+
+
+                        if (
+                            Object.keys(
+                                data[userId]
+                            ).length === 0
+                        ) {
+
+                            delete data[userId];
+
+                        }
+
+                    }
+
+                    saveData(data);
+
+                    console.log(
+                        "Lesson completed:",
+                        lessonId
+                    );
+
+                }
+            );
 
         });
 
     });
 </script>
+
 @endif
+
 @endsection

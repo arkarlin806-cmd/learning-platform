@@ -282,12 +282,12 @@
 
             const formData = new FormData(form);
 
-            const storeUrl = `@json(route('lesson.store'))`;
+
 
             console.log("POST URL:", storeUrl);
 
             try {
-                const res = await fetch(storeUrl, {
+                const res = await fetch(`{{ route('lesson.store') }}`, {
                     method: "POST",
                     headers: {
                         "X-CSRF-TOKEN": document.querySelector(

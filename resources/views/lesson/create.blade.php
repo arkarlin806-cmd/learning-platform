@@ -1,14 +1,14 @@
 @extends('layout.course_ins')
-@section("title","CREATE LESSON")
+@section("title","Lesson Create")
+@section("page","Instructor Lesson Create And Add Summaries with AI.")
 
 @section('content')
 
 
 <div class="max-w-6xl mx-auto px-4">
-
     <!-- HEADER -->
     <div class="mb-8">
-        <h1 class="gradient-shine text-4xl font-extrabold">
+        <h1 class="gradient-shine text-3xl font-extrabold">
             All lessons ( {{ $course->title }} )
         </h1>
         <p class="text-slate-500 mt-2">
@@ -20,7 +20,6 @@
 
         <!-- FORM -->
         <div class="lg:col-span-2">
-
             <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
 
                 <!-- HEADER BAR -->
@@ -29,48 +28,35 @@
                     <p class="text-white/70 text-sm">AI processing enabled</p>
                 </div>
 
-                <form
-                    id="lessonForm"
-                    method="POST"
-                    action="{{ route('lesson.store') }}"
-                    enctype="multipart/form-data"
-                    class="p-6 space-y-6">
+                <form id="lessonForm" class="p-6 space-y-6">
                     @csrf
-
                     <input type="hidden" id="course_id" name="course_id" value="{{ $course->id }}">
 
-                    <!-- TITLE -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Title</label>
-                        <input type="text" name="title" id="title"
+                        <input type="text" name="title" id="title" required
                             class="w-full mt-2 px-4 py-3 rounded-2xl border focus:ring-4 focus:ring-indigo-100 outline-none"
                             placeholder="Enter lesson title">
                         <p class="text-red-500 text-sm mt-1 hidden" id="error_title"></p>
                     </div>
 
-                    <!-- DESCRIPTION -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Description</label>
-                        <textarea name="description" id="description" rows="4"
+                        <textarea name="description" id="description" rows="4" required
                             class="w-full mt-2 px-4 py-3 rounded-2xl border focus:ring-4 focus:ring-indigo-100 outline-none"
                             placeholder="Optional description"></textarea>
                     </div>
 
-                    <!-- FILE -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Upload File</label>
-
-                        <input type="file" name="file" id="file"
+                        <input type="file" name="file" id="file" required
                             class="w-full mt-2 px-4 py-3 border rounded-2xl bg-white">
-
                         <p class="text-xs text-slate-400 mt-1">
                             PDF / MP4 supported (AI will process automatically)
                         </p>
-
                         <p class="text-red-500 text-sm mt-1 hidden" id="error_file"></p>
                     </div>
 
-                    <!-- BUTTONS -->
                     <div class="flex gap-4">
                         <button type="submit"
                             id="submitBtn"
@@ -113,8 +99,6 @@
     </div>
 </div>
 
-<!-- SWEETALERT -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -209,71 +193,6 @@
         // =========================
         // FORM SUBMIT (FETCH API)
         // =========================
-        // form.addEventListener('submit', async function(e) {
-        //     e.preventDefault();
-
-        //     submitBtn.disabled = true;
-        //     submitBtn.innerText = "Processing...";
-
-        //     const formData = new FormData(form);
-
-        //     try {
-        //         const res = await fetch("{{ route('lesson.store') }}", {
-        //             method: "POST",
-        //             headers: {
-        //                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
-        //             },
-        //             body: formData
-        //         });
-        //         const data = await res.json();
-
-        //         if (!res.ok) throw data;
-
-        //         showProgress();
-        //         updateProgress(10, 'start');
-
-        //         pollStatus(data.lesson_id);
-
-        //     } catch (err) {
-
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Error',
-        //             text: err.message || 'Something went wrong'
-        //         });
-
-        //         submitBtn.disabled = false;
-        //         submitBtn.innerText = "Create Lesson";
-        //     }
-
-        //     // const res = await fetch("{{ route('lesson.store') }}", {
-        //     //     method: "POST",
-        //     //     headers: {
-        //     //         "X-CSRF-TOKEN": "{{ csrf_token() }}",
-        //     //         "Accept": "application/json"
-        //     //     },
-        //     //     body: formData
-        //     // });
-
-        //     // const raw = await res.text();
-
-        //     // console.log("HTTP STATUS:", res.status);
-        //     // console.log("SERVER RESPONSE:", raw);
-
-        //     // let data;
-
-        //     // try {
-        //     //     data = JSON.parse(raw);
-        //     // } catch (e) {
-        //     //     throw new Error(
-        //     //         `Server returned HTTP ${res.status}. Check Console for full response.`
-        //     //     );
-        //     // }
-
-        //     // if (!res.ok) {
-        //     //     throw new Error(data.message || "Lesson creation failed");
-        //     // }
-        // });
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -282,64 +201,36 @@
 
             const formData = new FormData(form);
 
-
-
-            console.log("POST URL:", storeUrl);
-
             try {
-                const res = await fetch(`{{ route('lesson.store') }}`, {
+                const res = await fetch("{{ route('lesson.store') }}", {
                     method: "POST",
                     headers: {
-                        "X-CSRF-TOKEN": document.querySelector(
-                            'meta[name="csrf-token"]'
-                        ).content,
-                        "Accept": "application/json"
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     body: formData
                 });
+                const data = await res.json();
 
-                const raw = await res.text();
-
-                console.log("HTTP STATUS:", res.status);
-                console.log("SERVER RESPONSE:", raw);
-
-                let data;
-
-                try {
-                    data = JSON.parse(raw);
-                } catch (e) {
-                    throw new Error(
-                        `Server returned HTTP ${res.status}. Check Console.`
-                    );
-                }
-
-                if (!res.ok) {
-                    throw new Error(
-                        data.message || "Lesson creation failed"
-                    );
-                }
-
-                console.log("LESSON CREATED:", data);
+                if (!res.ok) throw data;
 
                 showProgress();
-                updateProgress(10, "start");
+                updateProgress(10, 'start');
 
                 pollStatus(data.lesson_id);
 
             } catch (err) {
 
-                console.error("LESSON CREATE ERROR:", err);
-
                 Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: err.message || "Something went wrong"
+                    icon: 'error',
+                    title: 'Error',
+                    text: err.message || 'Something went wrong'
                 });
 
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Create Lesson";
             }
         });
+
     });
 </script>
 

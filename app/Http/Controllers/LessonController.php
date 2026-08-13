@@ -306,7 +306,7 @@ class LessonController extends Controller
         |--------------------------------------------------------------------------
         */
 
-            $path = $file->store('lessons', 's3');
+            $path = $file->store('lessons', 'b2');
 
             if (!$path) {
                 throw new \Exception('Failed to upload lesson file to B2.');

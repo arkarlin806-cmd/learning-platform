@@ -189,7 +189,7 @@
                     class="lesson-video w-full h-40"
                     data-course="{{ $lesson->course_id }}"
                     data-lesson="{{ $lesson->id }}">
-                    <source src="{{ Storage::disk('s3')->url($lesson->file_path) }}" type="video/mp4">
+                    <source src="{{ Storage::disk('b2')->url($lesson->file_path) }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 @else

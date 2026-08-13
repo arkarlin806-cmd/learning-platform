@@ -15,7 +15,7 @@ class OpenAIService
         ?callable $progressCallback = null
     ): array {
 
-        $disk = Storage::disk('s3');
+        $disk = Storage::disk('b2');
 
         if (!$disk->exists($lesson->file_path)) {
             throw new \Exception('Lesson file not found in B2.');
@@ -71,7 +71,6 @@ class OpenAIService
             if ($progressCallback) {
                 $progressCallback(70);
             }
-
             /*
             |--------------------------------------------------------------------------
             | Generate AI Summary

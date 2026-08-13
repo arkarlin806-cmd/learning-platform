@@ -504,8 +504,10 @@ border-slate-200
 
                 <img
 
-                    src="{{ asset('storage/'.$certificate->frame->background) }}"
-
+                    src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'background'
+        ]) }}"
                     class="
 absolute
 inset-0
@@ -532,7 +534,10 @@ pointer-events-none
 
                 <img
 
-                    src="{{ asset('storage/'.$certificate->frame->border_image) }}"
+                    src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'border'
+        ]) }}"
 
                     class="
 absolute
@@ -559,8 +564,10 @@ pointer-events-none
 
                 <img
 
-                    src="{{ asset('storage/'.$certificate->frame->watermark) }}"
-
+                    src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'watermark'
+        ]) }}"
                     class="
                         absolute
                         inset-0
@@ -583,7 +590,10 @@ pointer-events-none
 
                 <img
 
-                    src="{{ asset('storage/'.$certificate->frame->logo) }}"
+                    src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'logo'
+        ]) }}"
 
                     class="
 absolute
@@ -768,7 +778,10 @@ text-center
 
                     <img
 
-                        src="{{ asset('storage/'.$certificate->signature) }}"
+                        src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'signature'
+        ]) }}"
 
                         class="
 w-10 h-10
@@ -811,8 +824,10 @@ mx-auto
 
                 <img
 
-                    src="{{ asset('storage/'.$certificate->frame->seal) }}"
-
+                    src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'seal'
+        ]) }}"
                     class="
 absolute
 bottom-[8%]
@@ -845,8 +860,10 @@ z-50
 
                     <img
 
-                        src="{{ asset('storage/'.$certificate->qr_code) }}"
-
+                        src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'qr'
+        ]) }}"
                         class="
 w-6 h-6
 h-auto

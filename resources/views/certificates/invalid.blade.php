@@ -125,19 +125,12 @@
 
                     <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
 
-                        <a href="{{ url('/') }}"
+                        <a href="{{ url('/login') }}"
                             class="px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition">
 
                             Go Home
 
-                        </a> <button
-                            onclick="history.back()"
-                            class="px-8 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 font-semibold transition">
-
-                            Go Back
-
-                        </button>
-
+                        </a>
                     </div>
 
                 </div>

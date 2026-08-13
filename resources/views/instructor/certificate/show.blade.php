@@ -54,7 +54,10 @@
         @if($certificate->frame->watermark)
         <div class="absolute top-50 left-86 z-10 overflow-hidden">
             <img
-                src="{{ asset('storage/'.$certificate->frame->watermark) }}"
+                src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'watermark'
+        ]) }}"
                 class="w-100 h-100 object-contain opacity-10">
         </div>
         @endif
@@ -63,7 +66,7 @@
         {{-- Content --}}
 
         <div
-            class="relative z-20 text-center pt-34 ">
+            class="relative z-20 text-center pt-42 ">
             <h1 class="text-4xl font-bold" style="color:{{ $certificate->frame->primary_color }}">
                 Certificate Of Completion
             </h1>

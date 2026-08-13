@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Log;
 use App\Models\Lesson;
+use Illuminate\Support\Facades\Storage;
 
 class OpenAIService
 {
@@ -14,39 +15,68 @@ class OpenAIService
         ?callable $progressCallback = null
     ): array {
 
-        $filePath = storage_path('app/public/' . $lesson->file_path);
+        $disk = Storage::disk('s3');
 
-        if (!file_exists($filePath)) {
-            throw new \Exception('Lesson file not found.');
+        if (!$disk->exists($lesson->file_path)) {
+            throw new \Exception('Lesson file not found in B2.');
         }
 
-        $audio = null;
+        $tempDir = storage_path('app/temp');
+
+        if (!is_dir($tempDir)) {
+            mkdir($tempDir, 0777, true);
+        }
+
+        $extension = strtolower(
+            pathinfo($lesson->file_path, PATHINFO_EXTENSION)
+        );
+
+        $localFile = $tempDir . '/' . uniqid('lesson_') . '.' . $extension;
 
         try {
+
+            if ($progressCallback) {
+                $progressCallback(20);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Download B2 file to temporary local storage
+            |--------------------------------------------------------------------------
+            */
+
+            file_put_contents(
+                $localFile,
+                $disk->get($lesson->file_path)
+            );
+
+            if (!file_exists($localFile)) {
+                throw new \Exception(
+                    'Failed to download lesson from B2.'
+                );
+            }
 
             if ($progressCallback) {
                 $progressCallback(40);
             }
 
-            $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            /*
+            |--------------------------------------------------------------------------
+            | Extract text
+            |--------------------------------------------------------------------------
+            */
 
-            if ($extension === 'pdf') {
-
-                $text = $this->extractText($filePath);
-            } else {
-
-                $audio = $this->videoToAudio($filePath);
-
-                if ($progressCallback) {
-                    $progressCallback(60);
-                }
-
-                $text = $this->whisper($audio);
-            }
+            $text = $this->extractText($localFile);
 
             if ($progressCallback) {
                 $progressCallback(70);
             }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Generate AI Summary
+            |--------------------------------------------------------------------------
+            */
 
             $result = $this->generateSummary($text);
 
@@ -57,8 +87,40 @@ class OpenAIService
             return $result;
         } finally {
 
-            // Temporary MP3 delete
-            if ($audio && file_exists($audio)) {
+            /*
+            |--------------------------------------------------------------------------
+            | Delete temporary downloaded file
+            |--------------------------------------------------------------------------
+            */
+
+            if (file_exists($localFile)) {
+                @unlink($localFile);
+            }
+        }
+    }
+    private function extractText(string $file): string
+    {
+        $extension = strtolower(
+            pathinfo($file, PATHINFO_EXTENSION)
+        );
+
+        if ($extension === 'pdf') {
+
+            $parser = new Parser();
+
+            $pdf = $parser->parseFile($file);
+
+            return $pdf->getText();
+        }
+
+        $audio = $this->videoToAudio($file);
+
+        try {
+
+            return $this->whisper($audio);
+        } finally {
+
+            if (file_exists($audio)) {
                 @unlink($audio);
             }
         }
@@ -84,20 +146,44 @@ class OpenAIService
     //     return $result;
     // }
 
-    private function extractText(string $file): string
-    {
-        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+    // private function extractText(string $file): string
+    // {
+    //     $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-        if ($extension === 'pdf') {
-            $parser = new Parser();
-            $pdf = $parser->parseFile($file);
-            return $pdf->getText();
-        }
+    //     if ($extension === 'pdf') {
+    //         $parser = new Parser();
+    //         $pdf = $parser->parseFile($file);
+    //         return $pdf->getText();
+    //     }
 
-        $audio = $this->videoToAudio($file);
-        return $this->whisper($audio);
-    }
+    //     $audio = $this->videoToAudio($file);
+    //     return $this->whisper($audio);
+    // }
 
+    // private function videoToAudio(string $video): string
+    // {
+    //     $tempDir = storage_path('app/temp');
+
+    //     if (!is_dir($tempDir)) {
+    //         mkdir($tempDir, 0777, true);
+    //     }
+
+    //     $audio = $tempDir . '/' . uniqid() . '.mp3';
+
+    //     $command = sprintf(
+    //         'ffmpeg -i "%s" -vn -ac 1 -ar 16000 -b:a 64k "%s" -y',
+    //         $video,
+    //         $audio
+    //     );
+
+    //     exec($command);
+
+    //     if (!file_exists($audio)) {
+    //         throw new \Exception('Failed converting video to audio');
+    //     }
+
+    //     return $audio;
+    // }
     private function videoToAudio(string $video): string
     {
         $tempDir = storage_path('app/temp');
@@ -109,20 +195,27 @@ class OpenAIService
         $audio = $tempDir . '/' . uniqid() . '.mp3';
 
         $command = sprintf(
-            'ffmpeg -i "%s" -vn -ac 1 -ar 16000 -b:a 64k "%s" -y',
+            'ffmpeg -i "%s" -vn -ac 1 -ar 16000 -b:a 64k "%s" -y 2>&1',
             $video,
             $audio
         );
 
-        exec($command);
+        exec($command, $output, $returnCode);
 
-        if (!file_exists($audio)) {
-            throw new \Exception('Failed converting video to audio');
+        if ($returnCode !== 0 || !file_exists($audio)) {
+
+            Log::error('FFmpeg conversion failed', [
+                'return_code' => $returnCode,
+                'output' => $output,
+            ]);
+
+            throw new \Exception(
+                'Failed converting video to audio.'
+            );
         }
 
         return $audio;
     }
-
     private function whisper(string $audio): string
     {
         $sizeMb = filesize($audio) / 1024 / 1024;

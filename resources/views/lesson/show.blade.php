@@ -183,17 +183,13 @@
             <!-- MEDIA -->
             <div class="mt-3">
                 @if($lesson->lesson_type == 'video')
-
-                @php
-                $videoUrl = asset('storage/' . $lesson->file_path);
-                @endphp
                 <video
                     controls
                     preload="metadata"
                     class="lesson-video w-full h-40"
                     data-course="{{ $lesson->course_id }}"
                     data-lesson="{{ $lesson->id }}">
-                    <source src="{{ $videoUrl }}" type="video/mp4">
+                    <source src="{{ Storage::disk('s3')->url($lesson->file_path) }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 @else
@@ -203,6 +199,7 @@
                     📄
                 </div>
                 @endif
+
 
             </div>
             <p class="text-gray-500 text-sm leading-relaxed max-w-2xl mt-1 mx-6">

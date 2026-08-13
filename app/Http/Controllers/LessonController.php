@@ -266,7 +266,6 @@ class LessonController extends Controller
             return false;
         }
     }
-
     public function store(Request $request)
     {
         Log::info('Lesson upload arrived');
@@ -275,9 +274,12 @@ class LessonController extends Controller
             'course_id'   => 'required|integer|exists:courses,id',
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string|max:300',
-
-            // 50 MB = 51200 KB
-            'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:51200',
+            'file'        => [
+                'required',
+                'file',
+                'mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a',
+                'max:51200', // 50 MB
+            ],
         ]);
 
         $course = Course::findOrFail($request->course_id);
@@ -298,22 +300,61 @@ class LessonController extends Controller
                 'mime' => $file->getMimeType(),
             ]);
 
-            $path = $file->store('lessons', 'public');
+            /*
+        |--------------------------------------------------------------------------
+        | Upload Lesson to Backblaze B2
+        |--------------------------------------------------------------------------
+        */
+
+            $path = $file->store('lessons', 's3');
+
+            if (!$path) {
+                throw new \Exception('Failed to upload lesson file to B2.');
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Detect lesson type
+        |--------------------------------------------------------------------------
+        */
+
+            $extension = strtolower(
+                $file->getClientOriginalExtension()
+            );
+
+            $lessonType = 'video';
+
+            if ($extension === 'pdf') {
+                $lessonType = 'pdf';
+            } elseif (in_array($extension, ['mp3', 'wav', 'm4a'])) {
+                $lessonType = 'audio';
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Create Lesson
+        |--------------------------------------------------------------------------
+        */
 
             $lesson = Lesson::create([
-                'course_id'         => $request->course_id,
-                'title'             => $request->title,
-                'description'       => $request->description,
-                'lesson_type'       => 'video',
-                'file_path'         => $path,
-                'summary_status'    => 'pending',
-                'summary_progress'  => 0,
-                'summary_error'     => null,
+                'course_id'        => $request->course_id,
+                'title'            => $request->title,
+                'description'      => $request->description,
+                'lesson_type'      => $lessonType,
+                'file_path'        => $path,
+                'summary_status'   => 'pending',
+                'summary_progress' => 0,
+                'summary_error'    => null,
             ]);
 
             DB::commit();
 
-            // AI processing ကို queue ထဲပို့
+            /*
+        |--------------------------------------------------------------------------
+        | Start AI processing
+        |--------------------------------------------------------------------------
+        */
+
             lessonvd::dispatch($lesson->id);
 
             return response()->json([
@@ -321,7 +362,7 @@ class LessonController extends Controller
                 'lesson_id' => $lesson->id,
                 'status'    => 'pending',
                 'progress'  => 0,
-                'message'   => 'Lesson created. AI processing started.',
+                'message'   => 'Lesson uploaded successfully. AI processing started.',
             ]);
         } catch (\Throwable $e) {
 
@@ -338,6 +379,64 @@ class LessonController extends Controller
             ], 500);
         }
     }
+
+    // public function store(Request $request) //lesson store
+    // {
+    //     Log::info('arrive');
+    //     $request->validate([
+    //         'course_id'   => 'required|integer',
+    //         'title'       => 'required|string|max:255',
+    //         'description' => 'nullable|string|max:300',
+    //         'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:512000',
+    //     ]);
+    //     $course = Course::findOrFail($request->course_id);
+
+
+    //     if ($course->instructor_id != auth()->id()) {
+    //         abort(403);
+    //     }
+    //     DB::beginTransaction();
+
+    //     try {
+
+    //         $path = $request->file('file')->store('lessons', 'public');
+
+    //         $lesson = Lesson::create([
+    //             'course_id'        => $request->course_id,
+    //             'title'            => $request->title,
+    //             'description'      => $request->description,
+    //             'lesson_type'      => 'video',
+    //             'file_path'        => $path,
+    //             'summary_status'   => 'pending',
+    //             'summary_progress' => 0,
+    //             'summary_error'    => null,
+    //         ]);
+
+    //         DB::commit();
+
+    //         lessonvd::dispatch($lesson->id);
+
+    //         return response()->json([
+    //             'success'   => true,
+    //             'lesson_id' => $lesson->id,
+    //             'status'    => 'pending',
+    //             'progress'  => 0,
+    //             'message'   => 'Lesson created. AI processing started.',
+    //         ]);
+    //     } catch (\Throwable $e) {
+
+    //         DB::rollBack();
+
+    //         Log::error('Lesson store failed', [
+    //             'error' => $e->getMessage()
+    //         ]);
+
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
 
     public function status($id)
     {

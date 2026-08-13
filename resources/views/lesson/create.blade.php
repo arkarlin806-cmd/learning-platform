@@ -213,35 +213,192 @@
             submitBtn.innerText = "Processing...";
 
             const formData = new FormData(form);
-
             try {
+
                 const res = await fetch("{{ route('lesson.store') }}", {
                     method: "POST",
+
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        "Accept": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
-                    body: formData
+
+                    body: formData,
+
+                    credentials: "same-origin"
                 });
-                const data = await res.json();
 
-                if (!res.ok) throw data;
+                console.log("LESSON STORE STATUS:", res.status);
 
+                // Get raw response first
+                const raw = await res.text();
+
+                console.log("LESSON STORE RESPONSE:", raw);
+
+                let data = {};
+
+                // Try JSON parsing
+                try {
+                    data = JSON.parse(raw);
+                } catch (jsonError) {
+
+                    console.error("SERVER DID NOT RETURN JSON:", raw);
+
+                    if (res.status === 413) {
+                        throw new Error(
+                            "File is too large. Maximum lesson file size is 50 MB."
+                        );
+                    }
+
+                    if (res.status === 419) {
+                        throw new Error(
+                            "Session expired. Please refresh the page and try again."
+                        );
+                    }
+
+                    if (res.status === 422) {
+                        throw new Error(
+                            "Validation failed. Please check your lesson information."
+                        );
+                    }
+
+                    if (res.status === 500) {
+                        throw new Error(
+                            "Server error while uploading lesson. Please try again."
+                        );
+                    }
+
+                    if (res.status === 405) {
+                        throw new Error(
+                            "Invalid request method. Please refresh the page and try again."
+                        );
+                    }
+
+                    throw new Error(
+                        `Server returned HTTP ${res.status}.`
+                    );
+                }
+
+                // HTTP error
+                if (!res.ok) {
+
+                    let message =
+                        data.message ||
+                        data.error ||
+                        "Lesson upload failed.";
+
+                    // Laravel validation errors
+                    if (res.status === 422 && data.errors) {
+
+                        message = Object.values(data.errors)
+                            .flat()
+                            .join("\n");
+                    }
+
+                    throw new Error(message);
+                }
+
+                // Laravel success check
+                if (data.success !== true) {
+
+                    throw new Error(
+                        data.message || "Lesson upload failed."
+                    );
+                }
+
+                // Lesson ID required
+                if (!data.lesson_id) {
+
+                    throw new Error(
+                        "Lesson was created but lesson ID was not returned."
+                    );
+                }
+
+                console.log(
+                    "LESSON CREATED SUCCESSFULLY:",
+                    data
+                );
+
+                // Show progress
                 showProgress();
-                updateProgress(10, 'start');
 
+                updateProgress(
+                    Number(data.progress ?? 10),
+                    data.status ?? "pending"
+                );
+
+                // Start polling
                 pollStatus(data.lesson_id);
+
 
             } catch (err) {
 
+                console.error(
+                    "LESSON CREATE ERROR:",
+                    err
+                );
+
+                let message = "Lesson upload failed.";
+
+                // Network error
+                if (
+                    err instanceof TypeError &&
+                    err.message === "Failed to fetch"
+                ) {
+
+                    message =
+                        "Unable to connect to the server. " +
+                        "Please check your internet connection and try again.";
+                } else if (err.message) {
+
+                    message = err.message;
+                }
+
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: err.message || 'Something went wrong'
+
+                    icon: "error",
+
+                    title: "Lesson Creation Failed",
+
+                    text: message,
+
+                    confirmButtonText: "OK"
+
                 });
 
                 submitBtn.disabled = false;
+
                 submitBtn.innerText = "Create Lesson";
             }
+            // try {
+            //     const res = await fetch("{{ route('lesson.store') }}", {
+            //         method: "POST",
+            //         headers: {
+            //             'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            //         },
+            //         body: formData
+            //     });
+            //     const data = await res.json();
+
+            //     if (!res.ok) throw data;
+
+            //     showProgress();
+            //     updateProgress(10, 'start');
+
+            //     pollStatus(data.lesson_id);
+
+            // } catch (err) {
+
+            //     Swal.fire({
+            //         icon: 'error',
+            //         title: 'Error',
+            //         text: err.message || 'Something went wrong'
+            //     });
+
+            //     submitBtn.disabled = false;
+            //     submitBtn.innerText = "Create Lesson";
+            // }
         });
 
     });

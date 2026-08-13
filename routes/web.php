@@ -484,7 +484,14 @@ Route::get('/debug-scheme', function () {
         'headers' => request()->headers->all(),
     ];
 });
+
+
+//admin and instructor certificate show production level
 Route::get(
     '/admin/certificate/image/{filename}',
     [CertificateFrameController::class, 'certificateImage']
 )->name('admin.certificate.image');
+Route::get(
+    '/instructor/certificate/{certificate}/file/{type}',
+    [CertificateFrameController::class, 'certificateFile']
+)->name('instructor.certificate.file');

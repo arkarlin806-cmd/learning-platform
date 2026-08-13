@@ -182,14 +182,14 @@
             </div>
             <!-- MEDIA -->
             <div class="mt-3">
-                <!-- @if($lesson->lesson_type == 'video')
+                @if($lesson->lesson_type == 'video')
                 <video
                     controls
                     preload="metadata"
                     class="lesson-video w-full h-40"
                     data-course="{{ $lesson->course_id }}"
                     data-lesson="{{ $lesson->id }}">
-                    <source src="{{ asset('storage/'.$lesson->file_path) }}" type="video/mp4">
+                    <source src="{{ $lesson->video_url }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 @else
@@ -198,38 +198,8 @@
                     flex items-center justify-center text-5xl">
                     📄
                 </div>
-                @endif -->
-                @if($lesson->lesson_type === 'video' && $lesson->video_url)
-
-                <div class="bg-black aspect-video">
-
-                    <video
-                        controls
-                        playsinline
-                        preload="metadata"
-                        class="w-full h-full object-contain">
-                        <source
-                            src="{{ $lesson->video_url }}"
-                            type="video/mp4">
-
-                        Your browser does not support video playback.
-                    </video>
-
-                </div>
-
-                @elseif($lesson->lesson_type === 'pdf' && $lesson->video_url)
-
-                <iframe
-                    src="{{ $lesson->video_url }}"
-                    class="w-full h-[700px]"></iframe>
-
-                @else
-
-                <div class="p-8 text-center text-slate-400">
-                    Lesson file unavailable.
-                </div>
-
                 @endif
+
 
             </div>
             <p class="text-gray-500 text-sm leading-relaxed max-w-2xl mt-1 mx-6">

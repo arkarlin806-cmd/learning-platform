@@ -142,16 +142,77 @@ class OpenAIService
 
     private function extractText(string $file): string
     {
-        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        $extension = strtolower(
+            pathinfo($file, PATHINFO_EXTENSION)
+        );
+
+        Log::info('EXTRACT STARTED', [
+            'file' => $file,
+            'extension' => $extension,
+            'size_mb' => file_exists($file)
+                ? round(filesize($file) / 1024 / 1024, 2)
+                : 0,
+        ]);
+
+        /*
+    |--------------------------------------------------------------------------
+    | PDF
+    |--------------------------------------------------------------------------
+    */
 
         if ($extension === 'pdf') {
+
+            Log::info('PDF EXTRACTION STARTED');
+
             $parser = new Parser();
+
             $pdf = $parser->parseFile($file);
-            return $pdf->getText();
+
+            $text = $pdf->getText();
+
+            Log::info('PDF EXTRACTION COMPLETED', [
+                'text_length' => strlen($text),
+            ]);
+
+            return $text;
         }
 
+        /*
+    |--------------------------------------------------------------------------
+    | Video / Audio
+    |--------------------------------------------------------------------------
+    */
+
+        Log::info('VIDEO TO AUDIO STARTED');
+
         $audio = $this->videoToAudio($file);
-        return $this->whisper($audio);
+
+        Log::info('VIDEO TO AUDIO COMPLETED', [
+            'audio' => $audio,
+            'size_mb' => file_exists($audio)
+                ? round(filesize($audio) / 1024 / 1024, 2)
+                : 0,
+        ]);
+
+        Log::info('WHISPER STARTED');
+
+        $text = $this->whisper($audio);
+
+        Log::info('WHISPER COMPLETED', [
+            'text_length' => strlen($text),
+        ]);
+
+        /*
+    |--------------------------------------------------------------------------
+    | Cleanup audio
+    |--------------------------------------------------------------------------
+    */
+
+        if (file_exists($audio)) {
+            @unlink($audio);
+        }
+
+        return $text;
     }
 
     private function videoToAudio(string $video): string
@@ -162,18 +223,46 @@ class OpenAIService
             mkdir($tempDir, 0777, true);
         }
 
-        $audio = $tempDir . '/' . uniqid() . '.mp3';
+        $audio = $tempDir . '/' .
+            uniqid('audio_', true) .
+            '.mp3';
+
+        Log::info('FFMPEG START', [
+            'input' => $video,
+            'output' => $audio,
+        ]);
 
         $command = sprintf(
-            'ffmpeg -i "%s" -vn -ac 1 -ar 16000 -b:a 64k "%s" -y',
-            $video,
-            $audio
+            'ffmpeg -y -i %s -vn -ac 1 -ar 16000 -b:a 64k %s 2>&1',
+            escapeshellarg($video),
+            escapeshellarg($audio)
         );
 
-        exec($command);
+        $output = [];
 
-        if (!file_exists($audio)) {
-            throw new \Exception('Failed converting video to audio');
+        $returnCode = 0;
+
+        exec(
+            $command,
+            $output,
+            $returnCode
+        );
+
+        Log::info('FFMPEG FINISHED', [
+            'return_code' => $returnCode,
+            'output' => implode("\n", $output),
+        ]);
+
+        if (
+            $returnCode !== 0 ||
+            !file_exists($audio) ||
+            filesize($audio) === 0
+        ) {
+
+            throw new \Exception(
+                'FFmpeg failed: ' .
+                    implode("\n", $output)
+            );
         }
 
         return $audio;

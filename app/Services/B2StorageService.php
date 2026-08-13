@@ -59,9 +59,10 @@ class B2StorageService
 
         $apiUrl = $authorization['apiInfo']['storageApi']['apiUrl'];
 
-        $response = Http::withToken(
-            $authorization['authorizationToken']
-        )
+        $response = Http::withHeaders([
+            'Authorization' => $authorization['authorizationToken'],
+            'Content-Type' => 'application/json',
+        ])
             ->timeout(30)
             ->post(
                 $apiUrl . '/b2api/v4/b2_get_upload_url',
@@ -69,7 +70,6 @@ class B2StorageService
                     'bucketId' => $config['bucket_id'],
                 ]
             );
-
         if ($response->failed()) {
             throw new RuntimeException(
                 'B2 get upload URL failed: ' . $response->body()

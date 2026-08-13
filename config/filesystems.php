@@ -82,9 +82,14 @@ return [
             'key' => env('B2_KEY_ID'),
             'secret' => env('B2_APPLICATION_KEY'),
 
-            'region' => env('B2_REGION'),
+            'region' => env('B2_REGION', 'us-east-005'),
+
             'bucket' => env('B2_BUCKET'),
-            'endpoint' => env('B2_ENDPOINT'),
+
+            'endpoint' => env(
+                'B2_ENDPOINT',
+                'https://s3.us-east-005.backblazeb2.com'
+            ),
 
             'use_path_style_endpoint' => true,
 

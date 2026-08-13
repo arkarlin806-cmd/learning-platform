@@ -70,6 +70,7 @@ class B2StorageService
                     'bucketId' => $config['bucket_id'],
                 ]
             );
+
         if ($response->failed()) {
             throw new RuntimeException(
                 'B2 get upload URL failed: ' . $response->body()

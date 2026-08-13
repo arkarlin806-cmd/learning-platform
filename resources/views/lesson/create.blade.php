@@ -153,164 +153,55 @@
 
         function pollStatus(id) {
 
-            if (polling) {
-                clearInterval(polling);
-            }
-
             polling = setInterval(async () => {
 
                 try {
+                    const course_id = document.getElementById('course_id').value;
 
-                    const courseId =
-                        document.getElementById('course_id').value;
+                    const res = await fetch(`{{ route('lesson.status',':id') }}`.replace(':id', id));
 
-                    // ================================
-                    // STATUS URL
-                    // ================================
-                    const statusUrl =
-                        "{{ url('/lesson/status') }}/" + id;
+                    const data = await res.json();
 
-                    console.log("STATUS URL:", statusUrl);
-
-                    const res = await fetch(statusUrl, {
-                        method: "GET",
-                        headers: {
-                            "Accept": "application/json",
-                            "X-Requested-With": "XMLHttpRequest"
-                        },
-                        credentials: "same-origin"
-                    });
-
-                    const raw = await res.text();
-
-                    console.log("STATUS HTTP:", res.status);
-                    console.log("STATUS RESPONSE:", raw);
-
-                    let data;
-
-                    try {
-                        data = JSON.parse(raw);
-                    } catch (e) {
-
-                        console.error(
-                            "STATUS IS NOT JSON:",
-                            raw
-                        );
-
-                        return;
-                    }
-
-                    if (!res.ok) {
-
-                        console.error(
-                            "STATUS ERROR:",
-                            data
-                        );
-
-                        return;
-                    }
-
-                    // ================================
-                    // UPDATE PROGRESS
-                    // ================================
-
-                    updateProgress(
-                        Number(data.progress ?? 0),
-                        data.status ?? 'pending'
-                    );
-
-
-                    // =================================
-                    // COMPLETED
-                    // =================================
+                    updateProgress(data.progress, data.status);
 
                     if (data.status === 'completed') {
-
                         clearInterval(polling);
-                        polling = null;
-
-                        console.log("AI PROCESSING COMPLETED");
-                        console.log("LESSON ID:", id);
-                        console.log("COURSE ID:", courseId);
 
                         Swal.fire({
                             icon: 'success',
                             title: 'Done!',
-                            text: 'AI Summary ready for review',
-                            confirmButtonText: 'Review Summary',
-                            allowOutsideClick: false
+                            text: 'AI Summary ready for review'
                         }).then(() => {
+                            const course_id = document.getElementById('course_id').value;
 
-                            /*
-                            |--------------------------------------------------------------------------
-                            | IMPORTANT
-                            |--------------------------------------------------------------------------
-                            | /lesson/preview/{lesson_id}/{course_id}
-                            |--------------------------------------------------------------------------
-                            */
+                            let url = "{{ route('lesson.preview', ['id' => ':id', 'course_id' => ':course_id']) }}";
 
-                            const previewUrl =
-                                "{{ url('/lesson/preview') }}" +
-                                "/" + id +
-                                "/" + courseId;
-
-                            console.log(
-                                "PREVIEW URL:",
-                                previewUrl
-                            );
-
-                            window.location.href = previewUrl;
+                            url = url.replace(':id', id).replace(':course_id', course_id);
+                            window.location.href = url;
                         });
-
-                        return;
                     }
 
-
-                    // =================================
-                    // FAILED
-                    // =================================
-
                     if (data.status === 'failed') {
-
                         clearInterval(polling);
-                        polling = null;
-
-                        console.error(
-                            "AI PROCESSING FAILED:",
-                            data.error
-                        );
 
                         Swal.fire({
                             icon: 'error',
-                            title: 'AI Processing Failed',
-                            text: data.error ||
-                                data.message ||
-                                'Processing failed'
+                            title: 'Failed',
+                            text: data.error || 'Processing failed'
                         });
 
                         submitBtn.disabled = false;
                         submitBtn.innerText = "Create Lesson";
-
-                        return;
                     }
 
-
                 } catch (err) {
-
-                    /*
-                     * Temporary network error
-                     * Don't stop polling
-                     */
-
-                    console.error(
-                        "POLLING ERROR:",
-                        err
-                    );
-
+                    console.error(err);
                 }
 
             }, 2000);
         }
+
+
         // =========================
         // FORM SUBMIT (FETCH API)
         // =========================

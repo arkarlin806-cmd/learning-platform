@@ -47,7 +47,6 @@ class LessonController extends Controller
         return view('LS.lessonlist', compact('lessons'));
     }
 
-
     public function show(Request $request, $id)
     {
         $course = Course::with('user')
@@ -94,17 +93,14 @@ class LessonController extends Controller
 
             $lesson->video_url = null;
 
-            if ($lesson->file_path) {
+            if (!empty($lesson->file_path)) {
 
                 $lesson->video_url =
                     $b2Endpoint .
                     '/' .
                     $b2Bucket .
                     '/' .
-                    ltrim(
-                        $lesson->file_path,
-                        '/'
-                    );
+                    ltrim($lesson->file_path, '/');
             }
         }
 
@@ -114,9 +110,7 @@ class LessonController extends Controller
         )->count();
 
         $isPurchased =
-            LessonController::isPurchased(
-                $course->id
-            );
+            LessonController::isPurchased($course->id);
 
         $isInstructor =
             LessonController::isInstructor();
@@ -135,10 +129,7 @@ class LessonController extends Controller
             );
         }
 
-        abort(
-            403,
-            'Please purchase courses!.'
-        );
+        abort(403, 'Please purchase courses!.');
     }
     // public function show(Request $request, $id)
     // {

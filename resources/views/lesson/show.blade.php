@@ -182,7 +182,7 @@
             </div>
             <!-- MEDIA -->
             <div class="mt-3">
-                @if($lesson->lesson_type == 'video')
+                <!-- @if($lesson->lesson_type == 'video')
                 <video
                     controls
                     preload="metadata"
@@ -198,9 +198,36 @@
                     flex items-center justify-center text-5xl">
                     📄
                 </div>
+                @endif -->
+
+                {{-- VIDEO --}}
+                @if($lesson->video_url)
+
+                <div class="bg-black w-full aspect-video">
+
+                    <video
+                        controls
+                        playsinline
+                        preload="metadata"
+                        class="w-full h-full object-contain">
+                        <source
+                            src="{{ $lesson->video_url }}"
+                            type="video/mp4">
+
+                        Your browser does not support video playback.
+                    </video>
+
+                </div>
+
+                @else
+
+                <div class="p-10 text-center">
+                    <p class="text-red-500">
+                        Lesson file not found.
+                    </p>
+                </div>
+
                 @endif
-
-
             </div>
             <p class="text-gray-500 text-sm leading-relaxed max-w-2xl mt-1 mx-6">
                 {{ $lesson->description }}

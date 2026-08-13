@@ -267,40 +267,53 @@ class LessonController extends Controller
         }
     }
 
-    public function store(Request $request) //lesson store
+    public function store(Request $request)
     {
-        Log::info('arrive');
+        Log::info('Lesson upload arrived');
+
         $request->validate([
-            'course_id'   => 'required|integer',
+            'course_id'   => 'required|integer|exists:courses,id',
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string|max:300',
-            'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:512000',
-        ]);
-        $course = Course::findOrFail($request->course_id);
 
+            // 50 MB = 51200 KB
+            'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:51200',
+        ]);
+
+        $course = Course::findOrFail($request->course_id);
 
         if ($course->instructor_id != auth()->id()) {
             abort(403);
         }
+
         DB::beginTransaction();
 
         try {
 
-            $path = $request->file('file')->store('lessons', 'public');
+            $file = $request->file('file');
+
+            Log::info('Lesson file received', [
+                'name' => $file->getClientOriginalName(),
+                'size_mb' => round($file->getSize() / 1024 / 1024, 2),
+                'mime' => $file->getMimeType(),
+            ]);
+
+            $path = $file->store('lessons', 'public');
 
             $lesson = Lesson::create([
-                'course_id'        => $request->course_id,
-                'title'            => $request->title,
-                'description'      => $request->description,
-                'lesson_type'      => 'video',
-                'file_path'        => $path,
-                'summary_status'   => 'pending',
-                'summary_progress' => 0,
-                'summary_error'    => null,
+                'course_id'         => $request->course_id,
+                'title'             => $request->title,
+                'description'       => $request->description,
+                'lesson_type'       => 'video',
+                'file_path'         => $path,
+                'summary_status'    => 'pending',
+                'summary_progress'  => 0,
+                'summary_error'     => null,
             ]);
 
             DB::commit();
 
+            // AI processing ကို queue ထဲပို့
             lessonvd::dispatch($lesson->id);
 
             return response()->json([
@@ -315,12 +328,13 @@ class LessonController extends Controller
             DB::rollBack();
 
             Log::error('Lesson store failed', [
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
+                'message' => 'Lesson upload failed.',
             ], 500);
         }
     }

@@ -9,26 +9,80 @@ use App\Models\Lesson;
 
 class OpenAIService
 {
-    public function processLesson(Lesson $lesson, ?callable $progressCallback = null): array
-    {
+    public function processLesson(
+        Lesson $lesson,
+        ?callable $progressCallback = null
+    ): array {
+
         $filePath = storage_path('app/public/' . $lesson->file_path);
 
         if (!file_exists($filePath)) {
             throw new \Exception('Lesson file not found.');
         }
 
-        if ($progressCallback) $progressCallback(40);
+        $audio = null;
 
-        $text = $this->extractText($filePath);
+        try {
 
-        if ($progressCallback) $progressCallback(70);
+            if ($progressCallback) {
+                $progressCallback(40);
+            }
 
-        $result = $this->generateSummary($text);
+            $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
 
-        if ($progressCallback) $progressCallback(85);
+            if ($extension === 'pdf') {
 
-        return $result;
+                $text = $this->extractText($filePath);
+            } else {
+
+                $audio = $this->videoToAudio($filePath);
+
+                if ($progressCallback) {
+                    $progressCallback(60);
+                }
+
+                $text = $this->whisper($audio);
+            }
+
+            if ($progressCallback) {
+                $progressCallback(70);
+            }
+
+            $result = $this->generateSummary($text);
+
+            if ($progressCallback) {
+                $progressCallback(85);
+            }
+
+            return $result;
+        } finally {
+
+            // Temporary MP3 delete
+            if ($audio && file_exists($audio)) {
+                @unlink($audio);
+            }
+        }
     }
+    // public function processLesson(Lesson $lesson, ?callable $progressCallback = null): array
+    // {
+    //     $filePath = storage_path('app/public/' . $lesson->file_path);
+
+    //     if (!file_exists($filePath)) {
+    //         throw new \Exception('Lesson file not found.');
+    //     }
+
+    //     if ($progressCallback) $progressCallback(40);
+
+    //     $text = $this->extractText($filePath);
+
+    //     if ($progressCallback) $progressCallback(70);
+
+    //     $result = $this->generateSummary($text);
+
+    //     if ($progressCallback) $progressCallback(85);
+
+    //     return $result;
+    // }
 
     private function extractText(string $file): string
     {

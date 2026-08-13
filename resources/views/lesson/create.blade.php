@@ -513,6 +513,36 @@
 
         });
 
+
+        const fileInput = document.querySelector('#file');
+
+        fileInput.addEventListener('change', function() {
+
+            const file = this.files[0];
+
+            if (!file) return;
+
+            const maxSize = 50 * 1024 * 1024; // 50 MB
+
+            if (file.size > maxSize) {
+
+                alert(
+                    `File is too large.\n\n` +
+                    `Maximum allowed size: 50 MB\n` +
+                    `Your file: ${(file.size / 1024 / 1024).toFixed(2)} MB`
+                );
+
+                this.value = '';
+                return;
+            }
+
+            console.log(
+                'File:',
+                file.name,
+                'Size:',
+                (file.size / 1024 / 1024).toFixed(2) + ' MB'
+            );
+        });
     });
 </script>
 @endsection

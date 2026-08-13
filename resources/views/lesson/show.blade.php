@@ -183,13 +183,17 @@
             <!-- MEDIA -->
             <div class="mt-3">
                 @if($lesson->lesson_type == 'video')
+
+                @php
+                $videoUrl = asset('storage/' . $lesson->file_path);
+                @endphp
                 <video
                     controls
                     preload="metadata"
                     class="lesson-video w-full h-40"
                     data-course="{{ $lesson->course_id }}"
                     data-lesson="{{ $lesson->id }}">
-                    <source src="{{ asset('storage/'.$lesson->file_path) }}" type="video/mp4">
+                    <source src="{{ $videoUrl }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 @else

@@ -84,7 +84,6 @@ return [
 
             'region' => env('B2_REGION'),
             'bucket' => env('B2_BUCKET'),
-
             'endpoint' => env('B2_ENDPOINT'),
 
             'use_path_style_endpoint' => true,

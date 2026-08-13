@@ -202,7 +202,7 @@ COPY . .
 
 COPY --from=frontend /app/public/build /var/www/html/public/build
 
-
+COPY php.ini /usr/local/etc/php/conf.d/uploads.ini
 RUN composer install \
     --no-dev \
     --no-interaction \

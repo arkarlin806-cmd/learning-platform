@@ -270,23 +270,59 @@ class LessonController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'course_id'   => 'required|integer',
+            'course_id'   => 'required|integer|exists:courses,id',
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:512000',
+            'file'        => [
+                'required',
+                'file',
+                'mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a',
+                'max:51200', // 50 MB
+            ],
         ]);
 
         DB::beginTransaction();
 
         try {
 
-            $path = $request->file('file')->store('lessons', 'public');
+            $file = $request->file('file');
+
+            /*
+        |--------------------------------------------------------------------------
+        | Upload to Backblaze B2
+        |--------------------------------------------------------------------------
+        */
+
+            $path = $file->store('lessons', 'b2');
+
+            Log::info('LESSON B2 UPLOAD SUCCESS', [
+                'path' => $path,
+                'size' => round($file->getSize() / 1024 / 1024, 2) . ' MB',
+            ]);
+
+            /*
+        |--------------------------------------------------------------------------
+        | Create Lesson
+        |--------------------------------------------------------------------------
+        */
+
+            $extension = strtolower(
+                $file->getClientOriginalExtension()
+            );
+
+            if ($extension === 'pdf') {
+                $lessonType = 'pdf';
+            } elseif (in_array($extension, ['mp3', 'wav', 'm4a'])) {
+                $lessonType = 'audio';
+            } else {
+                $lessonType = 'video';
+            }
 
             $lesson = Lesson::create([
                 'course_id'        => $request->course_id,
                 'title'            => $request->title,
                 'description'      => $request->description,
-                'lesson_type'      => 'video',
+                'lesson_type'      => $lessonType,
                 'upload_type'      => 'device',
                 'file_path'        => $path,
                 'summary_status'   => 'pending',
@@ -295,6 +331,12 @@ class LessonController extends Controller
             ]);
 
             DB::commit();
+
+            /*
+        |--------------------------------------------------------------------------
+        | Start AI Job
+        |--------------------------------------------------------------------------
+        */
 
             lessonvd::dispatch($lesson->id);
 
@@ -310,7 +352,9 @@ class LessonController extends Controller
             DB::rollBack();
 
             Log::error('Lesson store failed', [
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
             ]);
 
             return response()->json([

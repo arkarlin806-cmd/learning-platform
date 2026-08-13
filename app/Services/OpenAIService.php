@@ -6,28 +6,138 @@ use Illuminate\Support\Facades\Http;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Log;
 use App\Models\Lesson;
+use Illuminate\Support\Facades\Storage;
 
 class OpenAIService
 {
-    public function processLesson(Lesson $lesson, ?callable $progressCallback = null): array
-    {
-        $filePath = storage_path('app/public/' . $lesson->file_path);
+    public function processLesson(
+        Lesson $lesson,
+        ?callable $progressCallback = null
+    ): array {
 
-        if (!file_exists($filePath)) {
-            throw new \Exception('Lesson file not found.');
+        $disk = Storage::disk('b2');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check B2 file
+        |--------------------------------------------------------------------------
+        */
+
+        if (!$disk->exists($lesson->file_path)) {
+            throw new \Exception(
+                'Lesson file not found in Backblaze B2.'
+            );
         }
 
-        if ($progressCallback) $progressCallback(40);
+        /*
+        |--------------------------------------------------------------------------
+        | Temporary directory
+        |--------------------------------------------------------------------------
+        */
 
-        $text = $this->extractText($filePath);
+        $tempDir = storage_path('app/temp');
 
-        if ($progressCallback) $progressCallback(70);
+        if (!is_dir($tempDir)) {
+            mkdir($tempDir, 0777, true);
+        }
 
-        $result = $this->generateSummary($text);
+        $extension = strtolower(
+            pathinfo($lesson->file_path, PATHINFO_EXTENSION)
+        );
 
-        if ($progressCallback) $progressCallback(85);
+        $localFile = $tempDir . '/' .
+            uniqid('lesson_', true) .
+            '.' .
+            $extension;
 
-        return $result;
+        /*
+        |--------------------------------------------------------------------------
+        | B2 → Local temporary file
+        |--------------------------------------------------------------------------
+        */
+
+        $stream = $disk->readStream($lesson->file_path);
+
+        if ($stream === false) {
+            throw new \Exception(
+                'Unable to read lesson file from B2.'
+            );
+        }
+
+        $target = fopen($localFile, 'w');
+
+        if ($target === false) {
+            fclose($stream);
+
+            throw new \Exception(
+                'Unable to create temporary lesson file.'
+            );
+        }
+
+        stream_copy_to_stream($stream, $target);
+
+        fclose($target);
+        fclose($stream);
+
+        if (!file_exists($localFile)) {
+            throw new \Exception(
+                'Lesson temporary file was not created.'
+            );
+        }
+
+        Log::info('LESSON FILE DOWNLOADED FROM B2', [
+            'lesson_id' => $lesson->id,
+            'b2_path'   => $lesson->file_path,
+            'local_file' => $localFile,
+            'size_mb'   => round(
+                filesize($localFile) / 1024 / 1024,
+                2
+            ),
+        ]);
+
+        try {
+
+            if ($progressCallback) {
+                $progressCallback(40);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Extract
+            |--------------------------------------------------------------------------
+            */
+
+            $text = $this->extractText($localFile);
+
+            if ($progressCallback) {
+                $progressCallback(70);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Generate AI Summary
+            |--------------------------------------------------------------------------
+            */
+
+            $result = $this->generateSummary($text);
+
+            if ($progressCallback) {
+                $progressCallback(85);
+            }
+
+            return $result;
+        } finally {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Cleanup
+            |--------------------------------------------------------------------------
+            */
+
+            if (file_exists($localFile)) {
+                @unlink($localFile);
+            }
+        }
     }
 
     private function extractText(string $file): string

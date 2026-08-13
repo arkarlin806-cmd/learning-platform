@@ -1,14 +1,14 @@
 @extends('layout.course_ins')
-@section("title","Lesson Create")
-@section("page","Instructor Lesson Create And Add Summaries with AI.")
+@section("title","CREATE LESSON")
 
 @section('content')
 
 
 <div class="max-w-6xl mx-auto px-4">
+
     <!-- HEADER -->
     <div class="mb-8">
-        <h1 class="gradient-shine text-3xl font-extrabold">
+        <h1 class="gradient-shine text-4xl font-extrabold">
             All lessons ( {{ $course->title }} )
         </h1>
         <p class="text-slate-500 mt-2">
@@ -20,6 +20,7 @@
 
         <!-- FORM -->
         <div class="lg:col-span-2">
+
             <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
 
                 <!-- HEADER BAR -->
@@ -28,40 +29,44 @@
                     <p class="text-white/70 text-sm">AI processing enabled</p>
                 </div>
 
-                <form
-                    id="lessonForm"
-                    method="POST"
-                    action="{{ route('lesson.store') }}"
-                    enctype="multipart/form-data"
-                    class="p-6 space-y-6">
+                <form id="lessonForm" class="p-6 space-y-6">
+
                     @csrf
+
                     <input type="hidden" id="course_id" name="course_id" value="{{ $course->id }}">
 
+                    <!-- TITLE -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Title</label>
-                        <input type="text" name="title" id="title" required
+                        <input type="text" name="title" id="title"
                             class="w-full mt-2 px-4 py-3 rounded-2xl border focus:ring-4 focus:ring-indigo-100 outline-none"
                             placeholder="Enter lesson title">
                         <p class="text-red-500 text-sm mt-1 hidden" id="error_title"></p>
                     </div>
 
+                    <!-- DESCRIPTION -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Description</label>
-                        <textarea name="description" id="description" rows="4" required
+                        <textarea name="description" id="description" rows="4"
                             class="w-full mt-2 px-4 py-3 rounded-2xl border focus:ring-4 focus:ring-indigo-100 outline-none"
                             placeholder="Optional description"></textarea>
                     </div>
 
+                    <!-- FILE -->
                     <div>
                         <label class="text-sm font-semibold text-slate-700">Upload File</label>
-                        <input type="file" name="file" id="file" required
+
+                        <input type="file" name="file" id="file"
                             class="w-full mt-2 px-4 py-3 border rounded-2xl bg-white">
+
                         <p class="text-xs text-slate-400 mt-1">
                             PDF / MP4 supported (AI will process automatically)
                         </p>
+
                         <p class="text-red-500 text-sm mt-1 hidden" id="error_file"></p>
                     </div>
 
+                    <!-- BUTTONS -->
                     <div class="flex gap-4">
                         <button type="submit"
                             id="submitBtn"
@@ -103,6 +108,10 @@
         </div>
     </div>
 </div>
+
+<!-- SWEETALERT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -111,408 +120,130 @@
 
         let polling = null;
 
-        // =====================================================
-        // SWEETALERT PROGRESS
-        // =====================================================
+        // =========================
+        // SWEET ALERT PROGRESS UI
+        // =========================
         function showProgress() {
-
             Swal.fire({
                 title: 'AI Processing...',
                 html: `
                 <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden mt-4">
-                    <div
-                        id="bar"
-                        class="h-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
-                        style="width: 0%">
-                    </div>
+                    <div id="bar" class="h-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-0"></div>
                 </div>
-
-                <p
-                    id="text"
-                    class="mt-3 text-indigo-600 font-bold"
-                >
-                    Starting...
-                </p>
-            `,
+                <p id="text" class="mt-3 text-indigo-600 font-bold">Starting...</p>`,
                 showConfirmButton: false,
                 allowOutsideClick: false,
-                allowEscapeKey: false
             });
         }
 
-
-        // =====================================================
-        // UPDATE PROGRESS
-        // =====================================================
         function updateProgress(percent, status) {
-
             const bar = document.getElementById('bar');
             const text = document.getElementById('text');
 
-            if (bar) {
-                bar.style.width = `${percent}%`;
-            }
+            if (bar) bar.style.width = percent + '%';
 
-            if (!text) return;
-
-            if (status === 'pending' || percent < 20) {
-
-                text.innerText = "Uploading...";
-
-            } else if (percent < 50) {
-
-                text.innerText = "Extracting content...";
-
-            } else if (percent < 80) {
-
-                text.innerText = "AI generating summary...";
-
-            } else {
-
-                text.innerText = "Finalizing...";
+            if (text) {
+                if (percent < 20) text.innerText = "Uploading...";
+                else if (percent < 50) text.innerText = "Extracting content...";
+                else if (percent < 80) text.innerText = "AI generating summary...";
+                else text.innerText = "Finalizing...";
             }
         }
 
 
-        // =====================================================
-        // POLL LESSON STATUS
-        // =====================================================
         function pollStatus(id) {
 
-            if (polling) {
-                clearInterval(polling);
-            }
-
-            polling = setInterval(async function() {
+            polling = setInterval(async () => {
 
                 try {
+                    const course_id = document.getElementById('course_id').value;
 
-                    const statusUrl =
-                        "{{ route('lesson.status', ['id' => '__LESSON_ID__']) }}"
-                        .replace('__LESSON_ID__', id);
+                    const res = await fetch(`{{ route('lesson.status',':id') }}`.replace(':id', id));
 
-                    console.log("STATUS URL:", statusUrl);
+                    const data = await res.json();
 
-                    const res = await fetch(statusUrl, {
-                        method: "GET",
+                    updateProgress(data.progress, data.status);
 
-                        headers: {
-                            "Accept": "application/json"
-                        },
-
-                        credentials: "same-origin"
-                    });
-
-
-                    const raw = await res.text();
-
-                    console.log("STATUS HTTP:", res.status);
-                    console.log("STATUS RESPONSE:", raw);
-
-
-                    let data;
-
-                    try {
-
-                        data = JSON.parse(raw);
-
-                    } catch (jsonError) {
-
-                        console.error(
-                            "STATUS IS NOT JSON:",
-                            raw
-                        );
-
-                        throw new Error(
-                            `Status server returned HTTP ${res.status}`
-                        );
-                    }
-
-
-                    if (!res.ok) {
-
-                        throw new Error(
-                            data.message ||
-                            data.error ||
-                            "Unable to check lesson status"
-                        );
-                    }
-
-
-                    updateProgress(
-                        Number(data.progress ?? 0),
-                        data.status
-                    );
-
-
-                    // =========================
-                    // COMPLETED
-                    // =========================
                     if (data.status === 'completed') {
-
                         clearInterval(polling);
-                        polling = null;
 
                         Swal.fire({
                             icon: 'success',
                             title: 'Done!',
                             text: 'AI Summary ready for review'
-                        }).then(function() {
+                        }).then(() => {
+                            const course_id = document.getElementById('course_id').value ?? 1;
 
-                            const courseId =
-                                document.getElementById('course_id').value;
+                            let url = "{{ route('lesson.preview', ['id' => ':id', 'course_id' => ':course_id']) }}";
 
-                            const previewUrl =
-                                `{{ route('lesson.preview', [
-                            'id' => '__LESSON_ID__',
-                            'course_id' => '__COURSE_ID__'
-                        ])
-                    }}`
-                                .replace('__LESSON_ID__', id)
-                                .replace('__COURSE_ID__', courseId);
-
-                            window.location.href = previewUrl;
+                            url = url.replace(':id', id)
+                                .replace(':course_id', course_id);
+                            window.location.href = url;
                         });
                     }
 
-
-                    // =========================
-                    // FAILED
-                    // =========================
-                    else if (data.status === 'failed') {
-
+                    if (data.status === 'failed') {
                         clearInterval(polling);
-                        polling = null;
 
                         Swal.fire({
                             icon: 'error',
-                            title: 'AI Processing Failed',
-                            text: data.error ||
-                                data.message ||
-                                'Processing failed'
+                            title: 'Failed',
+                            text: data.error || 'Processing failed'
                         });
 
                         submitBtn.disabled = false;
                         submitBtn.innerText = "Create Lesson";
                     }
 
-
                 } catch (err) {
-
-                    console.error(
-                        "STATUS POLLING ERROR:",
-                        err
-                    );
-
-                    // Don't immediately stop polling
-                    // temporary network error can recover
-
+                    console.error(err);
                 }
 
             }, 2000);
         }
 
-
-        // =====================================================
-        // FORM SUBMIT
-        // =====================================================
+        // =========================
+        // FORM SUBMIT (FETCH API)
+        // =========================
         form.addEventListener('submit', async function(e) {
-
             e.preventDefault();
 
-
-            // Prevent double submit
-            if (submitBtn.disabled) {
-                return;
-            }
-
-
             submitBtn.disabled = true;
-            submitBtn.innerText = "Uploading...";
-
+            submitBtn.innerText = "Processing...";
 
             const formData = new FormData(form);
 
-
-            // Laravel generates the correct production URL
-            const storeUrl = form.getAttribute('action');
-
-            console.log("POST URL:", storeUrl);
-
-            console.log("=================================");
-            console.log("LESSON STORE URL:", storeUrl);
-            console.log("METHOD: POST");
-            console.log("=================================");
-
-
             try {
-
-                const res = await fetch(`{{ route('lesson.store') }}`, {
-
+                const res = await fetch("{{ route('lesson.store') }}", {
                     method: "POST",
-
                     headers: {
-
-                        "Accept": "application/json",
-
-                        "X-Requested-With": "XMLHttpRequest",
-
-                        "X-CSRF-TOKEN": document
-                            .querySelector('input[name="_token"]')
-                            .value
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
-
-                    body: formData,
-
-                    credentials: "same-origin"
+                    body: formData
                 });
+                const data = await res.json();
 
-
-                // =================================================
-                // IMPORTANT
-                // NEVER directly call res.json()
-                // =================================================
-
-                const raw = await res.text();
-
-
-                console.log("=================================");
-                console.log("LESSON STORE HTTP:", res.status);
-                console.log("LESSON STORE RESPONSE:", raw);
-                console.log("=================================");
-
-
-                let data;
-
-
-                try {
-
-                    data = JSON.parse(raw);
-
-                } catch (jsonError) {
-
-                    console.error(
-                        "SERVER DID NOT RETURN JSON:",
-                        raw
-                    );
-
-
-                    let message =
-                        `Server returned HTTP ${res.status}.`;
-
-
-                    if (res.status === 419) {
-
-                        message =
-                            "Session expired. Please refresh the page and try again.";
-
-                    } else if (res.status === 413) {
-
-                        message =
-                            "Uploaded file is too large for the production server.";
-
-                    } else if (res.status === 422) {
-
-                        message =
-                            "Validation failed. Please check your lesson information.";
-
-                    } else if (res.status === 500) {
-
-                        message =
-                            "Laravel server error occurred. Check production logs.";
-
-                    } else if (res.status === 405) {
-
-                        message =
-                            "Invalid HTTP method. Lesson store requires POST.";
-
-                    }
-
-
-                    throw new Error(message);
-                }
-
-
-                // =================================================
-                // HTTP ERROR
-                // =================================================
-                if (!res.ok) {
-
-                    let message =
-                        data.message ||
-                        data.error ||
-                        "Lesson creation failed";
-
-
-                    // Laravel validation errors
-                    if (res.status === 422 && data.errors) {
-
-                        const errors = Object.values(data.errors)
-                            .flat()
-                            .join("\n");
-
-                        message = errors;
-                    }
-
-
-                    throw new Error(message);
-                }
-
-
-                // =================================================
-                // SUCCESS
-                // =================================================
-                console.log(
-                    "LESSON CREATED SUCCESSFULLY:",
-                    data
-                );
-
-
-                if (!data.lesson_id) {
-
-                    throw new Error(
-                        "Server returned success but lesson_id is missing."
-                    );
-                }
-
+                if (!res.ok) throw data;
 
                 showProgress();
-
-                updateProgress(
-                    Number(data.progress ?? 10),
-                    data.status ?? 'pending'
-                );
-
+                updateProgress(10, 'start');
 
                 pollStatus(data.lesson_id);
 
-
             } catch (err) {
 
-                console.error(
-                    "LESSON CREATE ERROR:",
-                    err
-                );
-
-
                 Swal.fire({
-
                     icon: 'error',
-
-                    title: 'Lesson Creation Failed',
-
-                    text: err.message ||
-                        'Something went wrong.'
+                    title: 'Error',
+                    text: err.message || 'Something went wrong'
                 });
 
-
                 submitBtn.disabled = false;
-
                 submitBtn.innerText = "Create Lesson";
             }
-
         });
 
     });
 </script>
+
 @endsection

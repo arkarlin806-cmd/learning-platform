@@ -82,7 +82,7 @@ class OpenAIService
 
     private function transcribeChunk(string $file): string
     {
-        $response = Http::timeout(400)
+        $response = Http::timeout(300)
             ->withHeaders([
                 'Authorization' => 'Bearer ' . env('GROQ_API_KEY'),
             ])
@@ -132,11 +132,6 @@ class OpenAIService
             @unlink($chunk);
         }
 
-        // if (file_exists($audio)) {
-        //     unlink($audio);
-        // }
-
-
         return trim($text);
     }
 
@@ -153,7 +148,7 @@ class OpenAIService
         $text = mb_substr($text, 0, 50000);
 
         $response = Http::retry(3, 2000)
-            ->timeout(300)
+            ->timeout(180)
             ->withHeaders([
                 'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
                 'Content-Type' => 'application/json'

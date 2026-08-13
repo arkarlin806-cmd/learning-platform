@@ -267,21 +267,15 @@ class LessonController extends Controller
         }
     }
 
-    public function store(Request $request) //lesson store
+    public function store(Request $request)
     {
-        Log::info('arrive');
         $request->validate([
             'course_id'   => 'required|integer',
             'title'       => 'required|string|max:255',
-            'description' => 'nullable|string|max:300',
+            'description' => 'nullable|string',
             'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:512000',
         ]);
-        $course = Course::findOrFail($request->course_id);
 
-
-        if ($course->instructor_id != auth()->id()) {
-            abort(403);
-        }
         DB::beginTransaction();
 
         try {
@@ -293,6 +287,7 @@ class LessonController extends Controller
                 'title'            => $request->title,
                 'description'      => $request->description,
                 'lesson_type'      => 'video',
+                'upload_type'      => 'device',
                 'file_path'        => $path,
                 'summary_status'   => 'pending',
                 'summary_progress' => 0,
@@ -324,6 +319,7 @@ class LessonController extends Controller
             ], 500);
         }
     }
+
 
     public function status($id)
     {

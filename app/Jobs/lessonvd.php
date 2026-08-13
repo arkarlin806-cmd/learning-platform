@@ -16,9 +16,7 @@ class lessonvd implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $lessonId;
-    public $tries = 3;
 
-    public $timeout = 900;
     public function __construct(int $lessonId)
     {
         $this->lessonId = $lessonId;
@@ -26,8 +24,8 @@ class lessonvd implements ShouldQueue
 
     public function handle(OpenAIService $aiService): void
     {
-
         $lesson = Lesson::findOrFail($this->lessonId);
+
         try {
 
             $lesson->update([

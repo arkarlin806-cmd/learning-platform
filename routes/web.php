@@ -255,18 +255,37 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-#lesson upload
+// #lesson upload
+// Route::middleware(['auth'])->group(function () {
+//     Route::prefix('lesson')->group(function () {
+//         Route::get('/lesson/create/{id}', [LessonController::class, 'create'])->name('lesson.create');
+//         Route::get('/status/{id}', [LessonController::class, 'status'])->name('lesson.status');
+//         Route::get('/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])->name('lesson.preview');
+//         Route::post('/{id}/save-summary', [LessonController::class, 'saveSummary'])->name('lesson.save.summary');
+//         Route::get('/lesson/show/{id}', [LessonController::class, 'show'])->name('lesson.show');
+//         Route::post('/store', [LessonController::class, 'store'])->name('lesson.store');
+//     });
+// });
 Route::middleware(['auth'])->group(function () {
-    Route::prefix('lesson')->group(function () {
-        Route::get('/lesson/create/{id}', [LessonController::class, 'create'])->name('lesson.create');
-        Route::get('/status/{id}', [LessonController::class, 'status'])->name('lesson.status');
-        Route::get('/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])->name('lesson.preview');
-        Route::post('/{id}/save-summary', [LessonController::class, 'saveSummary'])->name('lesson.save.summary');
-        Route::get('/lesson/show/{id}', [LessonController::class, 'show'])->name('lesson.show');
-        Route::post('/store', [LessonController::class, 'store'])->name('lesson.store');
-    });
-});
 
+    Route::get('/lesson/create/{id}', [LessonController::class, 'create'])
+        ->name('lesson.create');
+
+    Route::get('/lesson/status/{id}', [LessonController::class, 'status'])
+        ->name('lesson.status');
+
+    Route::get('/lesson/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])
+        ->name('lesson.preview');
+
+    Route::post('/lesson/{id}/save-summary', [LessonController::class, 'saveSummary'])
+        ->name('lesson.save.summary');
+
+    Route::get('/lesson/show/{id}', [LessonController::class, 'show'])
+        ->name('lesson.show');
+
+    Route::post('/lesson/store', [LessonController::class, 'store'])
+        ->name('lesson.store');
+});
 
 
 //admin roadmap 

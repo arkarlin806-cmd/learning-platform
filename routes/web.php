@@ -263,10 +263,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])->name('lesson.preview');
         Route::post('/{id}/save-summary', [LessonController::class, 'saveSummary'])->name('lesson.save.summary');
         Route::get('/lesson/show/{id}', [LessonController::class, 'show'])->name('lesson.show');
-        Route::post('/store', [LessonController::class, 'store'])->name('lesson.store');
     });
 });
 
+Route::post('/lesson/store', [LessonController::class, 'store'])->name('lesson.store');
 
 
 //admin roadmap 

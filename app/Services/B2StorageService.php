@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
 class B2StorageService
@@ -15,7 +14,7 @@ class B2StorageService
     }
 
     /**
-     * Authorize B2 account.
+     * Authorize Backblaze B2 account
      */
     protected function authorize(): array
     {
@@ -36,22 +35,36 @@ class B2StorageService
             );
         }
 
-        return $response->json();
+        $data = $response->json();
+
+        if (
+            empty($data['authorizationToken']) ||
+            empty($data['apiInfo']['storageApi']['apiUrl'])
+        ) {
+            throw new RuntimeException(
+                'B2 authorization response is missing apiUrl or authorizationToken: '
+                    . $response->body()
+            );
+        }
+
+        return $data;
     }
 
     /**
-     * Get an upload URL.
+     * Get upload URL
      */
     protected function getUploadUrl(array $authorization): array
     {
         $config = $this->config();
+
+        $apiUrl = $authorization['apiInfo']['storageApi']['apiUrl'];
 
         $response = Http::withToken(
             $authorization['authorizationToken']
         )
             ->timeout(30)
             ->post(
-                $authorization['apiUrl'] . '/b2api/v4/b2_get_upload_url',
+                $apiUrl . '/b2api/v4/b2_get_upload_url',
                 [
                     'bucketId' => $config['bucket_id'],
                 ]
@@ -63,16 +76,29 @@ class B2StorageService
             );
         }
 
-        return $response->json();
+        $data = $response->json();
+
+        if (
+            empty($data['uploadUrl']) ||
+            empty($data['authorizationToken'])
+        ) {
+            throw new RuntimeException(
+                'B2 upload URL response is invalid: '
+                    . $response->body()
+            );
+        }
+
+        return $data;
     }
 
     /**
-     * Upload a Laravel UploadedFile.
+     * Upload file to Backblaze B2
      */
     public function upload(
         UploadedFile $file,
         string $folder = ''
     ): array {
+
         $authorization = $this->authorize();
 
         $upload = $this->getUploadUrl($authorization);
@@ -102,23 +128,21 @@ class B2StorageService
             );
         }
 
+        $mimeType = $file->getMimeType()
+            ?: 'application/octet-stream';
+
         $sha1 = sha1($contents);
 
         $response = Http::withHeaders([
             'Authorization' => $upload['authorizationToken'],
-
             'X-Bz-File-Name' => rawurlencode($fileName),
-
-            'Content-Type' => $file->getMimeType()
-                ?: 'b2/x-auto',
-
+            'Content-Type' => $mimeType,
             'X-Bz-Content-Sha1' => $sha1,
-
             'Content-Length' => strlen($contents),
         ])
             ->withBody(
                 $contents,
-                $file->getMimeType() ?: 'application/octet-stream'
+                $mimeType
             )
             ->timeout(300)
             ->post(

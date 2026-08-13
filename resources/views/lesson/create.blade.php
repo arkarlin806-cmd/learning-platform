@@ -151,7 +151,6 @@
             }
         }
 
-
         function pollStatus(id) {
 
             polling = setInterval(async () => {
@@ -173,7 +172,7 @@
                             title: 'Done!',
                             text: 'AI Summary ready for review'
                         }).then(() => {
-                            const course_id = document.getElementById('course_id').value ?? 1;
+                            // const course_id = document.getElementById('course_id').value ?? 1;
 
                             let url = "{{ route('lesson.preview', ['id' => ':id', 'course_id' => ':course_id']) }}";
 
@@ -202,6 +201,7 @@
 
             }, 2000);
         }
+
 
         // =========================
         // FORM SUBMIT (FETCH API)

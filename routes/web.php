@@ -271,14 +271,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lesson/create/{id}', [LessonController::class, 'create'])
         ->name('lesson.create');
 
-    Route::get('/lesson/status/{id}', [LessonController::class, 'status'])
-        ->name('lesson.status');
+    Route::get('/lesson/status/{id}', [LessonController::class, 'status'])->name('lesson.status');
 
-    Route::get('/lesson/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])
-        ->name('lesson.preview');
+    Route::get('/lesson/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])->name('lesson.preview');
 
-    Route::post('/lesson/{id}/save-summary', [LessonController::class, 'saveSummary'])
-        ->name('lesson.save.summary');
+    Route::post('/lesson/{id}/save-summary', [LessonController::class, 'saveSummary'])->name('lesson.save.summary');
 
     Route::get('/lesson/show/{id}', [LessonController::class, 'show'])
         ->name('lesson.show');

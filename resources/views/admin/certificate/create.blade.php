@@ -117,7 +117,7 @@
 
 
                 <!-- OPTIONS -->
-                <div class="border-t pt-5">
+                <div class="border-t pt-5 hidden">
                     <h2 class="font-bold mb-4">
                         ⚙ Display
                     </h2>

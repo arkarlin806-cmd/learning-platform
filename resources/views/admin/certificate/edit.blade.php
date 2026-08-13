@@ -319,18 +319,18 @@
                     <img
                         id="previewLogo"
                         src="{{ $certificateFrame->logo ? asset('storage/'.$certificateFrame->logo) : '' }}"
-                        class="absolute top-12 left-12 w-16 z-40 {{ $certificateFrame->logo ? '' : 'hidden' }}">
+                        class="absolute top-12 left-12 w-16 z-10 {{ $certificateFrame->logo ? '' : 'hidden' }}">
 
                     <!-- Seal -->
 
                     <img
                         id="previewSeal"
                         src="{{ $certificateFrame->seal ? asset('storage/'.$certificateFrame->seal) : '' }}"
-                        class="absolute bottom-8 right-55 w-20 z-40 {{ $certificateFrame->seal ? '' : 'hidden' }}">
+                        class="absolute bottom-8 right-55 w-20 z-10 {{ $certificateFrame->seal ? '' : 'hidden' }}">
 
                     <!-- Certificate Content -->
 
-                    <div class="relative z-30 flex flex-col  py-12 h-full px-12 text-center">
+                    <div class="relative z-10 flex flex-col  py-12 h-full px-12 text-center">
 
                         <h1
                             id="previewTitle"
@@ -392,22 +392,6 @@
 
                             </div>
 
-                            <!-- Certificate ID -->
-
-                            <!-- <div class="text-center">
-                                <p class="text-xs text-slate-500">
-
-                                    Certificate ID
-
-                                </p>
-
-                                <p class="font-bold">
-
-                                    CERT-000001
-
-                                </p>
-
-                            </div> -->
 
                             <!-- QR -->
 
@@ -430,7 +414,7 @@
                     <img
                         id="previewBorder"
                         src="{{ $certificateFrame->border_image ? asset('storage/'.$certificateFrame->border_image) : '' }}"
-                        class="absolute inset-0 w-full h-full object-fill pointer-events-none z-50 {{ $certificateFrame->border_image ? '' : 'hidden' }}">
+                        class="absolute inset-0 w-full h-full object-fill pointer-events-none z-10 {{ $certificateFrame->border_image ? '' : 'hidden' }}">
 
                 </div>
 

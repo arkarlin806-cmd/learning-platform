@@ -163,97 +163,6 @@ class CertificateFrameController extends Controller
             ->header('Content-Type', $mime)
             ->header('Cache-Control', 'private, max-age=3600');
     }
-    // public function show(CertificateFrame $certificateFrame)
-    // {
-    //     return view(
-    //         'admin.certificate.show',
-    //         compact('certificateFrame')
-    //     );
-    // }
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         // Basic
-    //         'category'
-    //         => 'required|string|max:255',
-
-    //         'frame_name'
-    //         => 'required|string|max:255',
-
-    //         // Images
-    //         'background'
-    //         => 'nullable|image|max:5120',
-
-    //         'border_image'
-    //         => 'nullable|image|max:5120',
-
-    //         'watermark'
-    //         => 'nullable|image|max:5120',
-
-    //         'logo'
-    //         => 'nullable|image|max:5120',
-
-    //         'seal'
-    //         => 'nullable|image|max:5120',
-
-    //         // Colors
-    //         'primary_color'
-    //         => 'nullable|string',
-
-    //         'secondary_color'
-    //         => 'nullable|string',
-
-    //         'accent_color'
-    //         => 'nullable|string',
-    //     ]);
-
-    //     $data = $request->except([
-    //         '_token'
-    //     ]);
-
-    //     $images = [
-
-    //         'background',
-    //         'border_image',
-    //         'watermark',
-
-    //         'logo',
-    //         'seal'
-
-    //     ];
-
-    //     foreach ($images as $image) {
-    //         if ($request->hasFile($image)) {
-    //             $data[$image] =
-    //                 $request->file($image)
-    //                 ->store(
-    //                     'certificate_frames',
-    //                     'public'
-    //                 );
-    //         }
-    //     }
-
-    //     $booleanFields = [
-    //         'active'
-    //     ];
-
-    //     foreach ($booleanFields as $field) {
-
-    //         $data[$field] =
-    //             $request->has($field);
-    //     }
-    //     CertificateFrame::create($data);
-    //     return redirect()
-    //         ->route(
-    //             'admin.certificate.frames.index'
-    //         )
-    //         ->with(
-    //             'success',
-    //             'Certificate Frame Created Successfully'
-    //         );
-    // }
-
-
 
     public function edit(CertificateFrame $certificateFrame)
     {
@@ -370,6 +279,7 @@ class CertificateFrameController extends Controller
 
 
 
+
     public function update(Request $request, CertificateFrame $certificateFrame)
     {
         $request->validate([
@@ -390,58 +300,89 @@ class CertificateFrameController extends Controller
         ]);
 
         $data = [
-            'category'        => $request->category,
-            'frame_name'      => $request->frame_name,
-            'primary_color'   => $request->primary_color,
-            'secondary_color' => $request->secondary_color,
-            'accent_color'    => $request->accent_color,
+            'category'        => $request->input('category'),
+            'frame_name'      => $request->input('frame_name'),
+            'primary_color'   => $request->input('primary_color'),
+            'secondary_color' => $request->input('secondary_color'),
+            'accent_color'    => $request->input('accent_color'),
             'active'          => $request->boolean('active'),
         ];
 
-        /*
-        |--------------------------------------------------------------------------
-        | B2 Upload Helper
-        |--------------------------------------------------------------------------
-        */
+        $oldFiles = [];
 
         $images = [
-            'background' => 'certificate_frames/backgrounds',
+            'background'   => 'certificate_frames/backgrounds',
             'border_image' => 'certificate_frames/borders',
-            'watermark' => 'certificate_frames/watermarks',
-            'logo' => 'certificate_frames/logos',
-            'seal' => 'certificate_frames/seals',
+            'watermark'    => 'certificate_frames/watermarks',
+            'logo'         => 'certificate_frames/logos',
+            'seal'         => 'certificate_frames/seals',
         ];
 
         foreach ($images as $field => $folder) {
 
             if ($request->hasFile($field)) {
 
-                // Delete old image from B2
-                if (
-                    !empty($certificateFrame->$field) &&
-                    Storage::disk('b2')->exists(
-                        $certificateFrame->$field
-                    )
-                ) {
-                    Storage::disk('b2')->delete(
-                        $certificateFrame->$field
-                    );
+                /*
+                 * Save old path first
+                 */
+                if (!empty($certificateFrame->$field)) {
+                    $oldFiles[$field] = $certificateFrame->$field;
                 }
 
-                // Upload new image to B2
-                $data[$field] = $request
+                /*
+                 * Upload NEW file to B2
+                 */
+                $newPath = $request
                     ->file($field)
                     ->store($folder, 'b2');
+
+                /*
+                 * If upload failed
+                 */
+                if (!$newPath) {
+                    return back()
+                        ->withInput()
+                        ->with(
+                            'error',
+                            "Failed to upload {$field} to B2."
+                        );
+                }
+
+                /*
+                 * Save new path
+                 */
+                $data[$field] = $newPath;
             }
         }
 
         /*
-        |--------------------------------------------------------------------------
-        | Update Database
-        |--------------------------------------------------------------------------
-        */
-
+         * Update database
+         */
         $certificateFrame->update($data);
+
+        /*
+         * Delete OLD files from B2
+         */
+        foreach ($oldFiles as $oldPath) {
+
+            try {
+                if (
+                    !empty($oldPath) &&
+                    Storage::disk('b2')->exists($oldPath)
+                ) {
+                    Storage::disk('b2')->delete($oldPath);
+                }
+            } catch (\Throwable $e) {
+
+                \Log::warning(
+                    'Old certificate frame image could not be deleted from B2',
+                    [
+                        'path' => $oldPath,
+                        'error' => $e->getMessage(),
+                    ]
+                );
+            }
+        }
 
         return redirect()
             ->route('admin.certificate.frames.index')

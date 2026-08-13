@@ -86,23 +86,11 @@
                 <!-- SETTINGS -->
                 <div class="border-t pt-5">
 
-                    <div class="py-2 flex justify-center rounded-xl px-7 py-2 bg-yellow-200"><a href="{{ route('admin.certificate-frames.edit',$certificateFrame) }}">Edit</a></div>
-
-
+                    <div class="py-2 flex justify-center rounded-xl px-7 py-3 bg-orange-700 text-white font-semibold hover:shadow-md">
+                        <a href="{{ route('admin.certificate-frames.edit',$certificateFrame) }}">Edit</a>
+                    </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
             </div>
-
-
         </div>
 
 

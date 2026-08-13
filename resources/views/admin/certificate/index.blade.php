@@ -94,7 +94,7 @@
         <!-- Preview -->
         <div class="relative h-56 overflow-hidden bg-slate-100">
             @if($frame->background)
-            <img src="{{ asset('storage/'.$frame->background) }}"
+            <img src="{{ route('admin.certificate.image', ['filename' => basename($frame->background)]) }}"
                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
             @else
 

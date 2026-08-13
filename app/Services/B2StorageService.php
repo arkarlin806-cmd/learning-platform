@@ -176,14 +176,15 @@ class B2StorageService
 
         $config = $this->config();
 
+        $apiUrl = $authorization['apiInfo']['storageApi']['apiUrl'];
+
         $response = Http::withHeaders([
             'Authorization' => $authorization['authorizationToken'],
             'Content-Type' => 'application/json',
         ])
             ->timeout(30)
             ->post(
-                $authorization['apiInfo']['storageApi']['apiUrl']
-                    . '/b2api/v4/b2_get_download_authorization',
+                $apiUrl . '/b2api/v4/b2_get_download_authorization',
                 [
                     'bucketId' => $config['bucket_id'],
                     'fileNamePrefix' => $fileName,
@@ -199,20 +200,35 @@ class B2StorageService
 
         $data = $response->json();
 
-        $downloadUrl = rtrim(
-            $authorization['downloadUrl'],
-            '/'
+        if (empty($data['authorizationToken'])) {
+            throw new RuntimeException(
+                'B2 download authorization token missing: '
+                    . $response->body()
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | IMPORTANT
+        |--------------------------------------------------------------------------
+        | Backblaze B2 v4:
+        | apiInfo.storageApi.downloadUrl
+        |--------------------------------------------------------------------------
+        */
+
+        $downloadUrl = $authorization['apiInfo']['storageApi']['downloadUrl'];
+
+        $encodedFileName = str_replace(
+            '%2F',
+            '/',
+            rawurlencode($fileName)
         );
 
-        return $downloadUrl
+        return rtrim($downloadUrl, '/')
             . '/file/'
             . $config['bucket_name']
             . '/'
-            . str_replace(
-                '%2F',
-                '/',
-                rawurlencode($fileName)
-            )
+            . $encodedFileName
             . '?Authorization='
             . urlencode($data['authorizationToken']);
     }

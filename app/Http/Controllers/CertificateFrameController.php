@@ -262,20 +262,131 @@ class CertificateFrameController extends Controller
             compact('certificateFrame')
         );
     }
+    // public function update(Request $request, CertificateFrame $certificateFrame)
+    // {
+    //     $request->validate([
+    //         'category'         => 'required|string|max:255',
+    //         'frame_name'       => 'required|string|max:255',
+    //         'background'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+    //         'border_image'     => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+    //         'watermark'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+    //         'logo'             => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+    //         'seal'             => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+    //         'primary_color'    => 'required|string|max:20',
+    //         'secondary_color'  => 'required|string|max:20',
+    //         'accent_color'     => 'required|string|max:20',
+    //         'active'           => 'nullable|boolean',
+    //     ]);
+
+    //     $data = [
+    //         'category'        => $request->category,
+    //         'frame_name'      => $request->frame_name,
+    //         'primary_color'   => $request->primary_color,
+    //         'secondary_color' => $request->secondary_color,
+    //         'accent_color'    => $request->accent_color,
+    //         'active'          => $request->boolean('active'),
+    //     ];
+
+    //     // Background
+    //     if ($request->hasFile('background')) {
+
+    //         if (
+    //             $certificateFrame->background &&
+    //             Storage::disk('public')->exists($certificateFrame->background)
+    //         ) {
+    //             Storage::disk('public')->delete($certificateFrame->background);
+    //         }
+
+    //         $data['background'] = $request
+    //             ->file('background')
+    //             ->store('certificate_frames/backgrounds', 'public');
+    //     }
+
+    //     // Border
+    //     if ($request->hasFile('border_image')) {
+
+    //         if (
+    //             $certificateFrame->border_image &&
+    //             Storage::disk('public')->exists($certificateFrame->border_image)
+    //         ) {
+    //             Storage::disk('public')->delete($certificateFrame->border_image);
+    //         }
+
+    //         $data['border_image'] = $request
+    //             ->file('border_image')
+    //             ->store('certificate_frames/borders', 'public');
+    //     }
+
+    //     // Watermark
+    //     if ($request->hasFile('watermark')) {
+
+    //         if (
+    //             $certificateFrame->watermark &&
+    //             Storage::disk('public')->exists($certificateFrame->watermark)
+    //         ) {
+    //             Storage::disk('public')->delete($certificateFrame->watermark);
+    //         }
+
+    //         $data['watermark'] = $request
+    //             ->file('watermark')
+    //             ->store('certificate_frames/watermarks', 'public');
+    //     }
+
+    //     // Logo
+    //     if ($request->hasFile('logo')) {
+
+    //         if (
+    //             $certificateFrame->logo &&
+    //             Storage::disk('public')->exists($certificateFrame->logo)
+    //         ) {
+    //             Storage::disk('public')->delete($certificateFrame->logo);
+    //         }
+
+    //         $data['logo'] = $request
+    //             ->file('logo')
+    //             ->store('certificate_frames/logos', 'public');
+    //     }
+
+    //     // Seal
+    //     if ($request->hasFile('seal')) {
+
+    //         if (
+    //             $certificateFrame->seal &&
+    //             Storage::disk('public')->exists($certificateFrame->seal)
+    //         ) {
+    //             Storage::disk('public')->delete($certificateFrame->seal);
+    //         }
+    //         $data['seal'] = $request
+    //             ->file('seal')
+    //             ->store('certificate_frames/seals', 'public');
+    //     }
+
+    //     $certificateFrame->update($data);
+
+    //     return redirect()
+    //         ->route('admin.certificate.frames.index')
+    //         ->with('success', 'Certificate frame updated successfully.');
+    // }
+
+
+
     public function update(Request $request, CertificateFrame $certificateFrame)
     {
         $request->validate([
-            'category'         => 'required|string|max:255',
-            'frame_name'       => 'required|string|max:255',
-            'background'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-            'border_image'     => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'watermark'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'logo'             => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'seal'             => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'primary_color'    => 'required|string|max:20',
-            'secondary_color'  => 'required|string|max:20',
-            'accent_color'     => 'required|string|max:20',
-            'active'           => 'nullable|boolean',
+            'category'        => 'required|string|max:255',
+            'frame_name'      => 'required|string|max:255',
+
+            'background'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'border_image'    => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+            'watermark'       => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+            'logo'            => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+            'seal'            => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+
+            'primary_color'   => 'required|string|max:20',
+            'secondary_color' => 'required|string|max:20',
+            'accent_color'    => 'required|string|max:20',
+
+            'active'          => 'nullable|boolean',
         ]);
 
         $data = [
@@ -287,89 +398,58 @@ class CertificateFrameController extends Controller
             'active'          => $request->boolean('active'),
         ];
 
-        // Background
-        if ($request->hasFile('background')) {
+        /*
+        |--------------------------------------------------------------------------
+        | B2 Upload Helper
+        |--------------------------------------------------------------------------
+        */
 
-            if (
-                $certificateFrame->background &&
-                Storage::disk('public')->exists($certificateFrame->background)
-            ) {
-                Storage::disk('public')->delete($certificateFrame->background);
+        $images = [
+            'background' => 'certificate_frames/backgrounds',
+            'border_image' => 'certificate_frames/borders',
+            'watermark' => 'certificate_frames/watermarks',
+            'logo' => 'certificate_frames/logos',
+            'seal' => 'certificate_frames/seals',
+        ];
+
+        foreach ($images as $field => $folder) {
+
+            if ($request->hasFile($field)) {
+
+                // Delete old image from B2
+                if (
+                    !empty($certificateFrame->$field) &&
+                    Storage::disk('b2')->exists(
+                        $certificateFrame->$field
+                    )
+                ) {
+                    Storage::disk('b2')->delete(
+                        $certificateFrame->$field
+                    );
+                }
+
+                // Upload new image to B2
+                $data[$field] = $request
+                    ->file($field)
+                    ->store($folder, 'b2');
             }
-
-            $data['background'] = $request
-                ->file('background')
-                ->store('certificate_frames/backgrounds', 'public');
         }
 
-        // Border
-        if ($request->hasFile('border_image')) {
-
-            if (
-                $certificateFrame->border_image &&
-                Storage::disk('public')->exists($certificateFrame->border_image)
-            ) {
-                Storage::disk('public')->delete($certificateFrame->border_image);
-            }
-
-            $data['border_image'] = $request
-                ->file('border_image')
-                ->store('certificate_frames/borders', 'public');
-        }
-
-        // Watermark
-        if ($request->hasFile('watermark')) {
-
-            if (
-                $certificateFrame->watermark &&
-                Storage::disk('public')->exists($certificateFrame->watermark)
-            ) {
-                Storage::disk('public')->delete($certificateFrame->watermark);
-            }
-
-            $data['watermark'] = $request
-                ->file('watermark')
-                ->store('certificate_frames/watermarks', 'public');
-        }
-
-        // Logo
-        if ($request->hasFile('logo')) {
-
-            if (
-                $certificateFrame->logo &&
-                Storage::disk('public')->exists($certificateFrame->logo)
-            ) {
-                Storage::disk('public')->delete($certificateFrame->logo);
-            }
-
-            $data['logo'] = $request
-                ->file('logo')
-                ->store('certificate_frames/logos', 'public');
-        }
-
-        // Seal
-        if ($request->hasFile('seal')) {
-
-            if (
-                $certificateFrame->seal &&
-                Storage::disk('public')->exists($certificateFrame->seal)
-            ) {
-                Storage::disk('public')->delete($certificateFrame->seal);
-            }
-            $data['seal'] = $request
-                ->file('seal')
-                ->store('certificate_frames/seals', 'public');
-        }
+        /*
+        |--------------------------------------------------------------------------
+        | Update Database
+        |--------------------------------------------------------------------------
+        */
 
         $certificateFrame->update($data);
 
         return redirect()
             ->route('admin.certificate.frames.index')
-            ->with('success', 'Certificate frame updated successfully.');
+            ->with(
+                'success',
+                'Certificate frame updated successfully.'
+            );
     }
-
-
-
     public function ins_create(Course $course)
     {
         abort_if($course->instructor_id != Auth::id(), 403);

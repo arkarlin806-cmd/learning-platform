@@ -6,7 +6,6 @@ use App\Models\CertificateFrame;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 use App\Models\Certificate;
@@ -14,7 +13,6 @@ use App\Models\Course;
 use App\Models\CourseOrder;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
 class CertificateFrameController extends Controller
 {
@@ -50,6 +48,87 @@ class CertificateFrameController extends Controller
 
         return view('admin.certificate.index', compact('certificateFrames'));
     }
+    public function store(Request $request)
+    {
+        $request->validate([
+            // Basic
+            'category'   => 'required|string|max:255',
+            'frame_name' => 'required|string|max:255',
+
+            // Images
+            'background'  => 'nullable|image|max:5120',
+            'border_image' => 'nullable|image|max:5120',
+            'watermark'   => 'nullable|image|max:5120',
+            'logo'        => 'nullable|image|max:5120',
+            'seal'        => 'nullable|image|max:5120',
+
+            // Colors
+            'primary_color'   => 'nullable|string',
+            'secondary_color' => 'nullable|string',
+            'accent_color'    => 'nullable|string',
+        ]);
+
+        $data = $request->except([
+            '_token'
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Upload certificate images to Backblaze B2
+        |--------------------------------------------------------------------------
+        */
+
+        $images = [
+            'background',
+            'border_image',
+            'watermark',
+            'logo',
+            'seal'
+        ];
+
+        foreach ($images as $image) {
+
+            if ($request->hasFile($image)) {
+
+                $file = $request->file($image);
+
+                $data[$image] = $file->store(
+                    'certificate_frames',
+                    'b2'
+                );
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Boolean fields
+        |--------------------------------------------------------------------------
+        */
+
+        $booleanFields = [
+            'active'
+        ];
+
+        foreach ($booleanFields as $field) {
+            $data[$field] = $request->has($field);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Create Certificate Frame
+        |--------------------------------------------------------------------------
+        */
+
+        CertificateFrame::create($data);
+
+        return redirect()
+            ->route('admin.certificate.frames.index')
+            ->with(
+                'success',
+                'Certificate Frame Created Successfully'
+            );
+    }
+
 
     public function show(CertificateFrame $certificateFrame)
     {
@@ -58,164 +137,124 @@ class CertificateFrameController extends Controller
             compact('certificateFrame')
         );
     }
-    public function store(Request $request)
+
+    public function certificateImage($filename)
     {
+        $path = 'certificate_frames/' . $filename;
 
-
-        $request->validate([
-
-
-            // Basic
-
-            'category'
-            => 'required|string|max:255',
-
-
-            'frame_name'
-            => 'required|string|max:255',
-
-
-
-
-
-            // Images
-
-            'background'
-            => 'nullable|image|max:5120',
-
-            'border_image'
-            => 'nullable|image|max:5120',
-
-            'watermark'
-            => 'nullable|image|max:5120',
-
-            'logo'
-            => 'nullable|image|max:5120',
-
-            'seal'
-            => 'nullable|image|max:5120',
-
-
-
-
-            // Colors
-
-            'primary_color'
-            => 'nullable|string',
-
-            'secondary_color'
-            => 'nullable|string',
-
-            'accent_color'
-            => 'nullable|string',
-        ]);
-
-
-
-
-
-        $data = $request->except([
-
-            '_token'
-
-        ]);
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Image Upload
-        |--------------------------------------------------------------------------
-        */
-
-
-        $images = [
-
-            'background',
-            'border_image',
-            'watermark',
-
-            'logo',
-            'seal'
-
-        ];
-
-
-
-
-        foreach ($images as $image) {
-
-
-            if ($request->hasFile($image)) {
-
-
-                $data[$image] =
-                    $request->file($image)
-                    ->store(
-                        'certificate_frames',
-                        'public'
-                    );
-            }
+        if (!Storage::disk('b2')->exists($path)) {
+            abort(404);
         }
 
+        $file = Storage::disk('b2')->get($path);
 
+        $extension = strtolower(
+            pathinfo($filename, PATHINFO_EXTENSION)
+        );
 
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Boolean Values
-        |--------------------------------------------------------------------------
-        */
-
-
-        $booleanFields = [
-            'active'
+        $mimeTypes = [
+            'jpg'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png'  => 'image/png',
+            'gif'  => 'image/gif',
+            'webp' => 'image/webp',
         ];
 
+        $mime = $mimeTypes[$extension] ?? 'application/octet-stream';
 
-
-
-
-        foreach ($booleanFields as $field) {
-
-            $data[$field] =
-                $request->has($field);
-        }
-
-
-
-
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Create
-        |--------------------------------------------------------------------------
-        */
-
-
-        CertificateFrame::create($data);
-
-
-
-
-        return redirect()
-
-            ->route(
-                'admin.certificate.frames.index'
-            )
-
-            ->with(
-                'success',
-                'Certificate Frame Created Successfully'
-            );
+        return response($file)
+            ->header('Content-Type', $mime)
+            ->header('Cache-Control', 'private, max-age=3600');
     }
+    // public function show(CertificateFrame $certificateFrame)
+    // {
+    //     return view(
+    //         'admin.certificate.show',
+    //         compact('certificateFrame')
+    //     );
+    // }
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         // Basic
+    //         'category'
+    //         => 'required|string|max:255',
+
+    //         'frame_name'
+    //         => 'required|string|max:255',
+
+    //         // Images
+    //         'background'
+    //         => 'nullable|image|max:5120',
+
+    //         'border_image'
+    //         => 'nullable|image|max:5120',
+
+    //         'watermark'
+    //         => 'nullable|image|max:5120',
+
+    //         'logo'
+    //         => 'nullable|image|max:5120',
+
+    //         'seal'
+    //         => 'nullable|image|max:5120',
+
+    //         // Colors
+    //         'primary_color'
+    //         => 'nullable|string',
+
+    //         'secondary_color'
+    //         => 'nullable|string',
+
+    //         'accent_color'
+    //         => 'nullable|string',
+    //     ]);
+
+    //     $data = $request->except([
+    //         '_token'
+    //     ]);
+
+    //     $images = [
+
+    //         'background',
+    //         'border_image',
+    //         'watermark',
+
+    //         'logo',
+    //         'seal'
+
+    //     ];
+
+    //     foreach ($images as $image) {
+    //         if ($request->hasFile($image)) {
+    //             $data[$image] =
+    //                 $request->file($image)
+    //                 ->store(
+    //                     'certificate_frames',
+    //                     'public'
+    //                 );
+    //         }
+    //     }
+
+    //     $booleanFields = [
+    //         'active'
+    //     ];
+
+    //     foreach ($booleanFields as $field) {
+
+    //         $data[$field] =
+    //             $request->has($field);
+    //     }
+    //     CertificateFrame::create($data);
+    //     return redirect()
+    //         ->route(
+    //             'admin.certificate.frames.index'
+    //         )
+    //         ->with(
+    //             'success',
+    //             'Certificate Frame Created Successfully'
+    //         );
+    // }
     public function edit(CertificateFrame $certificateFrame)
     {
         return view(

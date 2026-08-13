@@ -6,183 +6,44 @@ use Illuminate\Support\Facades\Http;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Log;
 use App\Models\Lesson;
-use Illuminate\Support\Facades\Storage;
 
 class OpenAIService
 {
-    public function processLesson(
-        Lesson $lesson,
-        ?callable $progressCallback = null
-    ): array {
+    public function processLesson(Lesson $lesson, ?callable $progressCallback = null): array
+    {
+        $filePath = storage_path('app/public/' . $lesson->file_path);
 
-        $disk = Storage::disk('b2');
-
-        if (!$disk->exists($lesson->file_path)) {
-            throw new \Exception('Lesson file not found in B2.');
+        if (!file_exists($filePath)) {
+            throw new \Exception('Lesson file not found.');
         }
 
-        $tempDir = storage_path('app/temp');
+        if ($progressCallback) $progressCallback(40);
 
-        if (!is_dir($tempDir)) {
-            mkdir($tempDir, 0777, true);
-        }
+        $text = $this->extractText($filePath);
 
-        $extension = strtolower(
-            pathinfo($lesson->file_path, PATHINFO_EXTENSION)
-        );
+        if ($progressCallback) $progressCallback(70);
 
-        $localFile = $tempDir . '/' . uniqid('lesson_') . '.' . $extension;
+        $result = $this->generateSummary($text);
 
-        try {
+        if ($progressCallback) $progressCallback(85);
 
-            if ($progressCallback) {
-                $progressCallback(20);
-            }
-
-            /*
-            |--------------------------------------------------------------------------
-            | Download B2 file to temporary local storage
-            |--------------------------------------------------------------------------
-            */
-
-            file_put_contents(
-                $localFile,
-                $disk->get($lesson->file_path)
-            );
-
-            if (!file_exists($localFile)) {
-                throw new \Exception(
-                    'Failed to download lesson from B2.'
-                );
-            }
-
-            if ($progressCallback) {
-                $progressCallback(40);
-            }
-
-            /*
-            |--------------------------------------------------------------------------
-            | Extract text
-            |--------------------------------------------------------------------------
-            */
-
-            $text = $this->extractText($localFile);
-
-            if ($progressCallback) {
-                $progressCallback(70);
-            }
-            /*
-            |--------------------------------------------------------------------------
-            | Generate AI Summary
-            |--------------------------------------------------------------------------
-            */
-
-            $result = $this->generateSummary($text);
-
-            if ($progressCallback) {
-                $progressCallback(85);
-            }
-
-            return $result;
-        } finally {
-
-            /*
-            |--------------------------------------------------------------------------
-            | Delete temporary downloaded file
-            |--------------------------------------------------------------------------
-            */
-
-            if (file_exists($localFile)) {
-                @unlink($localFile);
-            }
-        }
+        return $result;
     }
+
     private function extractText(string $file): string
     {
-        $extension = strtolower(
-            pathinfo($file, PATHINFO_EXTENSION)
-        );
+        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if ($extension === 'pdf') {
-
             $parser = new Parser();
-
             $pdf = $parser->parseFile($file);
-
             return $pdf->getText();
         }
 
         $audio = $this->videoToAudio($file);
-
-        try {
-
-            return $this->whisper($audio);
-        } finally {
-
-            if (file_exists($audio)) {
-                @unlink($audio);
-            }
-        }
+        return $this->whisper($audio);
     }
-    // public function processLesson(Lesson $lesson, ?callable $progressCallback = null): array
-    // {
-    //     $filePath = storage_path('app/public/' . $lesson->file_path);
 
-    //     if (!file_exists($filePath)) {
-    //         throw new \Exception('Lesson file not found.');
-    //     }
-
-    //     if ($progressCallback) $progressCallback(40);
-
-    //     $text = $this->extractText($filePath);
-
-    //     if ($progressCallback) $progressCallback(70);
-
-    //     $result = $this->generateSummary($text);
-
-    //     if ($progressCallback) $progressCallback(85);
-
-    //     return $result;
-    // }
-
-    // private function extractText(string $file): string
-    // {
-    //     $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-    //     if ($extension === 'pdf') {
-    //         $parser = new Parser();
-    //         $pdf = $parser->parseFile($file);
-    //         return $pdf->getText();
-    //     }
-
-    //     $audio = $this->videoToAudio($file);
-    //     return $this->whisper($audio);
-    // }
-
-    // private function videoToAudio(string $video): string
-    // {
-    //     $tempDir = storage_path('app/temp');
-
-    //     if (!is_dir($tempDir)) {
-    //         mkdir($tempDir, 0777, true);
-    //     }
-
-    //     $audio = $tempDir . '/' . uniqid() . '.mp3';
-
-    //     $command = sprintf(
-    //         'ffmpeg -i "%s" -vn -ac 1 -ar 16000 -b:a 64k "%s" -y',
-    //         $video,
-    //         $audio
-    //     );
-
-    //     exec($command);
-
-    //     if (!file_exists($audio)) {
-    //         throw new \Exception('Failed converting video to audio');
-    //     }
-
-    //     return $audio;
-    // }
     private function videoToAudio(string $video): string
     {
         $tempDir = storage_path('app/temp');
@@ -194,27 +55,20 @@ class OpenAIService
         $audio = $tempDir . '/' . uniqid() . '.mp3';
 
         $command = sprintf(
-            'ffmpeg -i "%s" -vn -ac 1 -ar 16000 -b:a 64k "%s" -y 2>&1',
+            'ffmpeg -i "%s" -vn -ac 1 -ar 16000 -b:a 64k "%s" -y',
             $video,
             $audio
         );
 
-        exec($command, $output, $returnCode);
+        exec($command);
 
-        if ($returnCode !== 0 || !file_exists($audio)) {
-
-            Log::error('FFmpeg conversion failed', [
-                'return_code' => $returnCode,
-                'output' => $output,
-            ]);
-
-            throw new \Exception(
-                'Failed converting video to audio.'
-            );
+        if (!file_exists($audio)) {
+            throw new \Exception('Failed converting video to audio');
         }
 
         return $audio;
     }
+
     private function whisper(string $audio): string
     {
         $sizeMb = filesize($audio) / 1024 / 1024;

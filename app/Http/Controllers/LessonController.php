@@ -266,78 +266,33 @@ class LessonController extends Controller
             return false;
         }
     }
-    public function store(Request $request)
+
+    public function store(Request $request) //lesson store
     {
-        Log::info('LESSON STORE START');
+        Log::info('arrive');
+        $request->validate([
+            'course_id'   => 'required|integer',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string|max:300',
+            'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:512000',
+        ]);
+        $course = Course::findOrFail($request->course_id);
+
+
+        if ($course->instructor_id != auth()->id()) {
+            abort(403);
+        }
+        DB::beginTransaction();
 
         try {
 
-            $request->validate([
-                'course_id'   => 'required|integer|exists:courses,id',
-                'title'       => 'required|string|max:255',
-                'description' => 'nullable|string|max:300',
-                'file'       => [
-                    'required',
-                    'file',
-                    'mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a',
-                    'max:51200',
-                ],
-            ]);
-
-            Log::info('LESSON VALIDATION PASSED');
-
-            $course = Course::findOrFail($request->course_id);
-
-            if ($course->instructor_id != auth()->id()) {
-                abort(403);
-            }
-
-            $file = $request->file('file');
-
-            Log::info('LESSON FILE RECEIVED', [
-                'name' => $file->getClientOriginalName(),
-                'size' => $file->getSize(),
-                'size_mb' => round($file->getSize() / 1024 / 1024, 2),
-                'mime' => $file->getMimeType(),
-            ]);
-
-            /*
-        |--------------------------------------------------------------------------
-        | B2 UPLOAD
-        |--------------------------------------------------------------------------
-        */
-
-            $path = $file->store('lessons', 'b2');
-
-            Log::info('B2 UPLOAD SUCCESS', [
-                'path' => $path,
-            ]);
-
-            /*
-        |--------------------------------------------------------------------------
-        | DATABASE
-        |--------------------------------------------------------------------------
-        */
-
-            DB::beginTransaction();
-
-            $extension = strtolower(
-                $file->getClientOriginalExtension()
-            );
-
-            if ($extension === 'pdf') {
-                $lessonType = 'pdf';
-            } elseif (in_array($extension, ['mp3', 'wav', 'm4a'])) {
-                $lessonType = 'audio';
-            } else {
-                $lessonType = 'video';
-            }
+            $path = $request->file('file')->store('lessons', 'public');
 
             $lesson = Lesson::create([
                 'course_id'        => $request->course_id,
                 'title'            => $request->title,
                 'description'      => $request->description,
-                'lesson_type'      => $lessonType,
+                'lesson_type'      => 'video',
                 'file_path'        => $path,
                 'summary_status'   => 'pending',
                 'summary_progress' => 0,
@@ -346,30 +301,21 @@ class LessonController extends Controller
 
             DB::commit();
 
-            Log::info('LESSON DATABASE CREATED', [
-                'lesson_id' => $lesson->id,
-            ]);
-
             lessonvd::dispatch($lesson->id);
 
             return response()->json([
-                'success' => true,
+                'success'   => true,
                 'lesson_id' => $lesson->id,
-                'status' => 'pending',
-                'progress' => 0,
-                'message' => 'Lesson created successfully.',
-            ], 200);
+                'status'    => 'pending',
+                'progress'  => 0,
+                'message'   => 'Lesson created. AI processing started.',
+            ]);
         } catch (\Throwable $e) {
 
-            if (DB::transactionLevel() > 0) {
-                DB::rollBack();
-            }
+            DB::rollBack();
 
-            Log::error('LESSON STORE FAILED', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(),
+            Log::error('Lesson store failed', [
+                'error' => $e->getMessage()
             ]);
 
             return response()->json([
@@ -378,64 +324,6 @@ class LessonController extends Controller
             ], 500);
         }
     }
-
-    // public function store(Request $request) //lesson store
-    // {
-    //     Log::info('arrive');
-    //     $request->validate([
-    //         'course_id'   => 'required|integer',
-    //         'title'       => 'required|string|max:255',
-    //         'description' => 'nullable|string|max:300',
-    //         'file'        => 'required|file|mimes:pdf,mp4,mov,avi,mkv,mp3,wav,m4a|max:512000',
-    //     ]);
-    //     $course = Course::findOrFail($request->course_id);
-
-
-    //     if ($course->instructor_id != auth()->id()) {
-    //         abort(403);
-    //     }
-    //     DB::beginTransaction();
-
-    //     try {
-
-    //         $path = $request->file('file')->store('lessons', 'public');
-
-    //         $lesson = Lesson::create([
-    //             'course_id'        => $request->course_id,
-    //             'title'            => $request->title,
-    //             'description'      => $request->description,
-    //             'lesson_type'      => 'video',
-    //             'file_path'        => $path,
-    //             'summary_status'   => 'pending',
-    //             'summary_progress' => 0,
-    //             'summary_error'    => null,
-    //         ]);
-
-    //         DB::commit();
-
-    //         lessonvd::dispatch($lesson->id);
-
-    //         return response()->json([
-    //             'success'   => true,
-    //             'lesson_id' => $lesson->id,
-    //             'status'    => 'pending',
-    //             'progress'  => 0,
-    //             'message'   => 'Lesson created. AI processing started.',
-    //         ]);
-    //     } catch (\Throwable $e) {
-
-    //         DB::rollBack();
-
-    //         Log::error('Lesson store failed', [
-    //             'error' => $e->getMessage()
-    //         ]);
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }
 
     public function status($id)
     {

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Services\B2StorageService;
 
 class Course extends Model
 {
@@ -65,5 +66,18 @@ class Course extends Model
     public function getRatingCountAttribute()
     {
         return $this->ratings()->count();
+    }
+    public function getThumbnailUrlAttribute()
+    {
+        if (!$this->thumbnail) {
+            return null;
+        }
+
+        try {
+            return app(B2StorageService::class)
+                ->getDownloadUrl($this->thumbnail, 3600);
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }

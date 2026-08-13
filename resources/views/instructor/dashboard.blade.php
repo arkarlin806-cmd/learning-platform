@@ -144,9 +144,16 @@
                     <div class="relative z-10">
 
                         <div class="relative">
+                            @if($course->thumbnail_url)
                             <img
-                                src="{{ asset('storage/' . $course->thumbnail) }}"
-                                class="w-full h-50 object-cover">
+                                src="{{ $course->thumbnail_url }}"
+                                alt="{{ $course->title }}"
+                                class="w-full h-48 object-cover">
+                            @else
+                            <div class="w-full h-48 flex items-center justify-center">
+                                No Image
+                            </div>
+                            @endif
                             <div class="absolute top-4 left-4">
                                 <span class="bg-white/90 text-indigo-700 px-4 py-2 rounded-full text-sm font-semibold">
                                     {{ $course->level }}

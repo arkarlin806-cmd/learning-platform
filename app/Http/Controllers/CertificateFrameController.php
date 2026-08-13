@@ -128,8 +128,6 @@ class CertificateFrameController extends Controller
                 'Certificate Frame Created Successfully'
             );
     }
-
-
     public function show(CertificateFrame $certificateFrame)
     {
         return view(
@@ -137,7 +135,6 @@ class CertificateFrameController extends Controller
             compact('certificateFrame')
         );
     }
-
     public function certificateImage($filename)
     {
         $path = 'certificate_frames/' . $filename;
@@ -255,6 +252,9 @@ class CertificateFrameController extends Controller
     //             'Certificate Frame Created Successfully'
     //         );
     // }
+
+
+
     public function edit(CertificateFrame $certificateFrame)
     {
         return view(
@@ -368,33 +368,7 @@ class CertificateFrameController extends Controller
             ->with('success', 'Certificate frame updated successfully.');
     }
 
-    //instructor
-    // public function ins_create(Course $course)
-    // {
-    //     abort_if(
-    //         $course->instructor_id != Auth::id(),
-    //         403
-    //     );
 
-    //     $learners = CourseOrder::where('course_id', $course->id)
-    //         ->with('user')
-    //         ->where('status', 'paid')
-    //         ->get();
-    //     $frames =
-    //         CertificateFrame::where(
-    //             'active',
-    //             1
-    //         )
-    //         ->get();
-    //     return view(
-    //         'instructor.certificate.create',
-    //         compact(
-    //             'course',
-    //             'learners',
-    //             'frames'
-    //         )
-    //     );
-    // }
 
     public function ins_create(Course $course)
     {

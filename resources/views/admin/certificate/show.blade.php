@@ -132,7 +132,7 @@
 
                     @if($certificateFrame->background)
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->background) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->background)]) }}"
                         class="absolute top-5 left-5 right-5 bottom-5 w-[calc(100%-40px)] h-[calc(100%-40px)] object-cover z-0 ">
                     @endif
 

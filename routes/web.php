@@ -484,3 +484,7 @@ Route::get('/debug-scheme', function () {
         'headers' => request()->headers->all(),
     ];
 });
+Route::get(
+    '/admin/certificate/image/{filename}',
+    [CertificateFrameController::class, 'certificateImage']
+)->name('admin.certificate.image');

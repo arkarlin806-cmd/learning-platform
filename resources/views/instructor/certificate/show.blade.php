@@ -41,7 +41,10 @@
         @if($certificate->frame->background)
         <div class="absolute inset-[28px] z-0 overflow-hidden">
             <img
-                src="{{ asset('storage/'.$certificate->frame->background) }}"
+                src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'background'
+        ]) }}"
                 class="w-full h-full object-cover">
         </div>
         @endif
@@ -97,7 +100,10 @@
 
         @if($certificate->qr_code)
         <img
-            src="{{asset('storage/'.$certificate->qr_code)}}"
+            src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'qr'
+        ]) }}"
             class="absolute bottom-30 right-30 w-18 z-40 ">
         @endif
 
@@ -105,7 +111,10 @@
 
         @if($certificate->signature)
         <img
-            src="{{asset('storage/'.$certificate->signature)}}"
+            src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'signature'
+        ]) }}"
             class="absolute bottom-48 left-40 w-32 z-10 ">
 
         @endif
@@ -113,7 +122,10 @@
         @if($certificate->frame->logo)
 
         <img
-            src="{{ asset('storage/'.$certificate->frame->logo) }}"
+            src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'logo'
+        ]) }}"
             class="absolute top-24 left-24 w-26 z-10 ">
         @endif
         <div class="absolute text-sm bottom-30 left-30 z-10 text-slate-600">
@@ -135,13 +147,19 @@
 
         @if($certificate->frame->seal)
         <img
-            src="{{ asset('storage/'.$certificate->frame->seal) }}"
+            src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'seal'
+        ]) }}"
             class="absolute bottom-20 right-122 w-34 z-50 ">
         @endif
         {{-- Border PNG --}}
         @if($certificate->frame->border_image)
         <img
-            src="{{ asset('storage/'.$certificate->frame->border_image) }}"
+            src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'border'
+        ]) }}"
             class="absolute inset-0 w-full h-full object-fill z-10 pointer-events-none">
         @endif
 

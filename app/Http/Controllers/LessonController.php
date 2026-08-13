@@ -464,53 +464,118 @@ class LessonController extends Controller
             'error'    => $lesson->summary_error,
         ]);
     }
+
     public function aiPreview($id, $course_id)
     {
         $lesson = Lesson::findOrFail($id);
+
         $course = Course::findOrFail($course_id);
 
-        $summary = Cache::get("lesson_ai_{$id}");
+        // Make sure lesson belongs to this course
+        if ((int) $lesson->course_id !== (int) $course->id) {
+            abort(404);
+        }
 
+        $summary = Cache::get("lesson_ai_{$lesson->id}");
+
+        /*
+    |--------------------------------------------------------------------------
+    | AI summary not ready
+    |--------------------------------------------------------------------------
+    */
         if (!$summary) {
+
             return redirect()
-                ->route('lesson.show', $id)
+                ->route('lesson.show', ['id' => $course->id])
                 ->with('error', 'AI summary not ready yet.');
         }
+
         $isInstructor = LessonController::isInstructor();
 
-
         return view('lesson.ls', [
-            'lesson'  => $lesson,
-            'summary' => $summary,
+            'lesson'       => $lesson,
+            'summary'      => $summary,
             'isInstructor' => $isInstructor,
-            'course' => $course
+            'course'       => $course,
         ]);
     }
     public function saveSummary(Request $request, $id)
     {
         $request->validate([
-            'title'       => 'required|string|max:255',
-            'summary'     => 'required|string',
-            'key_points'  => 'nullable|array',
+            'title'      => 'required|string|max:255',
+            'summary'    => 'required|string',
+            'key_points' => 'nullable|array',
         ]);
 
         $lesson = Lesson::findOrFail($id);
 
         $lesson->summary()->updateOrCreate(
-            ['lesson_id' => $id],
+            [
+                'lesson_id' => $lesson->id
+            ],
             [
                 'title'       => $request->title,
                 'summary'     => $request->summary,
                 'key_points'  => $request->key_points ?? [],
-                'source_type' => 'ai_reviewed'
+                'source_type' => 'ai_reviewed',
             ]
         );
 
-        Cache::forget("lesson_ai_{$id}");
+        // Remove temporary AI cache
+        Cache::forget("lesson_ai_{$lesson->id}");
 
         return response()->json([
             'success' => true,
-            'message' => 'Summary saved successfully'
+            'message' => 'Summary saved successfully',
         ]);
     }
+    // public function aiPreview($id, $course_id)
+    // {
+    //     $lesson = Lesson::findOrFail($id);
+    //     $course = Course::findOrFail($course_id);
+
+    //     $summary = Cache::get("lesson_ai_{$id}");
+
+    //     if (!$summary) {
+    //         return redirect()
+    //             ->route('lesson.show', $id)
+    //             ->with('error', 'AI summary not ready yet.');
+    //     }
+    //     $isInstructor = LessonController::isInstructor();
+
+
+    //     return view('lesson.ls', [
+    //         'lesson'  => $lesson,
+    //         'summary' => $summary,
+    //         'isInstructor' => $isInstructor,
+    //         'course' => $course
+    //     ]);
+    // }
+    // public function saveSummary(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'title'       => 'required|string|max:255',
+    //         'summary'     => 'required|string',
+    //         'key_points'  => 'nullable|array',
+    //     ]);
+
+    //     $lesson = Lesson::findOrFail($id);
+
+    //     $lesson->summary()->updateOrCreate(
+    //         ['lesson_id' => $id],
+    //         [
+    //             'title'       => $request->title,
+    //             'summary'     => $request->summary,
+    //             'key_points'  => $request->key_points ?? [],
+    //             'source_type' => 'ai_reviewed'
+    //         ]
+    //     );
+
+    //     Cache::forget("lesson_ai_{$id}");
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Summary saved successfully'
+    //     ]);
+    // }
 }

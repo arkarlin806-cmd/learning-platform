@@ -47,6 +47,7 @@ class LessonController extends Controller
         return view('LS.lessonlist', compact('lessons'));
     }
 
+
     public function show(Request $request, $id)
     {
         $course = Course::with('user')
@@ -73,16 +74,53 @@ class LessonController extends Controller
         $lessons = $query
             ->latest()
             ->paginate(10);
-        // ->withQueryString();
+
+        /*
+        |--------------------------------------------------------------------------
+        | B2 URL
+        |--------------------------------------------------------------------------
+        */
+
+        $b2Endpoint = rtrim(
+            config('filesystems.disks.b2.endpoint'),
+            '/'
+        );
+
+        $b2Bucket = config(
+            'filesystems.disks.b2.bucket'
+        );
+
+        foreach ($lessons as $lesson) {
+
+            $lesson->video_url = null;
+
+            if ($lesson->file_path) {
+
+                $lesson->video_url =
+                    $b2Endpoint .
+                    '/' .
+                    $b2Bucket .
+                    '/' .
+                    ltrim(
+                        $lesson->file_path,
+                        '/'
+                    );
+            }
+        }
 
         $totalLessons = Lesson::where(
             'course_id',
             $course->id
         )->count();
 
+        $isPurchased =
+            LessonController::isPurchased(
+                $course->id
+            );
 
-        $isPurchased = LessonController::isPurchased($course->id);
-        $isInstructor = LessonController::isInstructor();
+        $isInstructor =
+            LessonController::isInstructor();
+
         if ($isInstructor || $isPurchased) {
 
             return view(
@@ -95,10 +133,65 @@ class LessonController extends Controller
                     'isPurchased'
                 )
             );
-        } else {
-            abort(403, 'Please purchase courses!.');
         }
+
+        abort(
+            403,
+            'Please purchase courses!.'
+        );
     }
+    // public function show(Request $request, $id)
+    // {
+    //     $course = Course::with('user')
+    //         ->findOrFail($id);
+
+    //     $query = Lesson::with('summary')
+    //         ->where('course_id', $id);
+
+    //     if ($request->filled('search')) {
+    //         $query->where(
+    //             'title',
+    //             'like',
+    //             '%' . $request->search . '%'
+    //         );
+    //     }
+
+    //     if ($request->filled('upload_type')) {
+    //         $query->where(
+    //             'lesson_type',
+    //             $request->upload_type
+    //         );
+    //     }
+
+    //     $lessons = $query
+    //         ->latest()
+    //         ->paginate(10);
+    //     // ->withQueryString();
+
+    //     $totalLessons = Lesson::where(
+    //         'course_id',
+    //         $course->id
+    //     )->count();
+
+
+    //     $isPurchased = LessonController::isPurchased($course->id);
+    //     $isInstructor = LessonController::isInstructor();
+    //     if ($isInstructor || $isPurchased) {
+
+    //         return view(
+    //             'lesson.show',
+    //             compact(
+    //                 'course',
+    //                 'lessons',
+    //                 'totalLessons',
+    //                 'isInstructor',
+    //                 'isPurchased'
+    //             )
+    //         );
+    //     } else {
+    //         abort(403, 'Please purchase courses!.');
+    //     }
+    // }
 
     public function update(
         Request $request,

@@ -269,6 +269,8 @@ class LessonController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('LESSON STORE ARRIVED');
+
         $request->validate([
             'course_id'   => 'required|integer|exists:courses,id',
             'title'       => 'required|string|max:255',

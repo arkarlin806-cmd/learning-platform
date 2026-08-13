@@ -342,14 +342,10 @@
                 let message = "Lesson upload failed.";
 
                 // Network error
-                if (
-                    err instanceof TypeError &&
-                    err.message === "Failed to fetch"
-                ) {
-
+                if (err instanceof TypeError && err.message === "Failed to fetch") {
                     message =
-                        "Unable to connect to the server. " +
-                        "Please check your internet connection and try again.";
+                        "Lesson upload request failed. Please check the Network tab for /lesson/store.";
+
                 } else if (err.message) {
 
                     message = err.message;

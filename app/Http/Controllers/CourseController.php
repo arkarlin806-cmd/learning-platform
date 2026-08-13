@@ -600,7 +600,7 @@ class CourseController extends Controller
     }
 
 
-    public function update(Request $request, Course $course)
+    public function update(Request $request, Course $course, B2StorageService $b2)
     {
         abort_if($course->instructor_id != Auth::id(), 403);
 
@@ -694,11 +694,16 @@ class CourseController extends Controller
             /**
              * Thumbnail
              */
+            $thumbnail = null;
+
             if ($request->hasFile('thumbnail')) {
 
-                $data['thumbnail'] = $request
-                    ->file('thumbnail')
-                    ->store('course/thumbnails', 'public');
+                $upload = $b2->upload(
+                    $request->file('thumbnail'),
+                    'courses/thumbnails'
+                );
+
+                $thumbnail = $upload['file_name'];
             }
 
             /**

@@ -167,4 +167,53 @@ class B2StorageService
             'content_type' => $result['contentType'],
         ];
     }
+
+    public function getDownloadUrl(
+        string $fileName,
+        int $validSeconds = 3600
+    ): string {
+        $authorization = $this->authorize();
+
+        $config = $this->config();
+
+        $response = Http::withHeaders([
+            'Authorization' => $authorization['authorizationToken'],
+            'Content-Type' => 'application/json',
+        ])
+            ->timeout(30)
+            ->post(
+                $authorization['apiInfo']['storageApi']['apiUrl']
+                    . '/b2api/v4/b2_get_download_authorization',
+                [
+                    'bucketId' => $config['bucket_id'],
+                    'fileNamePrefix' => $fileName,
+                    'validDurationInSeconds' => $validSeconds,
+                ]
+            );
+
+        if ($response->failed()) {
+            throw new RuntimeException(
+                'B2 download authorization failed: ' . $response->body()
+            );
+        }
+
+        $data = $response->json();
+
+        $downloadUrl = rtrim(
+            $authorization['downloadUrl'],
+            '/'
+        );
+
+        return $downloadUrl
+            . '/file/'
+            . $config['bucket_name']
+            . '/'
+            . str_replace(
+                '%2F',
+                '/',
+                rawurlencode($fileName)
+            )
+            . '?Authorization='
+            . urlencode($data['authorizationToken']);
+    }
 }

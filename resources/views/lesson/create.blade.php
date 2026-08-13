@@ -347,7 +347,7 @@
 
             try {
 
-                const res = await fetch(storeUrl, {
+                const res = await fetch(`{{ route('lesson.store') }}`, {
 
                     method: "POST",
 

@@ -17,10 +17,19 @@
 
                 <div
                     class="relative rounded-3xl overflow-hidden shadow-2xl group">
-
+                    @if($course->thumbnail_url)
                     <img
-                        src="{{ asset('storage/'.$course->thumbnail) }}"
+                        src="{{ $course->thumbnail_url }}"
+                        alt="{{ $course->title }}"
                         class="w-full h-72 object-cover transition duration-700 group-hover:scale-110">
+                    @else
+                    <div class="w-full h-48 flex items-center justify-center">
+                        No Image
+                    </div>
+                    @endif
+
+
+
 
                     <!-- Status -->
 

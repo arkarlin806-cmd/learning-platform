@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Services\B2StorageService;
 
 class CourseController extends Controller
 {
@@ -23,7 +24,7 @@ class CourseController extends Controller
     {
         return view('instructor.course_create');
     }
-    public function course_store(Request $request)  //course store
+    public function course_store(Request $request, B2StorageService $b2)
     {
         $request->validate([
             'title' => 'required',
@@ -35,7 +36,6 @@ class CourseController extends Controller
             'end_date' => 'required',
             'thumbnail' => 'required|image|max:500',
         ]);
-
 
         $duplicates = [];
 
@@ -67,6 +67,7 @@ class CourseController extends Controller
                 }
             }
         }
+
         if (count($duplicates) > 0) {
 
             return back()
@@ -75,14 +76,30 @@ class CourseController extends Controller
                     'duplicate_schedule' => $duplicates
                 ]);
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Upload thumbnail to Backblaze B2
+        |--------------------------------------------------------------------------
+        */
+
         $thumbnail = null;
 
         if ($request->hasFile('thumbnail')) {
-            $thumbnail = $request->file('thumbnail')
-                ->store('courses/thumbnails', 'public');
+
+            $upload = $b2->upload(
+                $request->file('thumbnail'),
+                'courses/thumbnails'
+            );
+
+            $thumbnail = $upload['file_name'];
         }
 
-
+        /*
+        |--------------------------------------------------------------------------
+        | Create Course
+        |--------------------------------------------------------------------------
+        */
 
         $course = Course::create([
             'instructor_id' => auth()->id(),
@@ -97,6 +114,11 @@ class CourseController extends Controller
             'status' => 'draft',
         ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | Create Course Schedules
+        |--------------------------------------------------------------------------
+        */
 
         if ($request->days) {
 
@@ -111,13 +133,24 @@ class CourseController extends Controller
             }
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Create Group Chat
+        |--------------------------------------------------------------------------
+        */
+
         $group = GroupChat::create([
             'name' => $course->title,
             'course_id' => $course->id,
             'created_by' => auth()->id(),
         ]);
 
-        // dd($group);
+        /*
+        |--------------------------------------------------------------------------
+        | Add Instructor to Group
+        |--------------------------------------------------------------------------
+        */
+
         GroupMember::create([
             'group_chat_id' => $group->id,
             'user_id' => auth()->id(),

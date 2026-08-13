@@ -139,7 +139,7 @@
                     {{-- Border PNG Full Size --}}
                     @if($certificateFrame->border_image)
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->border_image) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->border_image)]) }}"
                         class="absolute inset-0 w-full h-full object-fill z-20 pointer-events-none ">
                     @endif
 
@@ -147,7 +147,7 @@
 
                     @if($certificateFrame->watermark)
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->watermark) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->watermark)]) }}"
                         class="absolute top-1/2 left-1/2 w-80 opacity-10 -translate-x-1/2 -translate-y-1/2 z-10 ">
                     @endif
 
@@ -182,14 +182,14 @@
                     <!-- logo  -->
                     @if( $certificateFrame->logo)
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->logo) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->logo)]) }}"
                         class="absolute top-14 left-14 w-16 z-50">
                     @endif
 
                     <!-- seal  -->
                     @if($certificateFrame->seal)
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->seal) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->seal)]) }}"
                         class="absolute bottom-12 right-70 w-24 z-50">
                     @endif
 

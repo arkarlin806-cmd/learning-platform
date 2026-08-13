@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class lessonvd implements ShouldQueue
 {
@@ -60,10 +61,21 @@ class lessonvd implements ShouldQueue
             ]);
         } catch (\Throwable $e) {
 
+            Log::error('LESSON AI PROCESSING FAILED', [
+                'lesson_id' => $this->lessonId,
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
             $lesson->update([
                 'summary_status' => 'failed',
                 'summary_progress' => 0,
-                'summary_error' => $e->getMessage(),
+                'summary_error' => mb_substr(
+                    $e->getMessage(),
+                    0,
+                    300
+                ),
             ]);
 
             throw $e;

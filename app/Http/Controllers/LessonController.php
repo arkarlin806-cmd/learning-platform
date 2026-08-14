@@ -49,6 +49,7 @@ class LessonController extends Controller
     }
 
 
+
     public function show(Request $request, $id)
     {
         $course = Course::with('user')->findOrFail($id);
@@ -57,11 +58,18 @@ class LessonController extends Controller
             ->where('course_id', $id);
 
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $query->where(
+                'title',
+                'like',
+                '%' . $request->search . '%'
+            );
         }
 
         if ($request->filled('upload_type')) {
-            $query->where('lesson_type', $request->upload_type);
+            $query->where(
+                'lesson_type',
+                $request->upload_type
+            );
         }
 
         $lessons = $query
@@ -69,38 +77,55 @@ class LessonController extends Controller
             ->paginate(10);
 
         /*
-    |--------------------------------------------------------------------------
-    | B2 Video URL
-    |--------------------------------------------------------------------------
-    */
+        |--------------------------------------------------------------------------
+        | B2 Video URL
+        |--------------------------------------------------------------------------
+        */
+
+        $disk = Storage::disk('b2');
+
         foreach ($lessons as $lesson) {
 
             $lesson->video_url = null;
 
-            if (
-                !empty($lesson->file_path) &&
-                Storage::disk('b2')->exists($lesson->file_path)
-            ) {
+            if (!empty($lesson->file_path)) {
 
-                $bucket = config('filesystems.disks.b2.bucket');
-                $endpoint = config('filesystems.disks.b2.endpoint');
+                try {
 
-                // Remove trailing slash
-                $endpoint = rtrim($endpoint, '/');
+                    if ($disk->exists($lesson->file_path)) {
 
-                /*
-             * Backblaze B2 S3 public URL
-             *
-             * https://s3.us-east-005.backblazeb2.com/
-             * learning-platform-files/
-             * lessons/xxxxx.mp4
-             */
-                $lesson->video_url =
-                    $endpoint .
-                    '/' .
-                    $bucket .
-                    '/' .
-                    ltrim($lesson->file_path, '/');
+                        $endpoint = rtrim(
+                            config('filesystems.disks.b2.endpoint'),
+                            '/'
+                        );
+
+                        $bucket = config(
+                            'filesystems.disks.b2.bucket'
+                        );
+
+                        $filePath = ltrim(
+                            $lesson->file_path,
+                            '/'
+                        );
+
+                        $lesson->video_url =
+                            $endpoint .
+                            '/' .
+                            $bucket .
+                            '/' .
+                            $filePath;
+                    }
+                } catch (\Throwable $e) {
+
+                    Log::error(
+                        'B2 video URL error',
+                        [
+                            'lesson_id' => $lesson->id,
+                            'file_path' => $lesson->file_path,
+                            'error' => $e->getMessage(),
+                        ]
+                    );
+                }
             }
         }
 
@@ -109,7 +134,10 @@ class LessonController extends Controller
             $course->id
         )->count();
 
-        $isPurchased = LessonController::isPurchased($course->id);
+        $isPurchased = LessonController::isPurchased(
+            $course->id
+        );
+
         $isInstructor = LessonController::isInstructor();
 
         if ($isInstructor || $isPurchased) {

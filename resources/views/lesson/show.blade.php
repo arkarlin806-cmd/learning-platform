@@ -201,25 +201,47 @@
                 @endif -->
 
                 {{-- VIDEO --}}
-                @if($lesson->video_url)
+                @foreach($lessons as $lesson)
 
-                <div class="bg-black w-full aspect-video">
+                <div class="mb-8">
 
-                    <video
-                        controls
-                        playsinline
-                        preload="metadata"
-                        class="w-full h-full object-contain">
-                        <source
-                            src="{{ $lesson->video_url }}"
-                            type="video/mp4">
+                    <h2 class="text-xl font-bold mb-3">
+                        {{ $lesson->title }}
+                    </h2>
 
-                        Your browser does not support video playback.
-                    </video>
+                    @if($lesson->video_url)
+
+                    <div class="bg-black w-full aspect-video rounded-xl overflow-hidden">
+
+                        <video
+                            controls
+                            playsinline
+                            preload="metadata"
+                            class="w-full h-full object-contain">
+
+                            <source
+                                src="{{ $lesson->video_url }}"
+                                type="video/mp4">
+
+                            Your browser does not support video playback.
+
+                        </video>
+
+                    </div>
+
+                    @else
+
+                    <div class="p-4 bg-red-50 text-red-600 rounded-xl">
+                        Video file is not available.
+                    </div>
+
+                    @endif
 
                 </div>
 
-                @else
+                @endforeach
+
+                {{ $lessons->links() }}
 
                 <div class="p-10 text-center">
                     <p class="text-red-500">

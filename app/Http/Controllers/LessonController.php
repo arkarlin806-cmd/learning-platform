@@ -464,30 +464,41 @@ class LessonController extends Controller
             'error'    => $lesson->summary_error,
         ]);
     }
-
     public function aiPreview($id, $course_id)
     {
         $lesson = Lesson::findOrFail($id);
 
         $course = Course::findOrFail($course_id);
 
-        // Make sure lesson belongs to this course
         if ((int) $lesson->course_id !== (int) $course->id) {
             abort(404);
         }
 
-        $summary = Cache::get("lesson_ai_{$lesson->id}");
+        $cacheKey = "lesson_ai_{$lesson->id}";
 
-        /*
-    |--------------------------------------------------------------------------
-    | AI summary not ready
-    |--------------------------------------------------------------------------
-    */
+        $summary = Cache::get($cacheKey);
+
+        Log::info('AI PREVIEW CHECK', [
+            'lesson_id' => $lesson->id,
+            'course_id' => $course->id,
+            'summary_status' => $lesson->summary_status,
+            'summary_progress' => $lesson->summary_progress,
+            'cache_key' => $cacheKey,
+            'cache_exists' => Cache::has($cacheKey),
+            'summary_type' => gettype($summary),
+        ]);
+
         if (!$summary) {
 
-            return redirect()
-                ->route('lesson.show', ['id' => $course->id])
-                ->with('error', 'AI summary not ready yet.');
+            Log::error('AI SUMMARY CACHE MISSING', [
+                'lesson_id' => $lesson->id,
+                'cache_key' => $cacheKey,
+            ]);
+
+            return back()->with(
+                'error',
+                'AI summary data was not found.'
+            );
         }
 
         $isInstructor = LessonController::isInstructor();
@@ -499,6 +510,40 @@ class LessonController extends Controller
             'course'       => $course,
         ]);
     }
+    // public function aiPreview($id, $course_id)
+    // {
+    //     $lesson = Lesson::findOrFail($id);
+
+    //     $course = Course::findOrFail($course_id);
+
+    //     // Make sure lesson belongs to this course
+    //     if ((int) $lesson->course_id !== (int) $course->id) {
+    //         abort(404);
+    //     }
+
+    //     $summary = Cache::get("lesson_ai_{$lesson->id}");
+
+    //     /*
+    // |--------------------------------------------------------------------------
+    // | AI summary not ready
+    // |--------------------------------------------------------------------------
+    // */
+    //     if (!$summary) {
+
+    //         return redirect()
+    //             ->route('lesson.show', ['id' => $course->id])
+    //             ->with('error', 'AI summary not ready yet.');
+    //     }
+
+    //     $isInstructor = LessonController::isInstructor();
+
+    //     return view('lesson.ls', [
+    //         'lesson'       => $lesson,
+    //         'summary'      => $summary,
+    //         'isInstructor' => $isInstructor,
+    //         'course'       => $course,
+    //     ]);
+    // }
     public function saveSummary(Request $request, $id)
     {
         $request->validate([

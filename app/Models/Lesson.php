@@ -23,13 +23,13 @@ class Lesson extends Model
         'ai_generated' => 'array',
     ];
 
-    // public function summary()
-    // {
-    //     return $this->hasMany(
-    //         lesson_summary::class,
-    //     );
-    // }
     public function summary()
+    {
+        return $this->hasMany(
+            lesson_summary::class,
+        );
+    }
+    public function summary_pre()
     {
         return $this->hasOne(lesson_summary::class, 'lesson_id');
     }

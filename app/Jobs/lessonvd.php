@@ -86,6 +86,7 @@
 namespace App\Jobs;
 
 use App\Models\Lesson;
+use App\Models\lesson_summary;
 use App\Services\OpenAIService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -121,6 +122,12 @@ class lessonvd implements ShouldQueue
                 'summary_progress' => 25,
             ]);
 
+            /*
+            |--------------------------------------------------------------------------
+            | AI PROCESS
+            |--------------------------------------------------------------------------
+            */
+
             $result = $aiService->processLesson(
                 $lesson,
                 function ($progress) use ($lesson) {
@@ -137,16 +144,29 @@ class lessonvd implements ShouldQueue
 
             /*
             |--------------------------------------------------------------------------
-            | SAVE AI RESULT TO DATABASE
+            | SAVE AI RESULT TO lesson_summaries
+            |--------------------------------------------------------------------------
+            */
+
+            lesson_summary::updateOrCreate(
+                [
+                    'lesson_id' => $lesson->id,
+                ],
+                [
+                    'title'      => $result['title'] ?? $lesson->title,
+                    'summary'    => $result['summary'] ?? '',
+                    'key_points' => $result['key_points'] ?? [],
+                    'source_type' => 'ai',
+                ]
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPLETED
             |--------------------------------------------------------------------------
             */
 
             $lesson->update([
-                'ai_generated' => json_encode(
-                    $result,
-                    JSON_UNESCAPED_UNICODE
-                ),
-
                 'summary_status'   => 'completed',
                 'summary_progress' => 100,
                 'summary_error'    => null,
@@ -154,12 +174,11 @@ class lessonvd implements ShouldQueue
 
             Log::info('LESSON AI PROCESSING COMPLETED', [
                 'lesson_id' => $lesson->id,
-                'result_type' => gettype($result),
             ]);
         } catch (\Throwable $e) {
 
             Log::error('LESSON AI PROCESSING FAILED', [
-                'lesson_id' => $this->lessonId,
+                'lesson_id' => $lesson->id,
                 'error'      => $e->getMessage(),
                 'file'       => $e->getFile(),
                 'line'       => $e->getLine(),

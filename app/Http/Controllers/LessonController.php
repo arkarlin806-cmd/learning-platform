@@ -482,14 +482,17 @@ class LessonController extends Controller
                 ->with('error', 'AI summary is not ready yet.');
         }
 
-        if (empty($lesson->ai_generated)) {
+        $summary = $lesson->summary;
+
+        if (!$summary) {
 
             return redirect()
                 ->route('lesson.show', ['id' => $course->id])
-                ->with('error', 'AI summary data was not found.');
+                ->with(
+                    'error',
+                    'AI summary data was not found.'
+                );
         }
-
-        $summary = $lesson->ai_generated;
 
         $isInstructor = LessonController::isInstructor();
 

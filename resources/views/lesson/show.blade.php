@@ -201,55 +201,40 @@
                 @endif -->
 
                 {{-- VIDEO --}}
-                @foreach($lessons as $lesson)
 
-                <div class="mb-8">
 
-                    <h2 class="text-xl font-bold mb-3">
-                        {{ $lesson->title }}
-                    </h2>
+                @if($lesson->video_url)
 
-                    @if($lesson->video_url)
+                <div class="bg-black w-full aspect-video rounded-xl overflow-hidden">
 
-                    <div class="bg-black w-full aspect-video rounded-xl overflow-hidden">
+                    <video
+                        controls
+                        playsinline
+                        preload="metadata"
+                        class="w-full h-full object-contain">
 
-                        <video
-                            controls
-                            playsinline
-                            preload="metadata"
-                            class="w-full h-full object-contain">
+                        <source
+                            src="{{ $lesson->video_url }}"
+                            type="video/mp4">
 
-                            <source
-                                src="{{ $lesson->video_url }}"
-                                type="video/mp4">
+                        Your browser does not support video playback.
 
-                            Your browser does not support video playback.
-
-                        </video>
-
-                    </div>
-
-                    @else
-
-                    <div class="p-4 bg-red-50 text-red-600 rounded-xl">
-                        Video file is not available.
-                    </div>
-
-                    @endif
+                    </video>
 
                 </div>
 
-                @endforeach
+                @else
 
-                {{ $lessons->links() }}
-
-                <div class="p-10 text-center">
-                    <p class="text-red-500">
-                        Lesson file not found.
-                    </p>
+                <div class="p-4 bg-red-50 text-red-600 rounded-xl">
+                    Video file is not available.
                 </div>
 
                 @endif
+
+
+                {{ $lessons->links() }}
+
+
             </div>
             <p class="text-gray-500 text-sm leading-relaxed max-w-2xl mt-1 mx-6">
                 {{ $lesson->description }}

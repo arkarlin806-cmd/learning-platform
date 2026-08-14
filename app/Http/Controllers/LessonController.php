@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\lessonvd;
+use App\Models\lesson_summary;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
@@ -475,23 +476,16 @@ class LessonController extends Controller
             abort(404);
         }
 
-        if ($lesson->summary_status !== 'completed') {
-
-            return redirect()
-                ->route('lesson.show', ['id' => $course->id])
-                ->with('error', 'AI summary is not ready yet.');
-        }
-
-        $summary = $lesson->summary;
+        // IMPORTANT: one lesson = one summary
+        $summary = lesson_summary::where(
+            'lesson_id',
+            $lesson->id
+        )->first();
 
         if (!$summary) {
-
             return redirect()
                 ->route('lesson.show', ['id' => $course->id])
-                ->with(
-                    'error',
-                    'AI summary data was not found.'
-                );
+                ->with('error', 'Lesson summary not found.');
         }
 
         $isInstructor = LessonController::isInstructor();
@@ -503,7 +497,6 @@ class LessonController extends Controller
             'course'       => $course,
         ]);
     }
-
     public function saveSummary(Request $request, $id)
     {
         $request->validate([

@@ -19,7 +19,9 @@ class Lesson extends Model
         'summary_error',
         'ai_generated',
     ];
-
+    protected $casts = [
+        'ai_generated' => 'array',
+    ];
 
     public function summary()
     {

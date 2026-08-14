@@ -471,37 +471,25 @@ class LessonController extends Controller
 
         $course = Course::findOrFail($course_id);
 
-        // Make sure lesson belongs to this course
         if ((int) $lesson->course_id !== (int) $course->id) {
             abort(404);
         }
 
-        // AI processing not completed
         if ($lesson->summary_status !== 'completed') {
 
             return redirect()
                 ->route('lesson.show', ['id' => $course->id])
-                ->with(
-                    'error',
-                    'AI summary is not ready yet.'
-                );
+                ->with('error', 'AI summary is not ready yet.');
         }
 
-        // Get AI summary from DB
-        $summary = json_decode(
-            $lesson->ai_generated,
-            true
-        );
-
-        if (!$summary) {
+        if (empty($lesson->ai_generated)) {
 
             return redirect()
                 ->route('lesson.show', ['id' => $course->id])
-                ->with(
-                    'error',
-                    'AI summary data was not found.'
-                );
+                ->with('error', 'AI summary data was not found.');
         }
+
+        $summary = $lesson->ai_generated;
 
         $isInstructor = LessonController::isInstructor();
 

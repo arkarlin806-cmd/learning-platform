@@ -503,83 +503,39 @@ class LessonController extends Controller
             'course'       => $course,
         ]);
     }
+
     public function saveSummary(Request $request, $id)
     {
         $request->validate([
-            'title'      => 'required|string|max:255',
-            'summary'    => 'required|string',
+            'title' => 'required|string|max:255',
+            'summary' => 'required|string',
             'key_points' => 'nullable|array',
+            'key_points.*' => 'nullable|string|max:1000',
         ]);
 
         $lesson = Lesson::findOrFail($id);
 
-        $lesson->summary()->updateOrCreate(
+        $summary = $lesson->summary()->updateOrCreate(
             [
-                'lesson_id' => $lesson->id
+                'lesson_id' => $lesson->id,
             ],
             [
-                'title'       => $request->title,
-                'summary'     => $request->summary,
-                'key_points'  => $request->key_points ?? [],
+                'title' => $request->title,
+                'summary' => $request->summary,
+                'key_points' => array_values(
+                    array_filter(
+                        $request->key_points ?? [],
+                        fn($point) => trim($point) !== ''
+                    )
+                ),
                 'source_type' => 'ai_reviewed',
             ]
         );
 
-        // Remove temporary AI cache
-        Cache::forget("lesson_ai_{$lesson->id}");
-
         return response()->json([
             'success' => true,
-            'message' => 'Summary saved successfully',
+            'message' => 'Summary saved successfully.',
+            'summary_id' => $summary->id,
         ]);
     }
-    // public function aiPreview($id, $course_id)
-    // {
-    //     $lesson = Lesson::findOrFail($id);
-    //     $course = Course::findOrFail($course_id);
-
-    //     $summary = Cache::get("lesson_ai_{$id}");
-
-    //     if (!$summary) {
-    //         return redirect()
-    //             ->route('lesson.show', $id)
-    //             ->with('error', 'AI summary not ready yet.');
-    //     }
-    //     $isInstructor = LessonController::isInstructor();
-
-
-    //     return view('lesson.ls', [
-    //         'lesson'  => $lesson,
-    //         'summary' => $summary,
-    //         'isInstructor' => $isInstructor,
-    //         'course' => $course
-    //     ]);
-    // }
-    // public function saveSummary(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'title'       => 'required|string|max:255',
-    //         'summary'     => 'required|string',
-    //         'key_points'  => 'nullable|array',
-    //     ]);
-
-    //     $lesson = Lesson::findOrFail($id);
-
-    //     $lesson->summary()->updateOrCreate(
-    //         ['lesson_id' => $id],
-    //         [
-    //             'title'       => $request->title,
-    //             'summary'     => $request->summary,
-    //             'key_points'  => $request->key_points ?? [],
-    //             'source_type' => 'ai_reviewed'
-    //         ]
-    //     );
-
-    //     Cache::forget("lesson_ai_{$id}");
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Summary saved successfully'
-    //     ]);
-    // }
 }

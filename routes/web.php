@@ -273,7 +273,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/lesson/status/{id}', [LessonController::class, 'status'])->name('lesson.status');
 
-    Route::get('/lesson/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])->name('lesson.preview');
+    // Route::get('/lesson/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])->name('lesson.preview');
 
     Route::post('/lesson/{id}/save-summary', [LessonController::class, 'saveSummary'])->name('lesson.save.summary');
 
@@ -284,7 +284,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('lesson.store');
 });
 
-
+Route::get(
+    '/lesson/{id}/preview/{course_id}',
+    [LessonController::class, 'aiPreview']
+)->name('lesson.preview');
 //admin roadmap 
 
 Route::prefix('admin')

@@ -153,53 +153,155 @@
 
         function pollStatus(id) {
 
+            if (polling) {
+                clearInterval(polling);
+            }
+
             polling = setInterval(async () => {
 
                 try {
-                    const course_id = document.getElementById('course_id').value;
 
-                    const res = await fetch(`{{ route('lesson.status',':id') }}`.replace(':id', id));
+                    const course_id =
+                        document.getElementById('course_id').value;
+
+                    const statusUrl =
+                        "{{ route('lesson.status', ':id') }}"
+                        .replace(':id', id);
+
+                    const res = await fetch(statusUrl, {
+                        method: "GET",
+                        headers: {
+                            "Accept": "application/json",
+                            "X-Requested-With": "XMLHttpRequest"
+                        },
+                        credentials: "same-origin"
+                    });
 
                     const data = await res.json();
 
-                    updateProgress(data.progress, data.status);
+                    console.log("AI STATUS:", data);
 
-                    if (data.status === 'completed') {
+                    updateProgress(
+                        Number(data.progress ?? 0),
+                        data.status ?? "processing"
+                    );
+
+                    // =========================
+                    // COMPLETED
+                    // =========================
+                    if (data.status === "completed") {
+
                         clearInterval(polling);
+                        polling = null;
+
+                        const previewUrl = `{{ route('lesson.preview', ['id' => ':id','course_id' => ':course_id']) }}`
+                            .replace(':id', id)
+                            .replace(':course_id', course_id);
+
+                        console.log("PREVIEW URL:", previewUrl);
 
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Done!',
-                            text: 'AI Summary ready for review'
-                        }).then(() => {
-                            const course_id = document.getElementById('course_id').value;
+                            icon: "success",
+                            title: "Done!",
+                            text: "AI Summary ready for review",
+                            confirmButtonText: "Review Summary",
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
+                        }).then((result) => {
 
-                            let url = "{{ route('lesson.preview', ['id' => ':id', 'course_id' => ':course_id']) }}";
+                            if (result.isConfirmed) {
 
-                            url = url.replace(':id', id).replace(':course_id', course_id);
-                            window.location.href = url;
+                                console.log(
+                                    "Redirecting to:",
+                                    previewUrl
+                                );
+
+                                window.location.href = previewUrl;
+                            }
                         });
+
+                        return;
                     }
 
-                    if (data.status === 'failed') {
+                    // =========================
+                    // FAILED
+                    // =========================
+                    if (data.status === "failed") {
+
                         clearInterval(polling);
+                        polling = null;
 
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: data.error || 'Processing failed'
+                            icon: "error",
+                            title: "Failed",
+                            text: data.error || "Processing failed"
                         });
 
                         submitBtn.disabled = false;
                         submitBtn.innerText = "Create Lesson";
+
+                        return;
                     }
 
                 } catch (err) {
-                    console.error(err);
+
+                    console.error(
+                        "POLLING ERROR:",
+                        err
+                    );
                 }
 
             }, 2000);
         }
+        // function pollStatus(id) {
+
+        //     polling = setInterval(async () => {
+
+        //         try {
+        //             const course_id = document.getElementById('course_id').value;
+
+        //             const res = await fetch(`{{ route('lesson.status',':id') }}`.replace(':id', id));
+
+        //             const data = await res.json();
+
+        //             updateProgress(data.progress, data.status);
+
+        //             if (data.status === 'completed') {
+        //                 clearInterval(polling);
+
+        //                 Swal.fire({
+        //                     icon: 'success',
+        //                     title: 'Done!',
+        //                     text: 'AI Summary ready for review'
+        //                 }).then(() => {
+        //                     const course_id = document.getElementById('course_id').value;
+
+        //                     let url = "{{ route('lesson.preview', ['id' => ':id', 'course_id' => ':course_id']) }}";
+
+        //                     url = url.replace(':id', id).replace(':course_id', course_id);
+        //                     window.location.href = url;
+        //                 });
+        //             }
+
+        //             if (data.status === 'failed') {
+        //                 clearInterval(polling);
+
+        //                 Swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Failed',
+        //                     text: data.error || 'Processing failed'
+        //                 });
+
+        //                 submitBtn.disabled = false;
+        //                 submitBtn.innerText = "Create Lesson";
+        //             }
+
+        //         } catch (err) {
+        //             console.error(err);
+        //         }
+
+        //     }, 2000);
+        // }
 
 
         // =========================

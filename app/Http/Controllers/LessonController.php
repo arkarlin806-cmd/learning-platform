@@ -74,13 +74,103 @@ class LessonController extends Controller
             ->latest()
             ->paginate(10);
 
-        // Debug
-        Log::info('LESSON SHOW DEBUG', [
-            'course_id'   => $course->id,
-            'lesson_count' => $lessons->count(),
-            'lesson_ids'  => $lessons->pluck('id')->toArray(),
-            'lesson_titles' => $lessons->pluck('title')->toArray(),
-        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | B2 Video URL
+        |--------------------------------------------------------------------------
+        */
+
+        $disk = Storage::disk('b2');
+
+        foreach ($lessons as $lesson) {
+
+            // Default
+            $lesson->video_url = null;
+
+            if (
+                $lesson->lesson_type === 'video' &&
+                !empty($lesson->file_path)
+            ) {
+
+                try {
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Check B2 file
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $exists = $disk->exists(
+                        $lesson->file_path
+                    );
+
+
+                    Log::info('B2 LESSON CHECK', [
+                        'lesson_id' => $lesson->id,
+                        'file_path' => $lesson->file_path,
+                        'exists'    => $exists,
+                    ]);
+
+
+                    if ($exists) {
+
+                        $endpoint = rtrim(
+                            config('filesystems.disks.b2.endpoint'),
+                            '/'
+                        );
+
+                        $bucket = config(
+                            'filesystems.disks.b2.bucket'
+                        );
+
+                        $filePath = ltrim(
+                            $lesson->file_path,
+                            '/'
+                        );
+
+
+                        $lesson->video_url =
+                            $endpoint .
+                            '/' .
+                            $bucket .
+                            '/' .
+                            $filePath;
+
+
+                        Log::info('B2 VIDEO URL CREATED', [
+                            'lesson_id' =>
+                            $lesson->id,
+
+                            'video_url' =>
+                            $lesson->video_url,
+                        ]);
+                    }
+                } catch (\Throwable $e) {
+
+                    Log::error(
+                        'B2 VIDEO URL ERROR',
+                        [
+                            'lesson_id' =>
+                            $lesson->id,
+
+                            'file_path' =>
+                            $lesson->file_path,
+
+                            'error' =>
+                            $e->getMessage(),
+                        ]
+                    );
+                }
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Statistics
+        |--------------------------------------------------------------------------
+        */
 
         $totalLessons = Lesson::where(
             'course_id',
@@ -91,29 +181,42 @@ class LessonController extends Controller
             'course_id',
             $course->id
         )
-            ->where('lesson_type', 'video')
+            ->where(
+                'lesson_type',
+                'video'
+            )
             ->count();
 
         $pdfLessons = Lesson::where(
             'course_id',
             $course->id
         )
-            ->where('lesson_type', 'pdf')
+            ->where(
+                'lesson_type',
+                'pdf'
+            )
             ->count();
 
-        $isPurchased = LessonController::isPurchased(
-            $course->id
-        );
 
-        $isInstructor = LessonController::isInstructor();
+        /*
+        |--------------------------------------------------------------------------
+        | Access
+        |--------------------------------------------------------------------------
+        */
 
-        Log::info('LESSON ACCESS DEBUG', [
-            'course_id'    => $course->id,
-            'isPurchased'  => $isPurchased,
-            'isInstructor' => $isInstructor,
-        ]);
+        $isPurchased =
+            LessonController::isPurchased(
+                $course->id
+            );
 
-        if ($isInstructor || $isPurchased) {
+        $isInstructor =
+            LessonController::isInstructor();
+
+
+        if (
+            $isInstructor ||
+            $isPurchased
+        ) {
 
             return view(
                 'lesson.show',
@@ -129,7 +232,11 @@ class LessonController extends Controller
             );
         }
 
-        abort(403, 'Please purchase courses!');
+
+        abort(
+            403,
+            'Please purchase courses!'
+        );
     }
     public function update(
         Request $request,

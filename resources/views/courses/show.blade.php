@@ -646,7 +646,7 @@ text-gray-500">
                 class="group bg-white dark:bg-white/12 rounded-3xl overflow-hidden shadow-xl hover:-translate-y-3 transition duration-500">
                 <div class="overflow-hidden">
                     <img
-                        src="{{asset('storage/'.$item->thumbnail)}}"
+                        src="{{ $item->thumbnail_url }}"
                         class="w-full h-52 object-cover group-hover:scale-110 transition duration-700">
                 </div>
                 <div class="p-6">

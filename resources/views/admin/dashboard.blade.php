@@ -270,7 +270,7 @@
 
                     <div class="relative">
                         <img
-                            src="{{ asset('storage/' . $course->thumbnail_url) }}"
+                            src="{{ $course->thumbnail_url }}"
                             class="w-full h-50 object-cover">
                         <div class="absolute top-4 left-4">
                             <span class="bg-white/90 text-indigo-700 px-4 py-2 rounded-full text-sm font-semibold">

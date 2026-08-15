@@ -312,7 +312,7 @@
 
                 <div class="relative">
 
-                    <img src="{{ asset('storage/'.$course->thumbnail) }}"
+                    <img src="{{ $course->thumbnail_url }}"
                         class="h-56 w-full object-cover group-hover:scale-105 transition duration-700">
 
                     <span class="absolute top-4 left-4 bg-yellow-400 text-white px-4 py-2 rounded-full font-bold flex items-center gap-1">

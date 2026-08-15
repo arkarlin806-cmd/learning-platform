@@ -17,7 +17,7 @@
                     <div class="overflow-hidden">
 
                         <img
-                            src="{{ asset('storage/'.$course->thumbnail) }}"
+                            src="{{ $course->thumbnail_url }}"
                             class="w-full h-52 sm:h-64 object-cover hover:scale-105 transition duration-500">
 
                     </div>

@@ -141,48 +141,24 @@ class CertificateFrameController extends Controller
                 'Certificate Frame Created Successfully.'
             );
     }
-    public function update(
-        Request $request,
-        CertificateFrame $certificateFrame
-    ) {
+    public function update(Request $request, CertificateFrame $certificateFrame)
+    {
         $request->validate([
+            'category'        => 'required|string|max:255',
+            'frame_name'      => 'required|string|max:255',
 
-            /*
-            |--------------------------------------------------------------------------
-            | Basic
-            |--------------------------------------------------------------------------
-            */
-
-            'category'   => 'required|string|max:255',
-            'frame_name' => 'required|string|max:255',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Images
-            |--------------------------------------------------------------------------
-            */
-
-            'background'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-            'border_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'watermark'   => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'logo'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'seal'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Colors
-            |--------------------------------------------------------------------------
-            */
+            'background'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'border_image'    => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+            'watermark'       => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+            'logo'            => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+            'seal'            => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
 
             'primary_color'   => 'required|string|max:20',
             'secondary_color' => 'required|string|max:20',
             'accent_color'    => 'required|string|max:20',
 
-            'active' => 'nullable|boolean',
+            'active'          => 'nullable|boolean',
         ]);
-
 
         /*
         |--------------------------------------------------------------------------
@@ -202,36 +178,27 @@ class CertificateFrameController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | B2 folders
+        | Certificate Images
         |--------------------------------------------------------------------------
+        | IMPORTANT:
+        | Same folder as STORE:
+        |
+        | certificate_frames
+        |
         */
 
         $images = [
-
-            'background' =>
-            'certificate_frames/backgrounds',
-
-            'border_image' =>
-            'certificate_frames/borders',
-
-            'watermark' =>
-            'certificate_frames/watermarks',
-
-            'logo' =>
-            'certificate_frames/logos',
-
-            'seal' =>
-            'certificate_frames/seals',
+            'background',
+            'border_image',
+            'watermark',
+            'logo',
+            'seal',
         ];
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Store old paths
-        |--------------------------------------------------------------------------
-        */
-
         $oldFiles = [];
+
+        $disk = Storage::disk('b2');
 
 
         /*
@@ -240,32 +207,36 @@ class CertificateFrameController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        foreach ($images as $field => $folder) {
+        foreach ($images as $field) {
 
             if ($request->hasFile($field)) {
 
                 /*
-                | Save old path
+                | Keep old image path
                 */
 
                 if (!empty($certificateFrame->{$field})) {
 
-                    $oldFiles[$field] =
-                        $certificateFrame->{$field};
+                    $oldFiles[] = $certificateFrame->{$field};
                 }
 
 
                 /*
-                | Upload new image to B2
+                | Upload NEW image
+                |
+                | SAME AS STORE
                 */
 
                 $newPath = $request
                     ->file($field)
-                    ->store($folder, 'b2');
+                    ->store(
+                        'certificate_frames',
+                        'b2'
+                    );
 
 
                 /*
-                | Upload failed
+                | Check upload
                 */
 
                 if (!$newPath) {
@@ -290,7 +261,7 @@ class CertificateFrameController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Update database
+        | Update Database
         |--------------------------------------------------------------------------
         */
 
@@ -299,13 +270,11 @@ class CertificateFrameController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Delete old images from B2
+        | Delete OLD images from B2
         |--------------------------------------------------------------------------
         */
 
-        $disk = Storage::disk('b2');
-
-        foreach ($oldFiles as $field => $oldPath) {
+        foreach ($oldFiles as $oldPath) {
 
             try {
 
@@ -315,31 +284,14 @@ class CertificateFrameController extends Controller
                 ) {
 
                     $disk->delete($oldPath);
-
-                    Log::info(
-                        'Old certificate image deleted',
-                        [
-                            'frame_id' =>
-                            $certificateFrame->id,
-
-                            'field' =>
-                            $field,
-
-                            'path' =>
-                            $oldPath,
-                        ]
-                    );
                 }
             } catch (\Throwable $e) {
 
                 Log::warning(
-                    'Old certificate image could not be deleted',
+                    'Old certificate image could not be deleted from B2',
                     [
                         'frame_id' =>
                         $certificateFrame->id,
-
-                        'field' =>
-                        $field,
 
                         'path' =>
                         $oldPath,
@@ -351,6 +303,12 @@ class CertificateFrameController extends Controller
             }
         }
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Redirect
+        |--------------------------------------------------------------------------
+        */
 
         return redirect()
             ->route('admin.certificate.frames.index')

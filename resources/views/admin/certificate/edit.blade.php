@@ -97,10 +97,10 @@
                         accept="image/*"
                         class="w-full rounded-xl border p-3">
 
-                    @if($certificateFrame->background)
+                    @if($certificateFrame->background_url)
 
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->background) }}"
+                        src="{{ asset('storage/'.$certificateFrame->background_url) }}"
                         class="mt-3 h-24 rounded-lg border">
 
                     @endif
@@ -122,10 +122,10 @@
                         accept="image/*"
                         class="w-full rounded-xl border p-3">
 
-                    @if($certificateFrame->border_image)
+                    @if($certificateFrame->border_image_url)
 
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->border_image) }}"
+                        src="{{ asset('storage/'.$certificateFrame->border_image_url) }}"
                         class="mt-3 h-24 rounded-lg border">
 
                     @endif
@@ -146,10 +146,10 @@
                         accept="image/*"
                         class="w-full rounded-xl border p-3">
 
-                    @if($certificateFrame->watermark)
+                    @if($certificateFrame->watermark_url)
 
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->watermark) }}"
+                        src="{{ asset('storage/'.$certificateFrame->watermark_url) }}"
                         class="mt-3 h-24 rounded-lg border">
 
                     @endif
@@ -171,10 +171,10 @@
                         accept="image/*"
                         class="w-full rounded-xl border p-3">
 
-                    @if($certificateFrame->logo)
+                    @if($certificateFrame->logo_url)
 
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->logo) }}"
+                        src="{{ asset('storage/'.$certificateFrame->logo_url) }}"
                         class="mt-3 h-24 rounded-lg border">
 
                     @endif
@@ -196,10 +196,10 @@
                         accept="image/*"
                         class="w-full rounded-xl border p-3">
 
-                    @if($certificateFrame->seal)
+                    @if($certificateFrame->seal_url)
 
                     <img
-                        src="{{ asset('storage/'.$certificateFrame->seal) }}"
+                        src="{{ asset('storage/'.$certificateFrame->seal_url) }}"
                         class="mt-3 h-24 rounded-lg border">
 
                     @endif
@@ -304,28 +304,28 @@
 
                     <img
                         id="previewBackground"
-                        src="{{ $certificateFrame->background_url ? asset('storage/'.$certificateFrame->background_url) : '' }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->background_url)]) }}"
                         class="absolute inset-0 w-full h-full object-cover {{ $certificateFrame->background_url ? '' : 'hidden' }}">
 
                     <!-- Watermark -->
 
                     <img
                         id="previewWatermark"
-                        src="{{ $certificateFrame->watermark_url ? asset('storage/'.$certificateFrame->watermark_url) : '' }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->watermark_url)]) }}"
                         class="absolute inset-0 w-full h-full object-contain opacity-10 {{ $certificateFrame->watermark_url ? '' : 'hidden' }}">
 
                     <!-- Logo -->
 
                     <img
                         id="previewLogo"
-                        src="{{ $certificateFrame->logo_url ? asset('storage/'.$certificateFrame->logo_url) : '' }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->logo_url)]) }}"
                         class="absolute top-12 left-12 w-16 z-10 {{ $certificateFrame->logo_url ? '' : 'hidden' }}">
 
                     <!-- Seal -->
 
                     <img
                         id="previewSeal"
-                        src="{{ $certificateFrame->seal_url ? asset('storage/'.$certificateFrame->seal_url) : '' }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->seal_url)]) }}"
                         class="absolute bottom-8 right-55 w-20 z-10 {{ $certificateFrame->seal_url ? '' : 'hidden' }}">
 
                     <!-- Certificate Content -->
@@ -413,7 +413,7 @@
 
                     <img
                         id="previewBorder"
-                        src="{{ $certificateFrame->border_image_url ? asset('storage/'.$certificateFrame->border_image_url) : '' }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->border_image_url)]) }}"
                         class="absolute inset-0 w-full h-full object-fill pointer-events-none z-10 {{ $certificateFrame->border_image_url ? '' : 'hidden' }}">
 
                 </div>

@@ -153,7 +153,7 @@
                 <div class="flex items-center gap-4 p-4 rounded-3xl bg-white/30 border border-slate-300  dark:bg-slate-100/20 dark:border-slate-500
                     hover:border-indigo-200 hover:shadow-lg transition duration-300">
 
-                    <img src="{{ asset('storage/' . $c->course->thumbnail) }}"
+                    <img src="{{$c->course->thumbnail_url }}"
                         class="w-20 h-16 object-cover rounded-xl shadow-md">
                     <div class="flex-1">
                         <h3 class="font-semibold text-gray-800 dark:text-white">

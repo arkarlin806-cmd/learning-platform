@@ -118,24 +118,24 @@
                     class="relative aspect-[1.414/1] overflow-hidden bg-white rounded-xl ">
                     {{-- Background Inside Frame --}}
 
-                    @if($certificateFrame->background)
+                    @if($certificateFrame->background_url)
                     <img
-                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->background)]) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->background_url)]) }}"
                         class="absolute top-5 left-5 right-5 bottom-5 w-[calc(100%-40px)] h-[calc(100%-40px)] object-cover z-0 ">
                     @endif
 
                     {{-- Border PNG Full Size --}}
-                    @if($certificateFrame->border_image)
+                    @if($certificateFrame->border_image_url)
                     <img
-                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->border_image)]) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->border_image_url)]) }}"
                         class="absolute inset-0 w-full h-full object-fill z-20 pointer-events-none ">
                     @endif
 
                     {{-- Watermark --}}
 
-                    @if($certificateFrame->watermark)
+                    @if($certificateFrame->watermark_url)
                     <img
-                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->watermark)]) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->watermark_url)]) }}"
                         class="absolute top-1/2 left-1/2 w-80 opacity-10 -translate-x-1/2 -translate-y-1/2 z-10 ">
                     @endif
 
@@ -168,16 +168,16 @@
                     </div>
 
                     <!-- logo  -->
-                    @if( $certificateFrame->logo)
+                    @if( $certificateFrame->logo_url)
                     <img
-                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->logo)]) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->logo_url)]) }}"
                         class="absolute top-14 left-14 w-16 z-50">
                     @endif
 
                     <!-- seal  -->
-                    @if($certificateFrame->seal)
+                    @if($certificateFrame->seal_url)
                     <img
-                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->seal)]) }}"
+                        src="{{ route('admin.certificate.image', ['filename' => basename($certificateFrame->seal_url)]) }}"
                         class="absolute bottom-12 right-70 w-24 z-50">
                     @endif
 

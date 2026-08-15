@@ -304,29 +304,29 @@
 
                     <img
                         id="previewBackground"
-                        src="{{ $certificateFrame->background ? asset('storage/'.$certificateFrame->background) : '' }}"
-                        class="absolute inset-0 w-full h-full object-cover {{ $certificateFrame->background ? '' : 'hidden' }}">
+                        src="{{ $certificateFrame->background_url ? asset('storage/'.$certificateFrame->background_url) : '' }}"
+                        class="absolute inset-0 w-full h-full object-cover {{ $certificateFrame->background_url ? '' : 'hidden' }}">
 
                     <!-- Watermark -->
 
                     <img
                         id="previewWatermark"
-                        src="{{ $certificateFrame->watermark ? asset('storage/'.$certificateFrame->watermark) : '' }}"
-                        class="absolute inset-0 w-full h-full object-contain opacity-10 {{ $certificateFrame->watermark ? '' : 'hidden' }}">
+                        src="{{ $certificateFrame->watermark_url ? asset('storage/'.$certificateFrame->watermark_url) : '' }}"
+                        class="absolute inset-0 w-full h-full object-contain opacity-10 {{ $certificateFrame->watermark_url ? '' : 'hidden' }}">
 
                     <!-- Logo -->
 
                     <img
                         id="previewLogo"
-                        src="{{ $certificateFrame->logo ? asset('storage/'.$certificateFrame->logo) : '' }}"
-                        class="absolute top-12 left-12 w-16 z-10 {{ $certificateFrame->logo ? '' : 'hidden' }}">
+                        src="{{ $certificateFrame->logo_url ? asset('storage/'.$certificateFrame->logo_url) : '' }}"
+                        class="absolute top-12 left-12 w-16 z-10 {{ $certificateFrame->logo_url ? '' : 'hidden' }}">
 
                     <!-- Seal -->
 
                     <img
                         id="previewSeal"
-                        src="{{ $certificateFrame->seal ? asset('storage/'.$certificateFrame->seal) : '' }}"
-                        class="absolute bottom-8 right-55 w-20 z-10 {{ $certificateFrame->seal ? '' : 'hidden' }}">
+                        src="{{ $certificateFrame->seal_url ? asset('storage/'.$certificateFrame->seal_url) : '' }}"
+                        class="absolute bottom-8 right-55 w-20 z-10 {{ $certificateFrame->seal_url ? '' : 'hidden' }}">
 
                     <!-- Certificate Content -->
 
@@ -413,8 +413,8 @@
 
                     <img
                         id="previewBorder"
-                        src="{{ $certificateFrame->border_image ? asset('storage/'.$certificateFrame->border_image) : '' }}"
-                        class="absolute inset-0 w-full h-full object-fill pointer-events-none z-10 {{ $certificateFrame->border_image ? '' : 'hidden' }}">
+                        src="{{ $certificateFrame->border_image_url ? asset('storage/'.$certificateFrame->border_image_url) : '' }}"
+                        class="absolute inset-0 w-full h-full object-fill pointer-events-none z-10 {{ $certificateFrame->border_image_url ? '' : 'hidden' }}">
 
                 </div>
 

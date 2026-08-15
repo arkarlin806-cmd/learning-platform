@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Jobs\lessonvd;
 use App\Models\lesson_summary;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Filesystem\FilesystemAdapter;
 
 class LessonController extends Controller
 {
@@ -81,86 +81,33 @@ class LessonController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        /** @var FilesystemAdapter $disk */
         $disk = Storage::disk('b2');
 
         foreach ($lessons as $lesson) {
 
-            // Default
             $lesson->video_url = null;
 
             if (
                 $lesson->lesson_type === 'video' &&
                 !empty($lesson->file_path)
             ) {
-
                 try {
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Check B2 file
-                    |--------------------------------------------------------------------------
-                    */
+                    if ($disk->exists($lesson->file_path)) {
 
-                    $exists = $disk->exists(
-                        $lesson->file_path
-                    );
-
-
-                    Log::info('B2 LESSON CHECK', [
-                        'lesson_id' => $lesson->id,
-                        'file_path' => $lesson->file_path,
-                        'exists'    => $exists,
-                    ]);
-
-
-                    if ($exists) {
-
-                        $endpoint = rtrim(
-                            config('filesystems.disks.b2.endpoint'),
-                            '/'
-                        );
-
-                        $bucket = config(
-                            'filesystems.disks.b2.bucket'
-                        );
-
-                        $filePath = ltrim(
+                        $lesson->video_url = $disk->temporaryUrl(
                             $lesson->file_path,
-                            '/'
+                            now()->addHours(2)
                         );
-
-
-                        $lesson->video_url =
-                            $endpoint .
-                            '/' .
-                            $bucket .
-                            '/' .
-                            $filePath;
-
-
-                        Log::info('B2 VIDEO URL CREATED', [
-                            'lesson_id' =>
-                            $lesson->id,
-
-                            'video_url' =>
-                            $lesson->video_url,
-                        ]);
                     }
                 } catch (\Throwable $e) {
 
-                    Log::error(
-                        'B2 VIDEO URL ERROR',
-                        [
-                            'lesson_id' =>
-                            $lesson->id,
-
-                            'file_path' =>
-                            $lesson->file_path,
-
-                            'error' =>
-                            $e->getMessage(),
-                        ]
-                    );
+                    Log::error('B2 signed URL error', [
+                        'lesson_id' => $lesson->id,
+                        'file_path' => $lesson->file_path,
+                        'error' => $e->getMessage(),
+                    ]);
                 }
             }
         }

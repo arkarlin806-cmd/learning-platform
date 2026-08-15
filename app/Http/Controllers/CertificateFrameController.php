@@ -15,6 +15,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Filesystem\FilesystemAdapter;
 
 class CertificateFrameController extends Controller
 {
@@ -51,96 +52,6 @@ class CertificateFrameController extends Controller
         return view('admin.certificate.index', compact('certificateFrames'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'category'   => 'required|string|max:255',
-    //         'frame_name' => 'required|string|max:255',
-
-    //         'background'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-    //         'border_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-    //         'watermark'   => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-    //         'logo'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-    //         'seal'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-
-    //         'primary_color'   => 'nullable|string|max:20',
-    //         'secondary_color' => 'nullable|string|max:20',
-    //         'accent_color'    => 'nullable|string|max:20',
-
-    //         'active' => 'nullable|boolean',
-    //     ]);
-
-
-    //     /*
-    // |--------------------------------------------------------------------------
-    // | Basic data
-    // |--------------------------------------------------------------------------
-    // */
-
-    //     $data = [
-    //         'category'        => $request->input('category'),
-    //         'frame_name'      => $request->input('frame_name'),
-    //         'primary_color'   => $request->input('primary_color'),
-    //         'secondary_color' => $request->input('secondary_color'),
-    //         'accent_color'    => $request->input('accent_color'),
-    //         'active'          => $request->boolean('active'),
-    //     ];
-
-
-    //     /*
-    // |--------------------------------------------------------------------------
-    // | Certificate images
-    // |--------------------------------------------------------------------------
-    // */
-
-    //     $images = [
-    //         'background'   => 'certificate_frames/backgrounds',
-    //         'border_image' => 'certificate_frames/borders',
-    //         'watermark'    => 'certificate_frames/watermarks',
-    //         'logo'         => 'certificate_frames/logos',
-    //         'seal'         => 'certificate_frames/seals',
-    //     ];
-
-
-    //     foreach ($images as $field => $folder) {
-
-    //         if ($request->hasFile($field)) {
-
-    //             $path = $request
-    //                 ->file($field)
-    //                 ->store($folder, 'b2');
-
-    //             if (!$path) {
-
-    //                 return back()
-    //                     ->withInput()
-    //                     ->with(
-    //                         'error',
-    //                         "Failed to upload {$field} to B2."
-    //                     );
-    //             }
-
-    //             $data[$field] = $path;
-    //         }
-    //     }
-
-
-    //     /*
-    // |--------------------------------------------------------------------------
-    // | Create
-    // |--------------------------------------------------------------------------
-    // */
-
-    //     CertificateFrame::create($data);
-
-
-    //     return redirect()
-    //         ->route('admin.certificate.frames.index')
-    //         ->with(
-    //             'success',
-    //             'Certificate Frame Created Successfully.'
-    //         );
-    // }
     public function update(Request $request, CertificateFrame $certificateFrame)
     {
         $request->validate([
@@ -175,18 +86,6 @@ class CertificateFrameController extends Controller
             'active'          => $request->boolean('active'),
         ];
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Certificate Images
-        |--------------------------------------------------------------------------
-        | IMPORTANT:
-        | Same folder as STORE:
-        |
-        | certificate_frames
-        |
-        */
-
         $images = [
             'background',
             'border_image',
@@ -201,31 +100,16 @@ class CertificateFrameController extends Controller
         $disk = Storage::disk('b2');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Upload new images
-        |--------------------------------------------------------------------------
-        */
-
         foreach ($images as $field) {
 
             if ($request->hasFile($field)) {
 
-                /*
-                | Keep old image path
-                */
 
                 if (!empty($certificateFrame->{$field})) {
 
                     $oldFiles[] = $certificateFrame->{$field};
                 }
 
-
-                /*
-                | Upload NEW image
-                |
-                | SAME AS STORE
-                */
 
                 $newPath = $request
                     ->file($field)
@@ -235,9 +119,6 @@ class CertificateFrameController extends Controller
                     );
 
 
-                /*
-                | Check upload
-                */
 
                 if (!$newPath) {
 
@@ -250,20 +131,10 @@ class CertificateFrameController extends Controller
                 }
 
 
-                /*
-                | Save new path
-                */
 
                 $data[$field] = $newPath;
             }
         }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Update Database
-        |--------------------------------------------------------------------------
-        */
 
         $certificateFrame->update($data);
 
@@ -442,122 +313,6 @@ class CertificateFrameController extends Controller
     }
 
 
-    // public function update(Request $request, CertificateFrame $certificateFrame)
-    // {
-    //     $request->validate([
-    //         'category'        => 'required|string|max:255',
-    //         'frame_name'      => 'required|string|max:255',
-
-    //         'background'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-    //         'border_image'    => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-    //         'watermark'       => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-    //         'logo'            => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-    //         'seal'            => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-
-    //         'primary_color'   => 'required|string|max:20',
-    //         'secondary_color' => 'required|string|max:20',
-    //         'accent_color'    => 'required|string|max:20',
-
-    //         'active'          => 'nullable|boolean',
-    //     ]);
-
-    //     $data = [
-    //         'category'        => $request->input('category'),
-    //         'frame_name'      => $request->input('frame_name'),
-    //         'primary_color'   => $request->input('primary_color'),
-    //         'secondary_color' => $request->input('secondary_color'),
-    //         'accent_color'    => $request->input('accent_color'),
-    //         'active'          => $request->boolean('active'),
-    //     ];
-
-    //     $oldFiles = [];
-
-    //     $images = [
-    //         'background'   => 'certificate_frames/backgrounds',
-    //         'border_image' => 'certificate_frames/borders',
-    //         'watermark'    => 'certificate_frames/watermarks',
-    //         'logo'         => 'certificate_frames/logos',
-    //         'seal'         => 'certificate_frames/seals',
-    //     ];
-
-    //     foreach ($images as $field => $folder) {
-
-    //         if ($request->hasFile($field)) {
-
-    //             /*
-    //              * Save old path first
-    //              */
-    //             if (!empty($certificateFrame->$field)) {
-    //                 $oldFiles[$field] = $certificateFrame->$field;
-    //             }
-
-    //             /*
-    //              * Upload NEW file to B2
-    //              */
-    //             $newPath = $request
-    //                 ->file($field)
-    //                 ->store($folder, 'b2');
-
-    //             /*
-    //              * If upload failed
-    //              */
-    //             if (!$newPath) {
-    //                 return back()
-    //                     ->withInput()
-    //                     ->with(
-    //                         'error',
-    //                         "Failed to upload {$field} to B2."
-    //                     );
-    //             }
-
-    //             /*
-    //              * Save new path
-    //              */
-    //             $data[$field] = $newPath;
-    //         }
-    //     }
-
-    //     /*
-    //      * Update database
-    //      */
-    //     $certificateFrame->update($data);
-
-    //     /*
-    //      * Delete OLD files from B2
-    //      */
-    //     foreach ($oldFiles as $oldPath) {
-
-    //         try {
-    //             if (
-    //                 !empty($oldPath) &&
-    //                 Storage::disk('b2')->exists($oldPath)
-    //             ) {
-    //                 Storage::disk('b2')->delete($oldPath);
-    //             }
-    //         } catch (\Throwable $e) {
-
-    //             Log::warning(
-    //                 'Old certificate frame image could not be deleted from B2',
-    //                 [
-    //                     'path' => $oldPath,
-    //                     'error' => $e->getMessage(),
-    //                 ]
-    //             );
-    //         }
-    //     }
-
-    //     return redirect()
-    //         ->route('admin.certificate.frames.index')
-    //         ->with(
-    //             'success',
-    //             'Certificate frame updated successfully.'
-    //         );
-    // }
-
-
-
-
-
 
 
     //instructor
@@ -572,16 +327,129 @@ class CertificateFrameController extends Controller
             ->whereNotExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('certificates')
-                    ->whereColumn('certificates.user_id', 'course_orders.user_id')
-                    ->whereColumn('certificates.course_id', 'course_orders.course_id');
+                    ->whereColumn(
+                        'certificates.user_id',
+                        'course_orders.user_id'
+                    )
+                    ->whereColumn(
+                        'certificates.course_id',
+                        'course_orders.course_id'
+                    );
             })
             ->get();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Active Certificate Frames
+        |--------------------------------------------------------------------------
+        */
+
         $frames = CertificateFrame::where('active', 1)->get();
+
+        $disk = Storage::disk('b2');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Generate B2 Temporary URLs
+        |--------------------------------------------------------------------------
+        */
+        /** @var FilesystemAdapter $disk */
+
+        foreach ($frames as $frame) {
+
+            $frame->background_url = null;
+            $frame->border_url     = null;
+            $frame->watermark_url  = null;
+            $frame->logo_url       = null;
+            $frame->seal_url       = null;
+
+
+            /*
+            | Background
+            */
+
+            if (
+                !empty($frame->background) &&
+                $disk->exists($frame->background)
+            ) {
+
+                $frame->background_url = $disk->temporaryUrl(
+                    $frame->background,
+                    now()->addHours(2)
+                );
+            }
+
+
+            /*
+            | Border
+            */
+
+            if (
+                !empty($frame->border_image) &&
+                $disk->exists($frame->border_image)
+            ) {
+                $frame->border_url = $disk->temporaryUrl(
+                    $frame->border_image,
+                    now()->addHours(2)
+                );
+            }
+
+
+            /*
+            | Watermark
+            */
+
+            if (
+                !empty($frame->watermark) &&
+                $disk->exists($frame->watermark)
+            ) {
+                $frame->watermark_url = $disk->temporaryUrl(
+                    $frame->watermark,
+                    now()->addHours(2)
+                );
+            }
+
+
+            /*
+            | Logo
+            */
+
+            if (
+                !empty($frame->logo) &&
+                $disk->exists($frame->logo)
+            ) {
+                $frame->logo_url = $disk->temporaryUrl(
+                    $frame->logo,
+                    now()->addHours(2)
+                );
+            }
+
+
+            /*
+            | Seal
+            */
+
+            if (
+                !empty($frame->seal) &&
+                $disk->exists($frame->seal)
+            ) {
+                $frame->seal_url = $disk->temporaryUrl(
+                    $frame->seal,
+                    now()->addHours(2)
+                );
+            }
+        }
+
 
         return view(
             'instructor.certificate.create',
-            compact('course', 'learners', 'frames')
+            compact(
+                'course',
+                'learners',
+                'frames'
+            )
         );
     }
 
@@ -794,154 +662,6 @@ class CertificateFrameController extends Controller
                 'Certificate issued successfully.'
             );
     }
-    // public function ins_store(Request $request, Course $course)
-    // {
-
-
-
-    //     abort_if(
-    //         $course->instructor_id != auth()->id(),
-    //         403
-    //     );
-
-    //     $validated = $request->validate([
-    //         'user_id' => [
-    //             'required',
-    //             'exists:users,id'
-    //         ],
-    //         'certificate_frame_id' => [
-    //             'required',
-    //             'exists:certificate_frames,id'
-    //         ],
-    //         'description' => [
-    //             'nullable',
-    //             'string',
-    //             'max:100'
-    //         ],
-    //         'signature' => [
-    //             'nullable',
-    //             'image',
-    //             'max:2048'
-    //         ]
-    //     ]);
-
-    //     // Check learner belongs to course
-    //     $enrolled =
-    //         CourseOrder::where(
-    //             'course_id',
-    //             $course->id
-    //         )
-    //         ->where(
-    //             'user_id',
-    //             $request->user_id
-    //         )
-    //         ->where(
-    //             'status',
-    //             'paid'
-    //         )
-    //         ->exists();
-
-    //     if (!$enrolled) {
-
-    //         return back()
-    //             ->with(
-    //                 'error',
-    //                 'Learner is not enrolled in this course.'
-    //             );
-    //     }
-
-
-    //     // prevent Duplicate Certificate
-    //     $exists =
-    //         Certificate::where(
-    //             'course_id',
-    //             $course->id
-    //         )
-    //         ->where(
-    //             'user_id',
-    //             $request->user_id
-    //         )
-    //         ->exists();
-    //     if ($exists) {
-    //         return back()
-    //             ->with(
-    //                 'error',
-    //                 'Certificate already issued.'
-    //             );
-    //     }
-
-    //     // Generate Certificate ID
-    //     $certificateId =
-    //         'CERT-'
-    //         . date('Y')
-    //         . '-'
-    //         . strtoupper(
-    //             Str::random(8)
-    //         );
-
-    //     //  Verification Hash
-    //     $hash =
-    //         hash(
-    //             'sha256',
-    //             $certificateId
-    //                 . time()
-    //         );
-
-    //     // Generate QR
-    //     $verifyUrl =
-    //         route(
-    //             'certificate.verify',
-    //             $hash
-    //         );
-    //     $qrPath =
-    //         'certificates/qrcode/'
-    //         . $certificateId
-    //         . '.svg';
-
-    //     Storage::put(
-    //         $qrPath,
-    //         QrCode::size(300)
-    //             ->generate($verifyUrl)
-    //     );
-
-    //     // Upload Instructor Signature
-    //     $signaturePath = null;
-
-    //     if ($request->hasFile('signature')) {
-    //         $signaturePath =
-    //             $request
-    //             ->file('signature')
-    //             ->store(
-    //                 'certificates/signatures',
-    //                 'public'
-    //             );
-    //     }
-
-    //     Certificate::create([
-
-    //         'user_id' => $request->user_id,
-    //         'course_id' => $course->id,
-    //         'instructor_id' => Auth::id(),
-    //         'certificate_frame_id' => $request->certificate_frame_id,
-    //         'certificate_id' => $certificateId,
-    //         'verification_hash' => $hash,
-    //         'qr_code' => $qrPath,
-    //         'description' => $request->description,
-    //         'signature' => $signaturePath,
-    //         'status' => 'valid',
-    //         'issued_at' => now(),
-    //     ]);
-
-    //     return redirect()
-    //         ->route(
-    //             'instructor.certificates.index',
-    //             $course->id
-    //         )
-    //         ->with(
-    //             'success',
-    //             'Certificate issued successfully.'
-    //         );
-    // }
 
 
     public function ins_index($courseId)
@@ -984,11 +704,6 @@ class CertificateFrameController extends Controller
 
     public function certificate_show(Certificate $certificate)
     {
-        // abort_if(
-        //     $certificate->instructor_id != Auth::id(),
-        //     403
-        // );
-
         $course = Course::find($certificate->course_id);
 
         $certificate->load([
@@ -1077,35 +792,10 @@ class CertificateFrameController extends Controller
                 'private, max-age=3600'
             );
     }
-    // public function certificate_show(Certificate $certificate)
-    // {
-    //     // abort_if(
-    //     //     $certificate->instructor_id
-    //     //         != Auth::id(),
-    //     //     403
-    //     // );
-    //     $course = Course::find($certificate->course_id);
-    //     $certificate->load([
-    //         'user',
-    //         'course',
-    //         'frame',
-    //         'instructor'
-    //     ]);
-    //     return view(
-    //         'instructor.certificate.show',
-    //         compact(
-    //             'certificate',
-    //             'course'
-    //         )
-    //     );
-    // }
+
     public function downloadPdf(Certificate $certificate)
     {
-        // abort_if(
-        //     $certificate->instructor_id
-        //         != Auth::id(),
-        //     403
-        // );
+
         $certificate->load([
             'user',
             'course',

@@ -62,17 +62,15 @@
                             </option>
 
                             @foreach($frames as $frame)
-
                             <option
                                 value="{{ $frame->id }}"
-                                data-background="{{ $frame->background ? asset('storage/'.$frame->background) : '' }}"
-                                data-border="{{ $frame->border_image ? asset('storage/'.$frame->border_image) : '' }}"
-                                data-watermark="{{ $frame->watermark ? asset('storage/'.$frame->watermark) : '' }}"
-                                data-logo="{{ $frame->logo ? asset('storage/'.$frame->logo) : '' }}"
-                                data-seal="{{ $frame->seal ? asset('storage/'.$frame->seal) : '' }}">
+                                data-background="{{ $frame->background_url ?? '' }}"
+                                data-border="{{ $frame->border_url ?? '' }}"
+                                data-watermark="{{ $frame->watermark_url ?? '' }}"
+                                data-logo="{{ $frame->logo_url ?? '' }}"
+                                data-seal="{{ $frame->seal_url ?? '' }}">
                                 {{ $frame->frame_name }}
                             </option>
-
                             @endforeach
                         </select>
                     </div>

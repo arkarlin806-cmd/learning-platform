@@ -91,7 +91,8 @@
          <div class="group bg-white/80 backdrop-blur-xl border border-white rounded-[30px] shadow-xl p-7 hover:-translate-y-1 duration-300">
              <div class="grid grid-cols-12 gap-6 items-center"> {{-- Instructor --}}
                  <div class="col-span-3">
-                     <div class="flex items-center gap-4"> <img src="{{ $withdraw->instructor->avatar ? asset('storage/'.$withdraw->instructor->avatar) : asset('images/default-avatar.png') }}" class="h-16 w-16 rounded-2xl object-cover shadow">
+                     <div class="flex items-center gap-4">
+                         <img src="https://ui-avatars.com/api/?name={{ $$withdraw->instructor->name }}" class="h-16 w-16 rounded-2xl object-cover shadow">
                          <div>
                              <h3 class="font-bold text-gray-800"> {{ $withdraw->instructor->name }} </h3>
                              <p class="text-sm text-gray-500"> {{ $withdraw->instructor->email }} </p>

@@ -16,7 +16,7 @@
                     <div
                         class="group relative overflow-hidden rounded-3xl shadow-2xl">
                         <img
-                            src="{{ asset('storage/'.$course->thumbnail) }}"
+                            src="{{$course->thumbnail_url) }}"
                             class="w-full h-[420px] object-cover transition duration-700 group-hover:scale-110 ">
                         {{-- Overlay --}}
                         <div class=" absolute inset-0 bg-gradient-to-t from-black/60 via-transparent ">

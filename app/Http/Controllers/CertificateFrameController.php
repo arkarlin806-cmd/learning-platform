@@ -337,24 +337,12 @@ class CertificateFrameController extends Controller
                     );
             })
             ->get();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Active Certificate Frames
-        |--------------------------------------------------------------------------
-        */
-
         $frames = CertificateFrame::where('active', 1)->get();
 
         $disk = Storage::disk('b2');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Generate B2 Temporary URLs
-        |--------------------------------------------------------------------------
-        */
+
         /** @var FilesystemAdapter $disk */
 
         foreach ($frames as $frame) {
@@ -366,9 +354,6 @@ class CertificateFrameController extends Controller
             $frame->seal_url       = null;
 
 
-            /*
-            | Background
-            */
 
             if (
                 !empty($frame->background) &&
@@ -381,11 +366,6 @@ class CertificateFrameController extends Controller
                 );
             }
 
-
-            /*
-            | Border
-            */
-
             if (
                 !empty($frame->border_image) &&
                 $disk->exists($frame->border_image)
@@ -395,11 +375,6 @@ class CertificateFrameController extends Controller
                     now()->addHours(2)
                 );
             }
-
-
-            /*
-            | Watermark
-            */
 
             if (
                 !empty($frame->watermark) &&
@@ -412,10 +387,6 @@ class CertificateFrameController extends Controller
             }
 
 
-            /*
-            | Logo
-            */
-
             if (
                 !empty($frame->logo) &&
                 $disk->exists($frame->logo)
@@ -426,10 +397,6 @@ class CertificateFrameController extends Controller
                 );
             }
 
-
-            /*
-            | Seal
-            */
 
             if (
                 !empty($frame->seal) &&

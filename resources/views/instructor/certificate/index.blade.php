@@ -3,6 +3,7 @@
 @section("page","Instructor create certificate.")
 @section('content')
 
+@if($course->status != 'completed')
 
 <div class="max-w-7xl mx-auto px-4 py-8">
 
@@ -573,7 +574,34 @@ text-slate-500
 </script>
 
 
+@else
 
+<div class="max-w-7xl mx-auto px-4 py-8">
+
+
+    {{-- Section Heading --}}
+    <div class="text-center mb-12" data-aos="fade-up">
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-md border border-white shadow-sm text-sm font-semibold text-indigo-600">
+            ✨ Certificate
+        </span>
+
+        <h1 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-800">
+            Certificate
+            <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                Not Created
+            </span>
+        </h1>
+
+        <p class="mt-4 max-w-2xl mx-auto text-slate-500 text-sm sm:text-base leading-7">
+            Now, This course certificate not created. So, your couse do completed in course information page.
+        </p>
+    </div>
+
+
+</div>
+
+
+@endif
 
 
 @endsection

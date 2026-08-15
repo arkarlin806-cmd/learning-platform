@@ -392,8 +392,7 @@ p-4
 
                                     <p class="font-mono font-bold">
 
-                                        {{ $certificate->certificate_code }}
-
+                                        {{ $certificate->certificate_id }}
                                     </p>
 
 

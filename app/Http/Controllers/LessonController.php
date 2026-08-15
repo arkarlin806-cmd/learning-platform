@@ -49,7 +49,6 @@ class LessonController extends Controller
     }
 
 
-
     public function show(Request $request, $id)
     {
         $course = Course::with('user')->findOrFail($id);
@@ -57,6 +56,7 @@ class LessonController extends Controller
         $query = Lesson::with('summary_pre')
             ->where('course_id', $id);
 
+        // Search
         if ($request->filled('search')) {
             $query->where(
                 'title',
@@ -65,6 +65,7 @@ class LessonController extends Controller
             );
         }
 
+        // Filter
         if ($request->filled('upload_type')) {
             $query->where(
                 'lesson_type',
@@ -78,7 +79,7 @@ class LessonController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | B2 Video URL
+        | Backblaze B2 Video URL
         |--------------------------------------------------------------------------
         */
 
@@ -114,6 +115,15 @@ class LessonController extends Controller
                             $bucket .
                             '/' .
                             $filePath;
+                    } else {
+
+                        Log::warning(
+                            'B2 lesson file not found',
+                            [
+                                'lesson_id' => $lesson->id,
+                                'file_path' => $lesson->file_path,
+                            ]
+                        );
                     }
                 } catch (\Throwable $e) {
 
@@ -129,10 +139,36 @@ class LessonController extends Controller
             }
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Lesson Statistics
+        |--------------------------------------------------------------------------
+        */
+
         $totalLessons = Lesson::where(
             'course_id',
             $course->id
         )->count();
+
+        $videoLessons = Lesson::where(
+            'course_id',
+            $course->id
+        )
+            ->where('lesson_type', 'video')
+            ->count();
+
+        $pdfLessons = Lesson::where(
+            'course_id',
+            $course->id
+        )
+            ->where('lesson_type', 'pdf')
+            ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Access
+        |--------------------------------------------------------------------------
+        */
 
         $isPurchased = LessonController::isPurchased(
             $course->id
@@ -148,13 +184,15 @@ class LessonController extends Controller
                     'course',
                     'lessons',
                     'totalLessons',
+                    'videoLessons',
+                    'pdfLessons',
                     'isInstructor',
                     'isPurchased'
                 )
             );
         }
 
-        abort(403, 'Please purchase courses!.');
+        abort(403, 'Please purchase courses!');
     }
     // public function show(Request $request, $id)
     // {

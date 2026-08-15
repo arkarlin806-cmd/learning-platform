@@ -53,11 +53,23 @@ class LessonController extends Controller
     {
         $course = Course::with('user')->findOrFail($id);
 
-        $query = Lesson::with('summary_pre')
+        /*
+        |--------------------------------------------------------------------------
+        | Lessons + AI Summary
+        |--------------------------------------------------------------------------
+        */
+
+        $query = Lesson::with('summary')
             ->where('course_id', $id);
 
-        // Search
+        /*
+        |--------------------------------------------------------------------------
+        | Search
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('search')) {
+
             $query->where(
                 'title',
                 'like',
@@ -65,17 +77,30 @@ class LessonController extends Controller
             );
         }
 
-        // Filter
+        /*
+        |--------------------------------------------------------------------------
+        | Lesson Type Filter
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->filled('upload_type')) {
+
             $query->where(
                 'lesson_type',
                 $request->upload_type
             );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Pagination
+        |--------------------------------------------------------------------------
+        */
+
         $lessons = $query
             ->latest()
             ->paginate(10);
+
 
         /*
         |--------------------------------------------------------------------------
@@ -139,6 +164,7 @@ class LessonController extends Controller
             }
         }
 
+
         /*
         |--------------------------------------------------------------------------
         | Lesson Statistics
@@ -164,6 +190,7 @@ class LessonController extends Controller
             ->where('lesson_type', 'pdf')
             ->count();
 
+
         /*
         |--------------------------------------------------------------------------
         | Access
@@ -175,6 +202,7 @@ class LessonController extends Controller
         );
 
         $isInstructor = LessonController::isInstructor();
+
 
         if ($isInstructor || $isPurchased) {
 
@@ -191,6 +219,7 @@ class LessonController extends Controller
                 )
             );
         }
+
 
         abort(403, 'Please purchase courses!');
     }

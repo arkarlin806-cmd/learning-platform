@@ -217,7 +217,7 @@
                 data-update="{{ route('lesson.update',$lesson->id) }}"
 
                 data-points='@json(
-                            $lesson->summary_pre
+                            $lesson->summary
                                 ->flatMap(fn($s) => $s->key_points ?? [])
                                 ->values()
                         )'></div>
@@ -572,7 +572,7 @@
                             <div class="p-4">
 
                                 {{-- AI Summary --}}
-                                @foreach($lesson->summary_pre as $summary)
+                                @foreach($lesson->summary as $summary)
 
                                 @if(!empty($summary->summary))
 

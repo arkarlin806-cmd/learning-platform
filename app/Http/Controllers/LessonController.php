@@ -54,7 +54,7 @@ class LessonController extends Controller
     {
         $course = Course::with('user')->findOrFail($id);
 
-        $query = Lesson::with('summary')
+        $query = Lesson::with('summary_pre')
             ->where('course_id', $id);
 
         if ($request->filled('search')) {

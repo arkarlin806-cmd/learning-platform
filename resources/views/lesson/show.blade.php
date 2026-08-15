@@ -254,8 +254,6 @@
                     class="hidden">
 
 
-                    @foreach($lesson->summary ?? [] as $summary)
-
                     @foreach($summary->key_points ?? [] as $point)
 
                     <div class="key-point-data">
@@ -266,7 +264,6 @@
 
                     @endforeach
 
-                    @endforeach
 
 
                 </div>

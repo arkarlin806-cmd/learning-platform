@@ -61,7 +61,7 @@
                         type="text"
                         name="category"
                         value="{{ old('category',$certificateFrame->category) }}"
-                        class="w-full rounded-xl border-slate-300">
+                        class="w-full rounded-xl border py-2  border-slate-300">
 
                 </div>
 
@@ -78,7 +78,7 @@
                         type="text"
                         name="frame_name"
                         value="{{ old('frame_name',$certificateFrame->frame_name) }}"
-                        class="w-full rounded-xl border-slate-300">
+                        class="w-full rounded-xl border py-2 border-slate-300">
 
                 </div>
 

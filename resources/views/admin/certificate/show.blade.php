@@ -19,7 +19,7 @@
                         {{ ucfirst($certificateFrame->category) }}
                     </p>
                 </div>
-                <div>
+                <div class="hidden">
                     <h3 class="font-bold mb-2">
                         Description
                     </h3>

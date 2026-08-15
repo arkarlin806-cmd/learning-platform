@@ -51,96 +51,96 @@ class CertificateFrameController extends Controller
         return view('admin.certificate.index', compact('certificateFrames'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'category'   => 'required|string|max:255',
-            'frame_name' => 'required|string|max:255',
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'category'   => 'required|string|max:255',
+    //         'frame_name' => 'required|string|max:255',
 
-            'background'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-            'border_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'watermark'   => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'logo'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
-            'seal'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+    //         'background'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+    //         'border_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+    //         'watermark'   => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+    //         'logo'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+    //         'seal'        => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
 
-            'primary_color'   => 'nullable|string|max:20',
-            'secondary_color' => 'nullable|string|max:20',
-            'accent_color'    => 'nullable|string|max:20',
+    //         'primary_color'   => 'nullable|string|max:20',
+    //         'secondary_color' => 'nullable|string|max:20',
+    //         'accent_color'    => 'nullable|string|max:20',
 
-            'active' => 'nullable|boolean',
-        ]);
-
-
-        /*
-    |--------------------------------------------------------------------------
-    | Basic data
-    |--------------------------------------------------------------------------
-    */
-
-        $data = [
-            'category'        => $request->input('category'),
-            'frame_name'      => $request->input('frame_name'),
-            'primary_color'   => $request->input('primary_color'),
-            'secondary_color' => $request->input('secondary_color'),
-            'accent_color'    => $request->input('accent_color'),
-            'active'          => $request->boolean('active'),
-        ];
+    //         'active' => 'nullable|boolean',
+    //     ]);
 
 
-        /*
-    |--------------------------------------------------------------------------
-    | Certificate images
-    |--------------------------------------------------------------------------
-    */
+    //     /*
+    // |--------------------------------------------------------------------------
+    // | Basic data
+    // |--------------------------------------------------------------------------
+    // */
 
-        $images = [
-            'background'   => 'certificate_frames/backgrounds',
-            'border_image' => 'certificate_frames/borders',
-            'watermark'    => 'certificate_frames/watermarks',
-            'logo'         => 'certificate_frames/logos',
-            'seal'         => 'certificate_frames/seals',
-        ];
-
-
-        foreach ($images as $field => $folder) {
-
-            if ($request->hasFile($field)) {
-
-                $path = $request
-                    ->file($field)
-                    ->store($folder, 'b2');
-
-                if (!$path) {
-
-                    return back()
-                        ->withInput()
-                        ->with(
-                            'error',
-                            "Failed to upload {$field} to B2."
-                        );
-                }
-
-                $data[$field] = $path;
-            }
-        }
+    //     $data = [
+    //         'category'        => $request->input('category'),
+    //         'frame_name'      => $request->input('frame_name'),
+    //         'primary_color'   => $request->input('primary_color'),
+    //         'secondary_color' => $request->input('secondary_color'),
+    //         'accent_color'    => $request->input('accent_color'),
+    //         'active'          => $request->boolean('active'),
+    //     ];
 
 
-        /*
-    |--------------------------------------------------------------------------
-    | Create
-    |--------------------------------------------------------------------------
-    */
+    //     /*
+    // |--------------------------------------------------------------------------
+    // | Certificate images
+    // |--------------------------------------------------------------------------
+    // */
 
-        CertificateFrame::create($data);
+    //     $images = [
+    //         'background'   => 'certificate_frames/backgrounds',
+    //         'border_image' => 'certificate_frames/borders',
+    //         'watermark'    => 'certificate_frames/watermarks',
+    //         'logo'         => 'certificate_frames/logos',
+    //         'seal'         => 'certificate_frames/seals',
+    //     ];
 
 
-        return redirect()
-            ->route('admin.certificate.frames.index')
-            ->with(
-                'success',
-                'Certificate Frame Created Successfully.'
-            );
-    }
+    //     foreach ($images as $field => $folder) {
+
+    //         if ($request->hasFile($field)) {
+
+    //             $path = $request
+    //                 ->file($field)
+    //                 ->store($folder, 'b2');
+
+    //             if (!$path) {
+
+    //                 return back()
+    //                     ->withInput()
+    //                     ->with(
+    //                         'error',
+    //                         "Failed to upload {$field} to B2."
+    //                     );
+    //             }
+
+    //             $data[$field] = $path;
+    //         }
+    //     }
+
+
+    //     /*
+    // |--------------------------------------------------------------------------
+    // | Create
+    // |--------------------------------------------------------------------------
+    // */
+
+    //     CertificateFrame::create($data);
+
+
+    //     return redirect()
+    //         ->route('admin.certificate.frames.index')
+    //         ->with(
+    //             'success',
+    //             'Certificate Frame Created Successfully.'
+    //         );
+    // }
     public function update(Request $request, CertificateFrame $certificateFrame)
     {
         $request->validate([
@@ -317,86 +317,86 @@ class CertificateFrameController extends Controller
                 'Certificate frame updated successfully.'
             );
     }
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         // Basic
-    //         'category'   => 'required|string|max:255',
-    //         'frame_name' => 'required|string|max:255',
+    public function store(Request $request)
+    {
+        $request->validate([
+            // Basic
+            'category'   => 'required|string|max:255',
+            'frame_name' => 'required|string|max:255',
 
-    //         // Images
-    //         'background'  => 'nullable|image|max:5120',
-    //         'border_image' => 'nullable|image|max:5120',
-    //         'watermark'   => 'nullable|image|max:5120',
-    //         'logo'        => 'nullable|image|max:5120',
-    //         'seal'        => 'nullable|image|max:5120',
+            // Images
+            'background'  => 'nullable|image|max:5120',
+            'border_image' => 'nullable|image|max:5120',
+            'watermark'   => 'nullable|image|max:5120',
+            'logo'        => 'nullable|image|max:5120',
+            'seal'        => 'nullable|image|max:5120',
 
-    //         // Colors
-    //         'primary_color'   => 'nullable|string',
-    //         'secondary_color' => 'nullable|string',
-    //         'accent_color'    => 'nullable|string',
-    //     ]);
+            // Colors
+            'primary_color'   => 'nullable|string',
+            'secondary_color' => 'nullable|string',
+            'accent_color'    => 'nullable|string',
+        ]);
 
-    //     $data = $request->except([
-    //         '_token'
-    //     ]);
+        $data = $request->except([
+            '_token'
+        ]);
 
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Upload certificate images to Backblaze B2
-    //     |--------------------------------------------------------------------------
-    //     */
+        /*
+        |--------------------------------------------------------------------------
+        | Upload certificate images to Backblaze B2
+        |--------------------------------------------------------------------------
+        */
 
-    //     $images = [
-    //         'background',
-    //         'border_image',
-    //         'watermark',
-    //         'logo',
-    //         'seal'
-    //     ];
+        $images = [
+            'background',
+            'border_image',
+            'watermark',
+            'logo',
+            'seal'
+        ];
 
-    //     foreach ($images as $image) {
+        foreach ($images as $image) {
 
-    //         if ($request->hasFile($image)) {
+            if ($request->hasFile($image)) {
 
-    //             $file = $request->file($image);
+                $file = $request->file($image);
 
-    //             $data[$image] = $file->store(
-    //                 'certificate_frames',
-    //                 'b2'
-    //             );
-    //         }
-    //     }
+                $data[$image] = $file->store(
+                    'certificate_frames',
+                    'b2'
+                );
+            }
+        }
 
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Boolean fields
-    //     |--------------------------------------------------------------------------
-    //     */
+        /*
+        |--------------------------------------------------------------------------
+        | Boolean fields
+        |--------------------------------------------------------------------------
+        */
 
-    //     $booleanFields = [
-    //         'active'
-    //     ];
+        $booleanFields = [
+            'active'
+        ];
 
-    //     foreach ($booleanFields as $field) {
-    //         $data[$field] = $request->has($field);
-    //     }
+        foreach ($booleanFields as $field) {
+            $data[$field] = $request->has($field);
+        }
 
-    //     /*
-    //     |--------------------------------------------------------------------------
-    //     | Create Certificate Frame
-    //     |--------------------------------------------------------------------------
-    //     */
+        /*
+        |--------------------------------------------------------------------------
+        | Create Certificate Frame
+        |--------------------------------------------------------------------------
+        */
 
-    //     CertificateFrame::create($data);
+        CertificateFrame::create($data);
 
-    //     return redirect()
-    //         ->route('admin.certificate.frames.index')
-    //         ->with(
-    //             'success',
-    //             'Certificate Frame Created Successfully'
-    //         );
-    // }
+        return redirect()
+            ->route('admin.certificate.frames.index')
+            ->with(
+                'success',
+                'Certificate Frame Created Successfully'
+            );
+    }
     public function show(CertificateFrame $certificateFrame)
     {
         return view(

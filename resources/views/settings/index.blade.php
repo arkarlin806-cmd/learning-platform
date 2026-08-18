@@ -159,7 +159,7 @@
 
                     <div class="grid md:grid-cols-2 gap-8 grid-cols-1">
                         <!-- Card -->
-                        <div class="w-full max-w-xl bg-pink-400 rounded-3xl shadow-md p-6 sm:p-10 animate-[fadeIn_0.6s_ease-out]">
+                        <div class="w-full max-w-xl  bg-white/20 dark:bg-slate-900 rounded-3xl shadow-md p-6 sm:p-10 animate-[fadeIn_0.6s_ease-out]">
                             <!-- Header -->
                             <div class="text-center mb-8">
                                 <div class="mx-auto mb-4 w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-600
@@ -179,10 +179,10 @@
                                 </div>
 
 
-                                <h2 class="text-2xl sm:text-3xl font-bold text-white">
+                                <h2 class="text-2xl sm:text-3xl font-bold dark:text-white">
                                     Edit Profile
                                 </h2>
-                                <p class="text-gray-300 mt-2 text-sm">
+                                <p class="text-gray-300 mt-2 text-sm dark:text-white">
                                     Update your personal information securely
                                 </p>
                             </div>
@@ -195,7 +195,7 @@
                                 <!-- Name -->
 
                                 <div class="group">
-                                    <label class="text-sm text-gray-200 font-medium">
+                                    <label class="text-sm text-gray-200 font-medium dark:text-white">
                                         Full Name
                                     </label>
                                     <div class="relative mt-2">
@@ -203,7 +203,7 @@
                                             type="text"
                                             name="name"
                                             value="{{old('name',auth()->user()->name)}}"
-                                            class=" w-full rounded-2xl bg-white/10 border border-white/20 text-white placeholder-gray-400 px-5 py-4
+                                            class=" w-full rounded-2xl bg-slate-200 border border-slate-300 dark:text-white placeholder-gray-400 px-5 py-4
                                 outline-none transition-all duration-300 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/20 group-hover:border-blue-300"
                                             placeholder="Enter your name">
                                     </div>
@@ -223,7 +223,7 @@
                                         type="email"
                                         name="email"
                                         value="{{old('email',auth()->user()->email)}}"
-                                        class=" mt-2 w-full rounded-2xl bg-white/10 border border-white/20 text-white placeholder-gray-400 px-5 py-4
+                                        class=" mt-2 w-full rounded-2xl bg-slate-200 border border-slate-300 dark:text-white  placeholder-gray-400 px-5 py-4
                                 outline-none transition-all duration-300 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/20 group-hover:border-blue-300"
                                         placeholder="example@gmail.com">
                                     @error('email')
@@ -238,7 +238,7 @@
                                     <label class="text-sm text-red-200 font-semibold">
                                         Confirm Password
                                     </label>
-                                    <p class="text-xs text-gray-300 mt-1">
+                                    <p class="text-xs text-gray-300 mt-1 dark:text-white">
                                         Enter current password to save changes
                                     </p>
 
@@ -267,10 +267,10 @@
                         </div>
 
                         <div class="w-full max-w-xl flex-1">
-                            <div class="min-h-screen rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-purple-950 flex items-center justify-center px-4">
+                            <div class="min-h-screen rounded-3xl bg-white/20 dark:bg-slate-900 flex items-center justify-center px-4">
                                 <div class="w-full max-w-md">
                                     <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
-                                        <h2 class="text-3xl font-bold text-white text-center mb-8">
+                                        <h2 class="text-3xl font-bold text-white text-center mb-8 dark:text-white">
                                             Change Password
                                         </h2>
 
@@ -282,7 +282,7 @@
                                                     type="password"
                                                     name="current_password"
                                                     placeholder="Current Password"
-                                                    class="w-full rounded-2xl bg-white/10 border border-white/20 text-white px-5 py-4 outline-none focus:ring-4 focus:ring-blue-500/30">
+                                                    class="w-full rounded-2xl bg-slate-200 border border-slate-300 dark:text-white px-5 py-4 outline-none focus:ring-4 focus:ring-blue-500/30">
                                                 @error('current_password')
                                                 <p class="text-red-400 text-sm">
                                                     {{$message}}
@@ -292,12 +292,12 @@
                                                     type="password"
                                                     name="new_password"
                                                     placeholder="New Password"
-                                                    class="w-full rounded-2xl bg-white/10 border border-white/20 text-white px-5 py-4 outline-none focus:ring-4 focus:ring-green-500/30 ">
+                                                    class="w-full rounded-2xl bg-slate-200 border border-slate-300 dark:text-white px-5 py-4 outline-none focus:ring-4 focus:ring-green-500/30 ">
                                                 <input
                                                     type="password"
                                                     name="new_password_confirmation"
                                                     placeholder="Confirm New Password"
-                                                    class="w-full rounded-2xl bg-white/10 border border-white/20 text-white px-5 py-4 outline-none focus:ring-4 focus:ring-green-500/30">
+                                                    class="w-full rounded-2xl bg-slate-200 border border-slate-300 dark:text-white px-5 py-4 outline-none focus:ring-4 focus:ring-green-500/30">
 
                                                 <button
                                                     class="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold hover:scale-105 transition ">

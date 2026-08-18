@@ -148,7 +148,7 @@ class AuthController extends Controller
                 }
             }
 
-            User::where('id', $user->id)->save();
+            $user->save();
             if (Auth::user()->status === 'banned') {
 
                 Auth::logout();

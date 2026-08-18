@@ -86,13 +86,21 @@
                                     Profile
                                 </div>
 
-                                <a href="#"
+                                <a href="{{ route('settings.index') }}"
                                     class="block px-4 py-3 hover:bg-gray-100">
                                     Settings
-                                </a><a href="#"
+                                </a>
+                                <div onclick="confirmLogout()"
                                     class="block px-4 py-3 hover:bg-red-50 text-red-500">
                                     Logout
-                                </a>
+                                </div>
+                                <form
+                                    id="logoutForm"
+                                    method="POST"
+                                    action="{{ route('logout') }}"
+                                    class="hidden">
+                                    @csrf
+                                </form>
 
                             </div>
 
@@ -110,7 +118,51 @@
 
     </div>
     @include('layout.profile_edit')
+    <script>
+        function confirmLogout() {
+            Swal.fire({
 
+                title: 'Are you sure?',
+
+                text: 'You will be logged out from your account.',
+
+                icon: 'warning',
+
+                showCancelButton: true,
+
+                confirmButtonText: 'Yes, Logout',
+
+                cancelButtonText: 'Cancel',
+
+                reverseButtons: true,
+
+                buttonsStyling: false,
+
+                customClass: {
+
+                    popup: 'rounded-3xl',
+
+                    title: 'text-xl font-bold text-slate-900',
+
+                    htmlContainer: 'text-slate-500',
+
+                    confirmButton: 'px-5 py-2.5 rounded-xl bg-red-600 text-white font-semibold mx-2 hover:bg-red-700',
+
+                    cancelButton: 'px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-semibold mx-2 hover:bg-slate-200'
+
+                }
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    document.getElementById('logoutForm').submit();
+
+                }
+
+            });
+        }
+    </script>
 </body>
 
 </html>

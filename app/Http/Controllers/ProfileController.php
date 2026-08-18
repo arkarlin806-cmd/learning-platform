@@ -382,7 +382,7 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $user->avatar = $request->avatar;
-        User::where('id', $user->id)->save();
+        $user->save();
 
         return response()->json([
             'success' => true,

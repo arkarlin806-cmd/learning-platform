@@ -359,52 +359,37 @@
 
 
                     <div class="bg-white/80 dark:bg-slate-100/8 dark:border-slate-700  rounded-3xl shadow-xl p-8 border border-gray-100 transition hover:shadow-2xl ">
-                        <div class="flex items-center gap-4 mb-6">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-3xl">
-                                🌐
-                            </div>
-                            <div>
-                                <h2 data-en="Language"
-                                    data-mm="ဘာသာစကား" class="text-2xl font-bold dark:text-white">
-                                    Language
-                                </h2>
-                                <p data-en="Choose your platform language"
-                                    data-mm="ဘာသာစကားရွေးချယ်ပါ" class="text-gray-500 dark:text-white/70">
-                                    Choose your platform language
-                                </p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 ">
-                            <!-- English -->
-                            <button
-                                onclick="changeLanguage('en')"
-                                class="language-card group p-5 rounded-2xl border dark:border-slate-500 hover:border-blue-500 hover:-translate-y-1 transition text-left">
-                                <div class="text-3xl dark:text-white">
-                                    🇬🇧
+                        <div class="flex items-center justify-between gap-4 mb-6">
+                            <div class="">
+                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-3xl">
+                                    🌐
                                 </div>
-                                <h3 class="mt-3 font-bold dark:text-white">
-                                    English
-                                </h3>
-                                <p class="text-sm text-gray-500 dark:text-white">
-                                    English Language
-                                </p>
-                            </button>
+                                <div>
+                                    <h2 data-en="Language"
+                                        data-mm="ဘာသာစကား" class="text-2xl font-bold dark:text-white">
+                                        Language
+                                    </h2>
+                                    <p data-en="Choose your platform language"
+                                        data-mm="ဘာသာစကားရွေးချယ်ပါ" class="text-gray-500 dark:text-white/70">
+                                        Choose your platform language
+                                    </p>
+                                </div>
+                            </div>
+                            <select onchange="setLanguage(this.value)" class="py-3 px-14 rounded-md bg-slate-200  border border-slate-300">
 
-                            <!-- Myanmar -->
-                            <button
-                                onclick="changeLanguage('mm')"
-                                class="language-card group p-5 rounded-2xl border dark:border-slate-500 hover:border-blue-500 hover:-translate-y-1 transition text-left">
-                                <div class="text-3xl dark:text-white">
-                                    🇲🇲
-                                </div>
-                                <h3 class="mt-3 font-bold dark:text-white">
+                                <option value="en" class="text-slate-700 dark:text-white">
+                                    English
+                                </option>
+
+
+                                <option value="mm" class="text-slate-700 dark:text-white">
                                     မြန်မာ
-                                </h3>
-                                <p class="text-sm text-gray-500 dark:text-white">
-                                    Myanmar Language
-                                </p>
-                            </button>
+                                </option>
+
+
+                            </select>
                         </div>
+
                     </div>
 
                     <!-- Theme Section -->
@@ -438,15 +423,6 @@
                 </section>
 
                 <script>
-                    // function changeLanguage(lang) {
-                    //     const user = "{{ auth()->id() ?? 'guest' }}";
-                    //     localStorage.setItem(
-                    //         "user_" + user + "_language",
-                    //         lang
-                    //     );
-                    //     location.reload();
-
-                    // }
                     const userId = "{{ auth()->id() ?? 'guest' }}";
 
 

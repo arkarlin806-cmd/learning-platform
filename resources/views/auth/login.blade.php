@@ -11,7 +11,9 @@
         content="width=device-width, initial-scale=1.0">
 
     <title>Login</title>
-    @vite(['resources/css/app.css','resources/js/app.js'])
+
+    @vite('resources/css/app.css')
+
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center p-4">
@@ -115,9 +117,7 @@
 
                     <label class="block mb-2 font-medium text-gray-700">
                         Email Address
-                    </label>
-
-                    <input type="email"
+                    </label><input type="email"
                         name="email"
                         placeholder="Enter your email"
                         required
@@ -193,7 +193,30 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    @if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Wrong',
+                text: `@json(session('error'))`,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#dc2626',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                customClass: {
+                    popup: 'rounded-3xl',
+                    title: 'font-bold',
+                    confirmButton: 'rounded-xl px-6 py-2'
+                }
+            });
+
+        });
+    </script>
+    @endif
 </body>
 
 </html>

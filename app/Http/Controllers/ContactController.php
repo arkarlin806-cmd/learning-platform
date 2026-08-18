@@ -14,12 +14,21 @@ class ContactController extends Controller
     public function create()
     {
         $admins = User::where('role', 1)->get();
+        $mail = "false";
         return view(
             'contact.create',
-            compact('admins')
+            compact('admins', 'mail')
         );
     }
-
+    public function adimn_create(int $id)
+    {
+        $admins = User::findOrFail($id);
+        $mail = "true";
+        return view(
+            'contact.create',
+            compact('admins', 'mail')
+        );
+    }
     // send contact
     public function store(Request $request)
     {

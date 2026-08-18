@@ -148,8 +148,18 @@ class AuthController extends Controller
                 }
             }
 
-            $user->save();
+            User::where('id', $user->id)->save();
+            if (Auth::user()->status === 'banned') {
 
+                Auth::logout();
+
+                return redirect()
+                    ->route('login')
+                    ->with(
+                        'error',
+                        'Your account has been banned by the administrator.'
+                    );
+            }
             if ($user->role == 1) {
                 return redirect('/admin/dashboard');
             } elseif ($user->role == 2) {
@@ -159,9 +169,13 @@ class AuthController extends Controller
             }
         }
 
-        return back()->withErrors([
-            'email' => 'Invalid email or password.',
-        ]);
+
+        return redirect()
+            ->route('login')
+            ->with(
+                'error',
+                'Worong email or password.'
+            );
     }
     // Logout
     public function logout(Request $request)

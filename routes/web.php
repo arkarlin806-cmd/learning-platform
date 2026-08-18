@@ -320,6 +320,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
+    Route::get('/admin/contact', [ContactController::class, 'adimn_create'])->name('contact.adimn_create');
     Route::post('/contact/send', [ContactController::class, 'store'])->name('contact.store');
     Route::get('/contact/inbox', [ContactController::class, 'inbox'])->name('contact.inbox');
     Route::get('/contact/read/{id}', [ContactController::class, 'read'])->name('contact.read');

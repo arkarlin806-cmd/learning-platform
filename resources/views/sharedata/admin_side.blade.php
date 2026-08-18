@@ -182,6 +182,18 @@
 
         </a>
         <hr class="text-sky-200">
+        <a href="{{ route('admin.certificates.learners') }}"
+            class="menu-item flex items-center gap-4
+                px-4 py-3 rounded-2xl
+                hover:bg-indigo-50
+                hover:translate-x-2
+                transition-all duration-300">
+
+            <i class="ri-trophy-line text-lg"></i>
+            <span class="menu-text">Certificate Learners</span>
+
+        </a>
+        <hr class="text-sky-200">
 
 
 

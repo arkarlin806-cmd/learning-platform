@@ -69,7 +69,9 @@
                                 class="flex items-center gap-3">
 
                                 <img
-                                    src="{{ asset('uploads/group/images (1).jpg') }}"
+                                    src="{{ auth()->user()->avatar
+                                            ? asset('images/avatars/' . auth()->user()->avatar)
+                                            : asset('images/avatars/avatar1.png') }}"
                                     class="w-10 h-10 rounded-full">
 
                             </button>
@@ -79,10 +81,10 @@
             w-52 bg-white rounded-2xl
             shadow-xl overflow-hidden">
 
-                                <a href="#"
+                                <div onclick="openAvatarModal()"
                                     class="block px-4 py-3 hover:bg-gray-100">
                                     Profile
-                                </a>
+                                </div>
 
                                 <a href="#"
                                     class="block px-4 py-3 hover:bg-gray-100">
@@ -107,6 +109,7 @@
         </div>
 
     </div>
+    @include('layout.profile_edit')
 
 </body>
 

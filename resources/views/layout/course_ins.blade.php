@@ -58,7 +58,9 @@
         <div id="overlay"
             class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden">
         </div>
-
+        @if(auth()->user()->role == 1)
+        @include('sharedata.admin_side')
+        @else
         <!-- Sidebar -->
         <aside id="sidebar"
             class="fixed lg:relative z-50
@@ -257,9 +259,7 @@
 
 
         </aside>
-
-
-
+        @endif
         <!-- mani content  -->
         <div class="bg-slate-200 h-screen flex-1 overflow-y-auto">
 

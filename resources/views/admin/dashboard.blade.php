@@ -360,7 +360,11 @@
     </div>
 
 </section>
+<div class="p-6">
 
+    {{ $courses->links() }}
+
+</div>
 <script>
     let myChart = null;
     let ctx = null;

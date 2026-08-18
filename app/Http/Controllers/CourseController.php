@@ -188,6 +188,7 @@ class CourseController extends Controller
                 $course->id
             )
             ->exists();
+        $course_order_count = CourseOrder::where('course_id', $course->id)->count();
         $courseCount = Course::where('instructor_id', $course->instructor_id)->count();
         $instructor = InstructorRequest::where('user_id', $course->instructor_id)->first();
         return view(
@@ -196,7 +197,8 @@ class CourseController extends Controller
                 'course',
                 'instructor',
                 'courseCount',
-                'isPurchased'
+                'isPurchased',
+                'course_order_count'
             )
         );
     }

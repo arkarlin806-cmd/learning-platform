@@ -794,7 +794,7 @@ class CertificateFrameController extends Controller
 
         if (!$certificate) {
             // return view('learner.certificates.not-found', compact('course'));
-            return view('learner.certificates', compact('course'));
+            return view('profile.certificates_not_found', compact('course'));
         }
 
         return $this->certificate_show($certificate);

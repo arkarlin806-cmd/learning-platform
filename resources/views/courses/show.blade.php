@@ -99,16 +99,20 @@
                 {{-- RIGHT PURCHASE CARD --}}
                 <div class="lg:sticky lg:top-24">
 
-                    <div class="bg-white/80 backdrop-blur-xl dark:bg-white/10 rounded-3xl shadow-2xl p-8 border  border-white hover:-translate-y-2 transition duration-500">
-                        <h2 class="text-2xl font-extrabold text-indigo-600">
-                            {{ number_format($course->price,2) }} MMK
+                    <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border  border-white hover:-translate-y-2 transition duration-500">
+                        <h2 class="text-xl font-extrabold text-indigo-600">
+                            @if($course->price == 0.00)
+                            Free
+                            @else
+                            MMK {{ number_format($course->price,2) }}
+                            @endif
                         </h2>
 
                         <div class="mt-5 flex items-center gap-2">
                             <div class="text-yellow-400 text-xl">
                                 ★★★★★
                             </div>
-                            <span class="text-gray-600 dark:text-white">
+                            <span class="text-gray-600">
                                 {{ number_format($course->ratings_avg_rating ?? 0,1) }}
                                 ({{ $course->ratings_count }})
                             </span>
@@ -118,41 +122,71 @@
                         <a
                             href="#"
                             class="mt-8 block text-center py-4 rounded-2xl bg-emerald-500 text-white font-bold hover:scale-105 transition">
-                            Continue Learning
+                            purchased
                         </a>
-                        @else
+                        @else<!-- order count start  -->
+                        @if($course_order_count <= 50)
+                            @if($course->price == 0.00)
+                            <form
+                                action="{{ route('course.checkout', $course->id) }}"
+                                method="GET">
+                                @csrf
+                                <button
+                                    class="mt-8 w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-lg hover:scale-105 transition">
+                                    Add Now
+                                </button>
+                            </form>
+                            @else
+                            <form
+                                action="{{ route('course.checkout', $course->id) }}"
+                                method="GET">
+                                @csrf
+                                <button
+                                    class="mt-8 w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-lg hover:scale-105 transition">
+                                    Enroll Now
+                                </button>
+                            </form>
 
-                        <form
-                            action="{{ route('course.checkout', $course->id) }}"
-                            method="GET">
-                            @csrf
-                            <button data-en="Enroll Now" data-mm="ဝယ်ယူရန်"
-                                class="mt-8 w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold shadow-lg hover:scale-105 transition">
-                                Enroll Now
+                            @endif
+                            @else
+
+                            <button
+                                class="mt-8 w-full py-4 rounded-2xl bg-slate-200 disabled text-slate-800 font-bold shadow-lg hover:scale-105 transition">
+                                Not Now
                             </button>
-                        </form>
-                        @endif
-                        @endif
+                            @endif
+                            <!-- order count end  -->
+
+                            @endif
+                            @endif
 
 
-                        <div class="mt-8 space-y-4 text-gray-600 dark:text-white">
-                            <div class="flex gap-3" data-en="✓ Lifetime Access" data-mm="တစ်သက်တာလေ့လာနိုင်သည်။">
-                                ✓ Lifetime Access
+                            <div class="mt-8 space-y-4 text-gray-600">
+                                <div class="flex gap-3">
+                                    ✓ current learner {{$course_order_count}}
+                                </div>
+                                <div class="flex gap-3">
+                                    ✓ Only accept learner 50
+                                </div>
+                                <div class="flex gap-3">
+                                    ✓ Lifetime Access
+                                </div>
+                                <div class="flex gap-3">
+                                    ✓ Certificate Included
+                                </div>
+                                <div class="flex gap-3">
+                                    ✓ Mobile Learning
+                                </div>
+
+
+                                <div class="flex gap-3">
+
+                                    ✓ AI Learning Assistant
+
+                                </div>
+
+
                             </div>
-                            <div class="flex gap-3" data-en="✓ Certificate Included" data-mm="Certificate ပေးသည်။">
-                                ✓ Certificate Included
-                            </div>
-                            <div class="flex gap-3" data-en="✓ Mobile Learning" data-mm="Mobile (ဖုန်း) ဖြင့်လေ့လာနိုင်သည်။">
-                                ✓ Mobile Learning
-                            </div>
-                            <div class="flex gap-3" data-en="✓ AI Learning Assistant" data-mm="AI ဖြင့်သင်ယူမှု့ပံ့ပိုးပေးသည်။">
-
-                                ✓ AI Learning Assistant
-
-                            </div>
-
-
-                        </div>
 
 
                     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\User;
 use App\Models\CourseOrder;
+use App\Models\Certificate;
 use App\Models\CourseSchedule;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -27,11 +28,11 @@ class ProfileController extends Controller
             ->where('status', "paid")
             ->count();
 
-        $completedCourses = CourseOrder::where(
-            'user_id',
-            $user->id
-        )
-            ->where('status', "completed")
+        $completedCourses = CourseOrder::where('user_id', auth()->id())
+            ->where('status', 'paid')
+            ->whereHas('course', function ($query) {
+                $query->where('status', 'completed');
+            })
             ->count();
 
         $Courses = CourseOrder::with("course")
@@ -42,10 +43,10 @@ class ProfileController extends Controller
             ->where('status', "paid")
             ->get();
 
-        // $certificates = Certificate::where(
-        //     'user_id',
-        //     $user->id
-        // )->count();
+        $certificates = Certificate::where(
+            'user_id',
+            $user->id
+        )->count();
 
         $continueCourse = CourseOrder::with('course')
             ->where('user_id', $user->id)
@@ -272,9 +273,6 @@ class ProfileController extends Controller
             ->with('success', 'Profile updated successfully');
     }
 
-
-
-
     public function password_update(Request $request)
     {
 
@@ -368,5 +366,28 @@ class ProfileController extends Controller
             'success',
             'Password changed successfully.'
         );
+    }
+
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => [
+                'required',
+                'string',
+                'in:avatar1.png,avatar2.png,avatar3.png,avatar4.png,avatar5.png,
+                   avatar6.png,avatar7.png,avatar8.png,avatar9.png,avatar10.png'
+            ],
+        ]);
+
+        $user = Auth::user();
+
+        $user->avatar = $request->avatar;
+        User::where('id', $user->id)->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile picture updated successfully.',
+            'avatar' => asset('images/avatars/' . $user->avatar),
+        ]);
     }
 }

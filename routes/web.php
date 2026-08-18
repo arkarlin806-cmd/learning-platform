@@ -79,6 +79,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/withdraw/approve/{id}', [WithdrawalController::class, 'withdraw_approve'])->name('admin.withdraw.approve');
     Route::post('/withdraw/reject/{id}', [WithdrawalController::class, 'withdraw_reject'])->name('admin.withdraw.reject');
     Route::get('/admin/withdraw/wallet-analytics', [WithdrawalController::class, 'walletAnalytics'])->name('admin.withdraw.wallet.analytics');
+
+    //learner show
+    Route::get('/admin/certificates/learners', [AdminController::class, 'learners'])->name('admin.certificates.learners');
+
+    //ban
+    Route::post('/admin/users/{user}/warning', [AdminController::class, 'warning'])->name('admin.users.warning');
+    Route::post('/admin/users/{user}/ban', [AdminController::class, 'ban'])->name('admin.users.ban');
+    Route::post('/admin/users/{user}/activate', [AdminController::class, 'activate'])->name('admin.users.activate');
 });
 
 
@@ -130,6 +138,8 @@ Route::middleware(['auth', 'instructor'])->group(function () {
 
 // public user and learner 
 Route::middleware(['auth'])->group(function () {
+    //profile edit
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
 
     // instructor and learner single course show
     Route::get('/instructor/single_course/{course}', [InstructorController::class, 'single_course'])->name('instructor.single_course');

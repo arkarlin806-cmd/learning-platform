@@ -11,6 +11,8 @@ use App\Models\InstructorRequest;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Notifications\LearnerBannedNotification;
+use App\Notifications\LearnerWarningNotification;
 
 class AdminController extends Controller
 {
@@ -44,7 +46,8 @@ class AdminController extends Controller
             ->withAvg('ratings', 'rating')
             ->withCount('ratings')
             ->latest()
-            ->get();
+            ->paginate(6);
+        // ->get();
 
 
 
@@ -426,5 +429,324 @@ class AdminController extends Controller
                 'success',
                 'Instructor request rejected successfully.'
             );
+    }
+
+    public function learners(Request $request)
+    {
+
+        $category = $request->category;
+        $courseId = $request->course_id;
+        $certificateStatus = $request->certificate_status;
+        $search = $request->search;
+
+        $categories = Course::query()
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        $courses = Course::query()
+            ->where('status', 'completed')
+            ->when($category, function ($query) use ($category) {
+                $query->where('category', $category);
+            })
+            ->orderBy('title')
+            ->get();
+
+        $learners = DB::table('course_orders')
+
+            ->join(
+                'users',
+                'users.id',
+                '=',
+                'course_orders.user_id'
+            )
+
+            ->join(
+                'courses',
+                'courses.id',
+                '=',
+                'course_orders.course_id'
+            )
+
+            ->leftJoin(
+                'certificates',
+                function ($join) {
+
+                    $join->on(
+                        'certificates.user_id',
+                        '=',
+                        'course_orders.user_id'
+                    );
+
+                    $join->on(
+                        'certificates.course_id',
+                        '=',
+                        'course_orders.course_id'
+                    );
+                }
+            )
+
+            ->where(
+                'courses.status',
+                'completed'
+            )
+
+            ->where(
+                'course_orders.status',
+                'paid'
+            )
+
+            ->select([
+
+                'course_orders.id as order_id',
+
+                'course_orders.user_id',
+                'course_orders.course_id',
+
+                'users.name',
+                'users.email',
+                'users.avatar',
+
+                'courses.title as course_title',
+                'courses.category',
+
+                'certificates.id as certificate_id',
+                'certificates.certificate_frame_id',
+                'certificates.issued_at',
+
+            ])
+
+            ->when($category, function ($query) use ($category) {
+
+                $query->where(
+                    'courses.category',
+                    $category
+                );
+            })
+
+            ->when($courseId, function ($query) use ($courseId) {
+
+                $query->where(
+                    'course_orders.course_id',
+                    $courseId
+                );
+            })
+
+            ->when($search, function ($query) use ($search) {
+
+                $query->where(function ($q) use ($search) {
+
+                    $q->where(
+                        'users.name',
+                        'like',
+                        "%{$search}%"
+                    )
+
+                        ->orWhere(
+                            'users.email',
+                            'like',
+                            "%{$search}%"
+                        )
+
+                        ->orWhere(
+                            'courses.title',
+                            'like',
+                            "%{$search}%"
+                        );
+                });
+            })
+
+            ->when(
+                $certificateStatus === 'issued',
+                function ($query) {
+
+                    $query->whereNotNull(
+                        'certificates.id'
+                    );
+                }
+            )
+
+
+            ->when(
+                $certificateStatus === 'pending',
+                function ($query) {
+
+                    $query->whereNull(
+                        'certificates.id'
+                    );
+                }
+            )
+
+
+            ->orderBy(
+                'users.name'
+            )
+
+            ->paginate(12);
+
+        // ->withQueryString();
+        $statsQuery = DB::table('course_orders')
+            ->join(
+                'courses',
+                'courses.id',
+                '=',
+                'course_orders.course_id'
+            )
+
+            ->leftJoin(
+                'certificates',
+                function ($join) {
+
+                    $join->on(
+                        'certificates.user_id',
+                        '=',
+                        'course_orders.user_id'
+                    );
+
+                    $join->on(
+                        'certificates.course_id',
+                        '=',
+                        'course_orders.course_id'
+                    );
+                }
+            )
+
+            ->where(
+                'courses.status',
+                'completed'
+            )
+
+            ->where(
+                'course_orders.status',
+                'paid'
+            )
+
+            ->when($category, function ($query) use ($category) {
+
+                $query->where(
+                    'courses.category',
+                    $category
+                );
+            })
+
+            ->when($courseId, function ($query) use ($courseId) {
+
+                $query->where(
+                    'course_orders.course_id',
+                    $courseId
+                );
+            });
+
+        $totalCompleted = (clone $statsQuery)->count();
+
+        $certificateIssued = (clone $statsQuery)
+            ->whereNotNull('certificates.id')
+            ->count();
+
+        $certificatePending =
+            $totalCompleted - $certificateIssued;
+
+        $certificateRate = $totalCompleted > 0
+            ? round(
+                ($certificateIssued / $totalCompleted) * 100
+            )
+            : 0;
+
+
+        return view(
+            'admin.certificate.learners',
+            compact(
+                'learners',
+                'categories',
+                'courses',
+
+                'category',
+                'courseId',
+                'certificateStatus',
+                'search',
+
+                'totalCompleted',
+                'certificateIssued',
+                'certificatePending',
+                'certificateRate'
+            )
+        );
+    }
+
+    public function warning(Request $request, User $user)
+    {
+        // if ($user->role !== 1) {
+        //     return back()->with(
+        //         'error',
+        //         'Only learners can receive warnings.'
+        //     );
+        // }
+
+        $reason = $request->input(
+            'reason',
+            'Please follow the platform rules.'
+        );
+
+        // Change status
+        User::where('id', $user->id)->update([
+            'status' => 'warning',
+        ]);
+
+        // Send notification
+        $user->notify(
+            new LearnerWarningNotification($reason)
+        );
+
+        return back()->with(
+            'success_w',
+            $user->name . ' has received a warning.'
+        );
+    }
+    // Ban
+    public function ban(User $user)
+    {
+        // if ($user->role != 1) {
+        //     return back()->with(
+        //         'error',
+        //         'Only learners can be banned.'
+        //     );
+        // }
+
+        // Change status
+        User::where('id', $user->id)->update([
+            'status' => 'banned',
+        ]);
+
+        // Send notification
+        $user->notify(
+            new LearnerBannedNotification(
+                'Your account has been banned by the administrator.'
+            )
+        );
+
+        return back()->with(
+            'success',
+            $user->name . ' has been banned successfully.'
+        );
+    }
+    public function activate(User $user)
+    {
+        // if ($user->role !== 1) {
+        //     return back()->with(
+        //         'error',
+        //         'Only learners can be activated.'
+        //     );
+        // }
+
+        User::where('id', $user->id)->update([
+            'status' => 'active',
+        ]);
+
+        return back()->with(
+            'success',
+            $user->name . ' has been activated successfully.'
+        );
     }
 }

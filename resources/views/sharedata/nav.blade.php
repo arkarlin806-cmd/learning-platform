@@ -3,7 +3,7 @@
 
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
 
-        <div class="flex justify-between items-center h-16 relative">
+        <div class="flex justify-between items-center h-16 sm:h-24 relative">
 
             <div class="absolute top-0 left-0 h-full w-[380px] pointer-events-none -z-0">
                 <svg class="w-full h-full" viewBox="0 0 380 70" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -189,7 +189,9 @@
                 Free Courses
             </a>
 
-
+            <a href="{{ route('profile.index') }}">
+                <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}" alt="" class="rounded-full h-11 w-11 bg-blue-500 text-white">
+            </a>
         </div>
 
     </div>

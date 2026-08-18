@@ -89,7 +89,7 @@
                             class="flex items-center gap-3">
 
                             <img
-                                src="#"
+                                src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}"
                                 class="w-10 h-10 rounded-full">
 
                         </button>

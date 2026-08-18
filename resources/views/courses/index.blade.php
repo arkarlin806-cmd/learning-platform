@@ -255,7 +255,7 @@ $c = [
     </button>
     @foreach ($c as $category )
     <button
-        class="course-filter bg-white/70 border border-slate-300 text-slate-700 px-5 py-2 rounded-full transition-all duration-300"
+        class="course-filter bg-white/70 border text-lg border-slate-300 text-slate-700 px-5 py-2 rounded-full transition-all duration-300"
         data-category="{{ $category }}">
         {{ $category }}
     </button>

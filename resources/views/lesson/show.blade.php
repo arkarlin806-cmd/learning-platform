@@ -561,7 +561,7 @@
                                            rounded-2xl
                                            shadow-2xl
                                            border border-indigo-100
-                                           z-[9999]
+                                           z-50
                                            transition-all duration-500 ease-in-out">
 
                             @if(

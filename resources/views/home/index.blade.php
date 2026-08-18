@@ -2,9 +2,9 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="hero-bg min-h-screen flex items-center relative pt-24">
+<section class="hero-bg min-h-screen flex items-center relative pt-4 md:pt-24">
 
-    <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+    <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 md:gap-16 items-center">
 
         <!-- Left -->
         <div data-aos="fade-right">
@@ -303,7 +303,7 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             @foreach($topCourses as $course)
 

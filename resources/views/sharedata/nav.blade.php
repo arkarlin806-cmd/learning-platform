@@ -190,8 +190,7 @@
             </a>
 
             <a href="{{ route('profile.index') }}">
-                <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}" alt="" class="rounded-full h-11 w-11 bg-blue-500 text-white">
-            </a>
+                Profile </a>
         </div>
 
     </div>

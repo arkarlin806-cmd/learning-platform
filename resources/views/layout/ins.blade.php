@@ -47,21 +47,7 @@
 
                     <div class="flex items-center gap-5">
 
-                        <button class="relative">
 
-                            <i class="ri-notification-2-line text-lg"></i>
-
-                            <span
-                                class="absolute -top-2 -right-2
-            bg-red-500 text-white
-            text-[10px]
-            px-1.5 rounded-full">
-
-                                3
-
-                            </span>
-
-                        </button>
 
                         <div class="relative">
 

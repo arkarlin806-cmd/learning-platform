@@ -25,7 +25,15 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed'
         ]);
-
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            return redirect()
+                ->route('register')
+                ->with(
+                    'error',
+                    'Your account has been banned by the administrator.'
+                );
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -76,32 +84,6 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-
-    // Login
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->validate([
-    //         'email' => ['required', 'email'],
-    //         'password' => ['required']
-    //     ]);
-
-    //     if (Auth::attempt($credentials, $request->remember)) {
-
-    //         $request->session()->regenerate();
-    //         if (auth()->user()->role == 1) {
-    //             return redirect('/admin/dashboard');
-    //         } elseif (auth()->user()->role == 2) {
-    //             return redirect('/instructor/index');
-    //         } else {
-    //             return redirect('/home/index');
-    //         }
-    //     }
-
-    //     return back()->withErrors([
-    //         'email' => 'Invalid email or password.',
-    //     ]);
-    // }
-
 
     public function login(Request $request)
     {

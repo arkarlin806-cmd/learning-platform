@@ -140,6 +140,7 @@ Route::middleware(['auth', 'instructor'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     //profile edit
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::get('/settings/index', [HomeController::class, 'set_index'])->name('settings.index');
 
     // instructor and learner single course show
     Route::get('/instructor/single_course/{course}', [InstructorController::class, 'single_course'])->name('instructor.single_course');
@@ -331,164 +332,51 @@ Route::get('/home/about', [HomeController::class, 'about'])->name('home.about');
 Route::post('/courses/{course}/live/{live}/leave', [CourseLiveController::class, 'leave'])->middleware('auth')->name('courses.live.leave');
 
 
-Route::get('/admin/certificate-frames', [CertificateFrameController::class, 'index'])
-    ->name('admin.certificate.frames.index');
-Route::prefix('admin/certificate-frames')
-    ->name('admin.certificate.frames.')
-    ->group(function () {
+Route::get('/admin/certificate-frames', [CertificateFrameController::class, 'index'])->name('admin.certificate.frames.index');
+Route::prefix('admin/certificate-frames')->name('admin.certificate.frames.')->group(function () {
+    Route::get('/create', [CertificateFrameController::class, 'create'])->name('create');
+    Route::post('/store', [CertificateFrameController::class, 'store'])->name('store');
+});
+Route::get('/admin/certificate-frames/{certificateFrame}', [CertificateFrameController::class, 'show'])->name('admin.certificate.frames.show');
+Route::get('/instructor/certificate/create/{course}', [CertificateFrameController::class, 'ins_create'])->name('instructor.certificate.create');
+Route::post('/instructor/certificates/store/{course}', [CertificateFrameController::class, 'ins_store'])->name('instructor.certificates.store');
+Route::get('/certificate/verify/{hash}', [CertificateVerificationController::class, 'verify'])->name('certificate.verify');
 
-        Route::get(
-            '/create',
-            [CertificateFrameController::class, 'create']
-        )->name('create');
-
-
-        Route::post(
-            '/store',
-            [CertificateFrameController::class, 'store']
-        )->name('store');
-    });
-Route::get(
-    '/admin/certificate-frames/{certificateFrame}',
-    [CertificateFrameController::class, 'show']
-)->name(
-    'admin.certificate.frames.show'
-);
+Route::middleware(['auth'])->prefix('instructor')->name('instructor.')->group(function () {
+    Route::get('/courses/{course}/certificates', [CertificateFrameController::class, 'ins_index'])->name('certificates.index');
+});
 
 
-Route::get(
-    '/instructor/certificate/create/{course}',
-    [CertificateFrameController::class, 'ins_create']
-)->name(
-    'instructor.certificate.create'
-);
-Route::post(
-    '/instructor/certificates/store/{course}',
-    [CertificateFrameController::class, 'ins_store']
-)->name('instructor.certificates.store');
-Route::get(
-    '/certificate/verify/{hash}',
-    [CertificateVerificationController::class, 'verify']
-)
-    ->name('certificate.verify');
-
-Route::middleware(['auth'])
-    ->prefix('instructor')
-    ->name('instructor.')
-    ->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/certificate-frames/{certificateFrame}/edit', [CertificateFrameController::class, 'edit'])->name('certificate-frames.edit');
+    Route::put('/certificate-frames/{certificateFrame}', [CertificateFrameController::class, 'update'])->name('certificate-frames.update');
+});
 
 
-        Route::get(
-            '/courses/{course}/certificates',
-            [CertificateFrameController::class, 'ins_index']
-        )
-            ->name('certificates.index');
-    });
+Route::middleware('auth')->prefix('instructor')->name('instructor.')->group(function () {
+    Route::get('/certificates/{certificate}', [CertificateFrameController::class, 'certificate_show'])->name('certificates.show');
+    Route::get('/certificates/{certificate}/pdf', [CertificateFrameController::class, 'downloadPdf'])->name('certificates.pdf');
+});
 
-
-Route::middleware('auth')
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-
-        Route::get(
-            '/certificate-frames/{certificateFrame}/edit',
-            [CertificateFrameController::class, 'edit']
-        )->name('certificate-frames.edit');
-
-        Route::put(
-            '/certificate-frames/{certificateFrame}',
-            [CertificateFrameController::class, 'update']
-        )->name('certificate-frames.update');
-    });
-
-
-Route::middleware('auth')
-    ->prefix('instructor')
-    ->name('instructor.')
-    ->group(function () {
-
-
-        Route::get(
-            '/certificates/{certificate}',
-            [CertificateFrameController::class, 'certificate_show']
-        )
-            ->name('certificates.show');
-
-
-
-        Route::get(
-            '/certificates/{certificate}/pdf',
-            [CertificateFrameController::class, 'downloadPdf']
-        )
-            ->name('certificates.pdf');
-    });
-
-Route::get(
-    '/instructor/quizzes/{quiz}/edit',
-    [QuizController::class, 'edit']
-)->name('quiz.edit');
-
-
-
-Route::put(
-    '/instructor/quizzes/{quiz}',
-    [QuizController::class, 'update']
-)->name('quiz.update');
-
-
-Route::delete(
-    '/instructor/questions/{question}',
-    [QuizController::class, 'destroyQuestion']
-)->name('question.delete');
-
+Route::get('/instructor/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quiz.edit');
+Route::put('/instructor/quizzes/{quiz}', [QuizController::class, 'update'])->name('quiz.update');
+Route::delete('/instructor/questions/{question}', [QuizController::class, 'destroyQuestion'])->name('question.delete');
 Route::get('/about', function (HomeController $aboutService) {
     $data = $aboutService->getAboutPageData();
-
     return view('home.about', $data);
 })->name('about');
 
 
 
-Route::get(
-    '/settings/index',
-    [HomeController::class, 'set_index']
-)->name('settings.index');
 
 
 
 
-
-Route::get(
-    '/forgot-password',
-    [ForgotPasswordController::class, 'index']
-)->name('forgot.password');
-
-
-Route::post(
-    '/forgot-password/send-otp',
-    [ForgotPasswordController::class, 'sendOtp']
-)->name('forgot.sendOtp');
-
-
-Route::post(
-    '/forgot-password/verify-otp',
-    [ForgotPasswordController::class, 'verifyOtp']
-)->name('forgot.verifyOtp');
-
-
-Route::post(
-    '/forgot-password/reset',
-    [ForgotPasswordController::class, 'resetPassword']
-)->name('forgot.resetPassword');
-
-
-Route::post(
-    '/forgot-password/resend',
-    [ForgotPasswordController::class, 'resendOtp']
-)->name('forgot.resendOtp');
-
-
+Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('forgot.password');
+Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp'])->name('forgot.sendOtp');
+Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('forgot.verifyOtp');
+Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword'])->name('forgot.resetPassword');
+Route::post('/forgot-password/resend', [ForgotPasswordController::class, 'resendOtp'])->name('forgot.resendOtp');
 
 Route::get('/debug-scheme', function () {
     return [
@@ -501,11 +389,5 @@ Route::get('/debug-scheme', function () {
 
 
 //admin and instructor certificate show production level
-Route::get(
-    '/admin/certificate/image/{filename}',
-    [CertificateFrameController::class, 'certificateImage']
-)->name('admin.certificate.image');
-Route::get(
-    '/instructor/certificate/{certificate}/file/{type}',
-    [CertificateFrameController::class, 'certificateFile']
-)->name('instructor.certificate.file');
+Route::get('/admin/certificate/image/{filename}', [CertificateFrameController::class, 'certificateImage'])->name('admin.certificate.image');
+Route::get('/instructor/certificate/{certificate}/file/{type}', [CertificateFrameController::class, 'certificateFile'])->name('instructor.certificate.file');

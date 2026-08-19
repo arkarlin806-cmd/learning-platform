@@ -154,7 +154,30 @@
         </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    @if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Wrong',
+                text: `@json(session('error'))`,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#dc2626',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                customClass: {
+                    popup: 'rounded-3xl',
+                    title: 'font-bold',
+                    confirmButton: 'rounded-xl px-6 py-2'
+                }
+            });
+
+        });
+    </script>
+    @endif
 </body>
 
 </html>

@@ -52,7 +52,7 @@
 
         {{-- Watermark --}}
         @if($certificate->frame->watermark)
-        <div class="absolute top-50 left-86 z-10 overflow-hidden">
+        <div class="absolute top-50 left-90 z-10 overflow-hidden">
             <img
                 src="{{ route('instructor.certificate.file', [
             'certificate' => $certificate->id,

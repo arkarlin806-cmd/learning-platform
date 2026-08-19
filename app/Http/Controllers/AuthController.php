@@ -74,7 +74,9 @@ class AuthController extends Controller
         }
 
         Auth::login($user);
-
+        if (auth()->user()->role == 2) {
+            return redirect('/admin/dashboard');
+        }
         return redirect('/home/index');
     }
 

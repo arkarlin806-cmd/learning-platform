@@ -401,13 +401,10 @@
                             controls
                             preload="metadata"
                             playsinline
-                            class="w-full h-52
+                            class="w-full h-52 lesson-video
                                                    object-cover
                                                    bg-black"
-                            data-lesson-id="{{ $lesson->id }}"
-                            data-progress-url="{{ route('lesson.progress.save', $lesson->id) }}"
-                            data-progress-get="{{ route('lesson.progress.get', $lesson->id) }}">
-
+                            data-lesson-id="{{ $lesson->id }}">
                             <source
                                 src="{{ $lesson->video_url }}"
                                 type="video/mp4">
@@ -1692,202 +1689,114 @@
         }
     );
 
-
-
-    /* ============================================================
-       ESC KEY
-    ============================================================ */
+    //lesson progress store
     document.addEventListener('DOMContentLoaded', function() {
 
-        const videos = document.querySelectorAll('.lesson-video');
+        const USER_ID = `@json(auth()->id() ?? 'guest')`;
 
-        videos.forEach(video => {
+        const STORAGE_KEY = `lesson_video_progress_user_${USER_ID}`;
+
+        function getProgress() {
+            return JSON.parse(
+                localStorage.getItem(STORAGE_KEY) || '{}'
+            );
+        }
+
+        function saveProgress(data) {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(data)
+            );
+        }
+
+
+        document.querySelectorAll('.lesson-video').forEach(video => {
 
             const lessonId = video.dataset.lessonId;
 
-            if (!lessonId) {
-                return;
-            }
+            if (!lessonId) return;
 
-            loadLessonProgress(video);
 
-            let lastSaved = -1;
+            // =========================
+            // LOAD PREVIOUS POSITION
+            // =========================
 
-            video.addEventListener('timeupdate', function() {
+            video.addEventListener('loadedmetadata', function() {
 
-                if (!video.duration || !isFinite(video.duration)) {
-                    return;
+                const progress = getProgress();
+                const saved = progress[lessonId];
+
+                if (!saved) return;
+
+                if (
+                    saved.currentTime > 0 &&
+                    saved.currentTime < video.duration
+                ) {
+
+                    video.currentTime =
+                        saved.currentTime;
+
                 }
 
-                const progress = Math.floor(
-                    (video.currentTime / video.duration) * 100
-                );
-
-                // Don't send request every millisecond
-                if (progress === lastSaved) {
-                    return;
-                }
-
-                // Save every 5%
-                if (progress % 5 !== 0 && progress !== 100) {
-                    return;
-                }
-
-                lastSaved = progress;
-
-                saveLessonProgress(
-                    video,
-                    progress
-                );
+            }, {
+                once: true
             });
 
 
-            video.addEventListener('ended', function() {
+            // =========================
+            // SAVE POSITION
+            // =========================
 
-                saveLessonProgress(video, 100);
+            video.addEventListener('timeupdate', function() {
+
+                if (!video.duration) return;
+
+                const progress = getProgress();
+
+                progress[lessonId] = {
+
+                    currentTime: video.currentTime,
+
+                    duration: video.duration,
+
+                    percent: Math.floor(
+                        (video.currentTime /
+                            video.duration) * 100
+                    )
+
+                };
+
+                saveProgress(progress);
+
+            });
+
+
+            // Save immediately when pause
+            video.addEventListener('pause', function() {
+
+                const progress = getProgress();
+
+                progress[lessonId] = {
+
+                    currentTime: video.currentTime,
+
+                    duration: video.duration,
+
+                    percent: video.duration ?
+                        Math.floor(
+                            (video.currentTime /
+                                video.duration) * 100
+                        ) : 0
+
+                };
+
+                saveProgress(progress);
 
             });
 
         });
 
     });
-    async function loadLessonProgress(video) {
-
-        const url = video.dataset.progressGet;
-
-        if (!url) {
-            return;
-        }
-
-        try {
-
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json'
-                },
-                credentials: 'same-origin'
-            });
-
-            if (!response.ok) {
-                return;
-            }
-
-            const data = await response.json();
-
-            if (
-                data.success &&
-                data.progress &&
-                video.duration
-            ) {
-
-                const percent = Number(data.progress);
-
-                video.addEventListener('loadedmetadata', function() {
-
-                    if (
-                        percent > 0 &&
-                        percent < 100
-                    ) {
-
-                        video.currentTime =
-                            (percent / 100) * video.duration;
-
-                    }
-
-                }, {
-                    once: true
-                });
-
-            }
-
-        } catch (error) {
-
-            console.error(
-                'Load lesson progress failed:',
-                error
-            );
-
-        }
-
-    }
-    async function saveLessonProgress(video, progress) {
-
-        const url = video.dataset.progressUrl;
-
-        if (!url) {
-            return;
-        }
-
-        try {
-
-            await fetch(url, {
-
-                method: 'POST',
-
-                headers: {
-
-                    'Content-Type': 'application/json',
-
-                    'X-CSRF-TOKEN': document.querySelector(
-                        'meta[name="csrf-token"]'
-                    ).content,
-
-                    'Accept': 'application/json'
-
-                },
-
-                credentials: 'same-origin',
-
-                body: JSON.stringify({
-
-                    progress: progress,
-
-                    current_time: video.currentTime,
-
-                    duration: video.duration || 0
-
-                })
-
-            });
-
-        } catch (error) {
-
-            console.error(
-                'Save lesson progress failed:',
-                error
-            );
-
-        }
-
-    }
-    // document.addEventListener(
-    //     'keydown',
-    //     function(event) {
-
-    //         if (
-    //             event.key === 'Escape'
-    //         ) {
-
-    //             const modal =
-    //                 document.getElementById(
-    //                     'editModal'
-    //                 );
-
-
-    //             if (
-    //                 modal &&
-    //                 !modal.classList.contains('hidden')
-    //             ) {
-
-    //                 closeEditModal();
-
-    //             }
-
-    //         }
-
-    //     }
-    // );
 </script>
 
 @endsection

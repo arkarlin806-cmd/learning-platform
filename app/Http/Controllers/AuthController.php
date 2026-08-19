@@ -45,13 +45,11 @@ class AuthController extends Controller
         return redirect('/home/index');
     }
 
-    // Google Redirect
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
 
-    // Google Callback
     public function handleGoogleCallback()
     {
         $client = new \GuzzleHttp\Client([
@@ -79,7 +77,7 @@ class AuthController extends Controller
 
         return redirect('/home/index');
     }
-    // Show Login Page
+
     public function showLogin()
     {
         return view('auth.login');
@@ -159,7 +157,7 @@ class AuthController extends Controller
                 'Worong email or password.'
             );
     }
-    // Logout
+
     public function logout(Request $request)
     {
         Auth::logout();
@@ -171,13 +169,12 @@ class AuthController extends Controller
         return redirect('/login');
     }
 
-    // Forgot Password Page
+
     public function showForgotPassword()
     {
         return view('auth.forgot-password');
     }
 
-    // Send Reset Link
     public function sendResetLink(Request $request)
     {
         $request->validate([
@@ -227,5 +224,10 @@ class AuthController extends Controller
         return $status == Password::PASSWORD_RESET
             ? redirect('/login')->with('success', 'Password reset successful')
             : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    public function privacy()
+    {
+        return view('auth.privacy');
     }
 }

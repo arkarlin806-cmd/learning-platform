@@ -132,6 +132,15 @@
                         placeholder="Confirm password"
                         class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition">
                 </div>
+                <p class="text-center text-gray-500 mt-6">
+                    <input type="checkbox" required>
+                    Our platform privacy. Agree
+
+                    <a href="{{ route('privacy') }}"
+                        class="text-indigo-600 font-semibold hover:underline">
+                        pricacy
+                    </a>
+                </p>
 
                 <button
                     class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-2xl font-bold text-lg hover:scale-[1.02] hover:shadow-xl transition duration-300">

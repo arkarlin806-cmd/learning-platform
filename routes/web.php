@@ -31,6 +31,7 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/privacy', [AuthController::class, 'privacy'])->name('privacy');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 

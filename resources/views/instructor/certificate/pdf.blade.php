@@ -365,15 +365,16 @@
 
     <div class="certificate">
 
-
-
         {{-- Background --}}
 
         @if($certificate->frame->background)
 
         <div class="background">
 
-            <img src="{{ public_path('storage/'.$certificate->frame->background) }}">
+            <img src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'background'
+        ]) }}">
 
         </div>
 
@@ -387,7 +388,10 @@
         @if($certificate->frame->watermark)
 
         <img class="watermark"
-            src="{{ public_path('storage/'.$certificate->frame->watermark) }}">
+            src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'watermark'
+        ]) }}">
 
         @endif
 
@@ -404,7 +408,10 @@
             @if($certificate->frame->logo)
 
             <img class="logo"
-                src="{{ public_path('storage/'.$certificate->frame->logo) }}">
+                src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'logo'
+        ]) }}">
 
             @endif
 
@@ -468,7 +475,10 @@
             @if($certificate->signature)
 
             <img class="signature"
-                src="{{ public_path('storage/'.$certificate->signature) }}">
+                src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'signature'
+        ]) }}">
 
             @endif
 
@@ -481,7 +491,10 @@
             @if($certificate->frame->seal)
 
             <img class="seal"
-                src="{{ public_path('storage/'.$certificate->frame->seal) }}">
+                src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'seal'
+        ]) }}">
 
             @endif
 
@@ -494,7 +507,10 @@
             @if($certificate->qr_code)
 
             <img class="qr"
-                src="{{ public_path('storage/'.$certificate->qr_code) }}">
+                src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'qr'
+        ]) }}">
 
             @endif
 
@@ -540,7 +556,10 @@
 
         <div class="border">
 
-            <img src="{{ public_path('storage/'.$certificate->frame->border_image) }}">
+            <img src="{{ route('instructor.certificate.file', [
+            'certificate' => $certificate->id,
+            'type' => 'border'
+        ]) }}">
 
         </div>
 

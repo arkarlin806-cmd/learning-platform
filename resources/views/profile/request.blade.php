@@ -159,7 +159,7 @@
                         </span>
                         @endif
                     </div>
-                    <p class="text-slate-400 mt-2">
+                    <p class="text-slate-400 mt-2 text-xs md:text-sm">
                         {{ $order->created_at->format('d M Y h:i A') }}
                     </p>
                 </div>
@@ -167,7 +167,7 @@
                     <p class="text-slate-400 text-sm">
                         Total Amount
                     </p>
-                    <h2 class="text-xl font-bold text-slate-600">
+                    <h2 class="text-xs md:text-xl font-bold text-slate-600">
                         {{ number_format($order->amount,2) }} MMK
                     </h2>
                 </div>

@@ -96,7 +96,7 @@
                 </div>
             </header>
 
-            <div class="bg-gradient-to-r from-sky-100 via-white to-indigo-100 px-4 md:px-12 min-h-screen">
+            <div class="bg-gradient-to-r from-sky-100 via-white to-indigo-100 px-1 lg:px-12 min-h-screen">
                 @yield('content')
             </div>
 

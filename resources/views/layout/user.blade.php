@@ -63,20 +63,20 @@
         <div class="h-screen overflow-y-auto custom-scroll  relative flex-1">
 
             <header
-                class="h-20 bg-white shadow-sm dark:bg-slate-900
+                class="h-14 md:h-20 bg-white shadow-sm dark:bg-slate-900
                 flex items-center justify-between
                 px-6 sticky top-0 z-30">
 
                 <div class="flex items-center gap-4">
 
                     <button id="openSidebar"
-                        class="lg:hidden text-3xl">
+                        class="lg:hidden text-xl">
 
                         ☰
 
                     </button>
                     <div class="">
-                        <h1 class="font-bold text-2xl text-slate-600 dark:text-white font-semibold">
+                        <h1 class="font-bold text-md md:text-xl text-slate-600 dark:text-white font-semibold">
                             @yield('title')
                         </h1>
                         <p class="text-sm text-slate-500 dark:text-white/70">@yield('page')</p>

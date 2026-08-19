@@ -266,7 +266,7 @@
 
             <!-- Topbar -->
             <header
-                class="h-20 bg-white shadow-sm
+                class="h-14 md:h-20 bg-white shadow-sm
             flex items-center justify-between
             px-6 sticky top-0 z-30">
 
@@ -279,67 +279,17 @@
 
                     </button>
                     <div class="">
-                        <h1 class="font-bold text-slate-700 text-xl">
+                        <h1 class="font-bold text-slate-700 text-md md:text-xl">
                             @yield('title')
                         </h1>
                         <p class="text-sm text-slate-400">@yield('page')</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-5">
 
-                    <!-- <button class="relative">
-
-                        🔔
-
-                        <span
-                            class="absolute -top-2 -right-2
-                        bg-red-500 text-white
-                        text-[10px]
-                        px-1.5 rounded-full">
-
-                            3
-
-                        </span>
-
-                    </button>
-
-                    <div class="relative">
-
-                        <button id="profileBtn"
-                            class="flex items-center gap-3">
-
-                            <img
-                                src="#"
-                                class="w-10 h-10 rounded-full">
-
-                        </button>
-
-                        <div id="profileMenu"
-                            class="hidden absolute right-0 mt-3
-                        w-52 bg-white rounded-2xl
-                        shadow-xl overflow-hidden">
-
-                            <a href="#"
-                                class="block px-4 py-3 hover:bg-gray-100">
-                                Profile
-                            </a>
-
-                            <a href="#"
-                                class="block px-4 py-3 hover:bg-gray-100">
-                                Settings
-                            </a><a href="#"
-                                class="block px-4 py-3 hover:bg-red-50 text-red-500">
-                                Logout
-                            </a>
-
-                        </div>
-
-                    </div> -->
-                </div>
 
             </header>
-            <div class="bg-gradient-to-r from-sky-100 via-white to-indigo-100 px-12 py-8 min-h-screen overflow-y-auto">
+            <div class="bg-gradient-to-r from-sky-100 via-white to-indigo-100 px-1 lg:px-12 py-8 min-h-screen overflow-y-auto">
                 @yield('content')
             </div>
         </div>

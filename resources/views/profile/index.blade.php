@@ -10,7 +10,7 @@
     <div class="backdrop-blur-xl bg-white/40 dark:bg-slate-100/5 border border-white/30 dark:border-slate-700 rounded-3xl p-6 md:p-10 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="flex items-center gap-5">
             <!-- AVATAR -->
-            <div class="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
+            <div class="w-15 h-15 md:w-24 md:h-24 rounded-lg md:rounded-3xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
                 {{ strtoupper(substr($user->name, 0, 1)) }}
             </div>
             <div>
@@ -21,7 +21,7 @@
                     Learner Learning Dashboard •
                 </p>
                 <!-- XP BAR -->
-                <div class="w-56 md:w-80 h-2 bg-white/40 rounded-full mt-3 overflow-hidden border border-white/30">
+                <div class="w-40 md:w-80 h-2 bg-white/40 rounded-full mt-3 overflow-hidden border border-white/30">
                     <div class="h-2 bg-gradient-to-r from-yellow-400 to-orange-500 transition-all duration-700"></div>
                 </div>
 
@@ -156,12 +156,12 @@
                     <img src="{{$c->course->thumbnail_url }}"
                         class="w-20 h-16 object-cover rounded-xl shadow-md">
                     <div class="flex-1">
-                        <h3 class="font-semibold text-gray-800 dark:text-white">
-                            {{ $c->course->title }}
+                        <h3 class="font-semibold text-sm md:text-md text-gray-800 dark:text-white">
+                            <a href="{{ route('instructor.single_course', $c->course->id) }}">{{ $c->course->title }}</a>
                         </h3>
                     </div>
                     <a href="{{ route('instructor.single_course', $c->course->id) }}"
-                        class="px-4 py-2 rounded-xl bg-white/60 border border-white/40 text-blue-600 text-sm font-semibold hover:scale-105 transition">
+                        class="px-4 py-2 hidden md:flex rounded-xl bg-white/60 border border-white/40 text-blue-600 text-sm font-semibold hover:scale-105 transition">
                         learn
                     </a>
 

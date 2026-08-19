@@ -546,7 +546,7 @@
 
 
                         {{-- Floating Summary --}}
-                        <div
+                        <!-- <div
                             id="points-{{ $lesson->id }}"
                             class="absolute
                                            left-3
@@ -706,8 +706,53 @@
 
                             @endif
 
-                        </div>
+                        </div> -->
+                        <!-- Floating Key Points -->
+                        <div id="points-{{ $lesson->id }}"
+                            class="absolute 
+           left-0 sm:right-0
+           top-full mt-3
+           max-w-100
+           max-h-0
+           overflow-hidden
+           opacity-0
+           bg-white/90
+           backdrop-blur-xl
+           rounded-2xl
+           shadow-2xl
+           border border-indigo-100
+           z-[9999]
+           transition-all duration-500 ease-in-out">
 
+
+                            <div class="p-4 flex flex-wrap gap-2">
+
+                                @foreach($lesson->summary as $point)
+
+                                @foreach($point->key_points ?? [] as $p)
+
+                                <div class="flex items-center gap-2
+                        px-3 py-2
+                        rounded-full
+                        bg-gradient-to-r from-indigo-50 to-sky-50
+                        border border-indigo-100
+                        break-words">
+
+                                    <span class="text-green-500">✓</span>
+
+                                    <span class="text-sm text-gray-700">
+                                        {{ $p }}
+                                    </span>
+
+                                </div>
+
+                                @endforeach
+
+                                @endforeach
+
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
@@ -1051,82 +1096,47 @@
 <script>
     let activePoint = null;
 
-
-    /* ============================================================
-       TOGGLE AI KEY POINTS
-    ============================================================ */
-
     function togglePoints(id) {
-        const box =
-            document.getElementById('points-' + id);
 
-        const icon =
-            document.getElementById('icon-' + id);
+        const box = document.getElementById('points-' + id);
+        const icon = document.getElementById('icon-' + id);
 
 
-        if (!box || !icon) {
-            return;
-        }
-
-
-        // Close previous
+        // Close previous opened box
         if (activePoint && activePoint !== id) {
 
-            const oldBox =
-                document.getElementById(
-                    'points-' + activePoint
-                );
-
-            const oldIcon =
-                document.getElementById(
-                    'icon-' + activePoint
-                );
-
+            const oldBox = document.getElementById('points-' + activePoint);
+            const oldIcon = document.getElementById('icon-' + activePoint);
 
             if (oldBox) {
-
                 oldBox.style.maxHeight = "0px";
                 oldBox.style.opacity = "0";
-
             }
-
 
             if (oldIcon) {
-
-                oldIcon.style.transform =
-                    "rotate(0deg)";
-
+                oldIcon.style.transform = "rotate(0deg)";
             }
-
         }
 
 
-        // Toggle current
-        if (
-            box.style.maxHeight &&
-            box.style.maxHeight !== "0px"
-        ) {
+        // Toggle current box
+        if (box.style.maxHeight && box.style.maxHeight !== "0px") {
 
             box.style.maxHeight = "0px";
             box.style.opacity = "0";
 
-            icon.style.transform =
-                "rotate(0deg)";
+            icon.style.transform = "rotate(0deg)";
 
             activePoint = null;
 
         } else {
 
-            box.style.maxHeight =
-                box.scrollHeight + "px";
-
+            box.style.maxHeight = box.scrollHeight + "px";
             box.style.opacity = "1";
 
-            icon.style.transform =
-                "rotate(180deg)";
+            icon.style.transform = "rotate(180deg)";
 
             activePoint = id;
-
         }
     }
 

@@ -76,7 +76,7 @@
 
             <!-- Topbar -->
             <header
-                class="h-20 bg-white shadow-sm
+                class="h-20 bg-white shadow-sm dark:bg-slate-900
                         flex items-center justify-between
                         px-6 sticky top-0 z-30">
 
@@ -89,10 +89,10 @@
 
                     </button>
                     <div class="">
-                        <h1 class="text-slate-700 text-2xl font-extrabold">
+                        <h1 class="text-slate-700 dark:text-white text-2xl font-extrabold">
                             Settings
                         </h1>
-                        <p class="text-slate-500 text-sm">Edit Profile and Password</p>
+                        <p class="text-slate-500 text-sm dark:text-white ">Edit Profile and Password</p>
                     </div>
                 </div>
 
@@ -204,7 +204,7 @@
                                             type="text"
                                             name="name"
                                             value="{{old('name',auth()->user()->name)}}"
-                                            class=" w-full rounded-2xl bg-white/10 border border-white/20 dark:text-white placeholder-gray-400 px-5 py-4
+                                            class=" w-full rounded-2xl bg-white/10 border border-slate-200 dark:text-white placeholder-gray-400 px-5 py-4
                                             outline-none transition-all duration-300 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/20 group-hover:border-blue-300"
                                             placeholder="Enter your name">
                                     </div>
@@ -213,7 +213,7 @@
                                         {{$message}}
                                     </p>
                                     @enderror
-                                </div>[8/17/2026 9:40 PM] 💕 ပူတူးလေး💕: <!-- Email -->
+                                </div><!-- Email -->
                                 <div class="group">
                                     <label class="text-sm text-gray-700 dark:text-white font-medium">
                                         Email Address
@@ -222,7 +222,7 @@
                                         type="email"
                                         name="email"
                                         value="{{old('email',auth()->user()->email)}}"
-                                        class=" mt-2 w-full rounded-2xl bg-white/10 border border-white/20 dark:text-white placeholder-gray-400 px-5 py-4
+                                        class=" mt-2 w-full rounded-2xl bg-white/10 border border-slate-200 dark:text-white placeholder-gray-400 px-5 py-4
                                         outline-none transition-all duration-300 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/20 group-hover:border-blue-300"
                                         placeholder="example@gmail.com">
                                     @error('email')
@@ -271,7 +271,7 @@
                                         <h2 class="text-3xl font-bold dark:text-white text-center mb-8">
                                             Change Password
                                         </h2>
-                                        [8/17/2026 9:40 PM] 💕 ပူတူးလေး💕: <form method="POST"
+                                        <form method="POST"
                                             action="{{route('password.update')}}">
                                             @csrf
                                             <div class="space-y-5">

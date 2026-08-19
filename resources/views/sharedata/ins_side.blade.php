@@ -12,7 +12,7 @@ $side = [
 @endphp
 <!-- Sidebar -->
 <aside id="sidebar"
-    class="fixed lg:relative z-50 w-72 h-screen  bg-white/95 backdrop-blur-lg shadow-2xl transition-all duration-300
+    class="fixed lg:relative z-50 w-72 h-screen  bg-white/95 dark:bg-slate-900 backdrop-blur-lg shadow-2xl transition-all duration-300
                   -translate-x-full lg:translate-x-0 sidebar-animation">
 
     <!-- Logo -->
@@ -63,8 +63,8 @@ $side = [
 
         <a href="{{ route($s['route']) }}"
             class="menu-item flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-indigo-50 hover:translate-x-2 transition-all duration-300">
-            <i class="{{ $s['icon'] }} text-xl text-slate-700"></i>
-            <span class="menu-text text-slate-700" data-en="{{ $s['name'] }}" data-mm="{{ $s['mya'] }}">{{ $s['name'] }}</span>
+            <i class="{{ $s['icon'] }} text-xl text-slate-700 dark:text-white"></i>
+            <span class="menu-text text-slate-700 dark:text-white" data-en="{{ $s['name'] }}" data-mm="{{ $s['mya'] }}">{{ $s['name'] }}</span>
 
         </a>
 

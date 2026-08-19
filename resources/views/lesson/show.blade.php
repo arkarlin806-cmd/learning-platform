@@ -204,23 +204,27 @@
             {{-- =================================================
                         HIDDEN LESSON DATA
                     ================================================== --}}
+            @php
+            $keyPoints = collect($lesson->summary ?? [])
+            ->flatMap(function ($summary) {
+            return is_array($summary->key_points ?? null)
+            ? $summary->key_points
+            : [];
+            })
+            ->filter(fn($point) => filled($point))
+            ->values()
+            ->all();
+            @endphp
+
             <div
                 id="lesson-{{ $lesson->id }}"
                 class="hidden"
-
                 data-title="{{ $lesson->title }}"
-
                 data-description="{{ $lesson->description }}"
-
                 data-duration="{{ $lesson->duration ?? '' }}"
-
-                data-update="{{ route('lesson.update',$lesson->id) }}"
-
-                data-points='@json(
-                            $lesson->summary
-                                ->flatMap(fn($s) => $s->key_points ?? [])
-                                ->values()
-                        )'></div>
+                data-update="{{ route('lesson.update', $lesson->id) }}"
+                data-points='@json($keyPoints)'>
+            </div>
 
 
             {{-- =================================================
@@ -399,7 +403,11 @@
                             playsinline
                             class="w-full h-52
                                                    object-cover
-                                                   bg-black">
+                                                   bg-black"
+                            data-lesson-id="{{ $lesson->id }}"
+                            data-progress-url="{{ route('lesson.progress.save', $lesson->id) }}"
+                            data-progress-get="{{ route('lesson.progress.get', $lesson->id) }}">
+
                             <source
                                 src="{{ $lesson->video_url }}"
                                 type="video/mp4">
@@ -545,214 +553,7 @@
                         </button>
 
 
-                        {{-- Floating Summary --}}
-                        <!-- <div
-                            id="points-{{ $lesson->id }}"
-                            class="absolute
-                                           left-3
-                                           right-3
-                                           top-full
-                                           mt-2
-                                           max-h-0
-                                           overflow-hidden
-                                           opacity-0
-                                           bg-white/95
-                                           backdrop-blur-xl
-                                           rounded-2xl
-                                           shadow-2xl
-                                           border border-indigo-100
-                                           z-50
-                                           transition-all duration-500 ease-in-out">
 
-                            @if(
-                            $lesson->summary_pre &&
-                            $lesson->summary_pre->count() > 0
-                            )
-
-                            <div class="p-4">
-
-                                {{-- AI Summary --}}
-                                @foreach($lesson->summary as $summary)
-
-                                @if(!empty($summary->summary))
-
-                                <div
-                                    class="mb-4
-                                                               p-4
-                                                               rounded-2xl
-                                                               bg-gradient-to-br
-                                                               from-indigo-50
-                                                               to-sky-50
-                                                               border
-                                                               border-indigo-100">
-
-                                    <div
-                                        class="flex
-                                                                   items-center
-                                                                   gap-2
-                                                                   mb-2">
-
-                                        <i
-                                            class="ri-sparkling-fill
-                                                                       text-indigo-500"></i>
-
-                                        <span
-                                            class="font-bold
-                                                                       text-slate-700">
-                                            AI Summary
-                                        </span>
-
-                                    </div>
-
-                                    <p
-                                        class="text-sm
-                                                                   leading-6
-                                                                   text-slate-600">
-                                        {{ $summary->summary }}
-                                    </p>
-
-                                </div>
-
-                                @endif
-
-                                @endforeach
-
-
-                                {{-- Key Points --}}
-                                <div class="space-y-2">
-
-                                    <p
-                                        class="text-xs
-                                                           font-bold
-                                                           uppercase
-                                                           tracking-wider
-                                                           text-slate-400
-                                                           mb-2">
-                                        Key Points
-                                    </p>
-
-
-                                    @foreach($lesson->summary_pre as $summary)
-
-                                    @if(!empty($summary->key_points))
-
-                                    @foreach($summary->key_points as $point)
-
-                                    <div
-                                        class="flex
-                                                                       items-start
-                                                                       gap-2
-                                                                       px-3 py-2
-                                                                       rounded-xl
-                                                                       bg-gradient-to-r
-                                                                       from-indigo-50
-                                                                       to-sky-50
-                                                                       border
-                                                                       border-indigo-100">
-
-                                        <span
-                                            class="text-green-500
-                                                                           font-bold
-                                                                           mt-0.5">
-                                            ✓
-                                        </span>
-
-                                        <span
-                                            class="text-sm
-                                                                           text-gray-700
-                                                                           leading-5">
-                                            {{ $point }}
-                                        </span>
-
-                                    </div>
-
-                                    @endforeach
-
-                                    @endif
-
-                                    @endforeach
-
-                                </div>
-
-                            </div>
-
-                            @else
-
-                            <div
-                                class="p-6
-                                                   text-center">
-
-                                <i
-                                    class="ri-sparkling-line
-                                                       text-4xl
-                                                       text-slate-300"></i>
-
-                                <p
-                                    class="mt-2
-                                                       text-sm
-                                                       font-semibold
-                                                       text-slate-500">
-                                    No AI summary available yet.
-                                </p>
-
-                                <p
-                                    class="text-xs
-                                                       text-slate-400
-                                                       mt-1">
-                                    Summary will appear after AI processing.
-                                </p>
-
-                            </div>
-
-                            @endif
-
-                        </div> -->
-                        <!-- Floating Key Points -->
-                        <div id="points-{{ $lesson->id }}"
-                            class="absolute 
-           left-0 sm:right-0
-           top-full mt-3
-           max-w-100
-           max-h-0
-           overflow-hidden
-           opacity-0
-           bg-white/90
-           backdrop-blur-xl
-           rounded-2xl
-           shadow-2xl
-           border border-indigo-100
-           z-[9999]
-           transition-all duration-500 ease-in-out">
-
-
-                            <div class="p-4 flex flex-wrap gap-2">
-
-                                @foreach($lesson->summary as $point)
-
-                                @foreach($point->key_points ?? [] as $p)
-
-                                <div class="flex items-center gap-2
-                        px-3 py-2
-                        rounded-full
-                        bg-gradient-to-r from-indigo-50 to-sky-50
-                        border border-indigo-100
-                        break-words">
-
-                                    <span class="text-green-500">✓</span>
-
-                                    <span class="text-sm text-gray-700">
-                                        {{ $p }}
-                                    </span>
-
-                                </div>
-
-                                @endforeach
-
-                                @endforeach
-
-                            </div>
-
-                        </div>
                     </div>
 
                 </div>
@@ -760,6 +561,7 @@
             </article>
 
             @endforeach
+
 
         </div>
 
@@ -847,7 +649,59 @@
 </div>
 
 
+<!-- Key point modal  -->
+{{-- =========================================================
+    KEY POINT CENTER MODAL
+========================================================= --}}
+<div
+    id="keyPointModal"
+    class="fixed inset-0 z-[99999] hidden items-center justify-center
+           bg-black/50 backdrop-blur-sm px-4 py-6">
 
+    <div
+        id="keyPointModalContent"
+        class="w-full max-w-2xl max-h-[85vh]
+               bg-white rounded-3xl shadow-2xl
+               overflow-hidden
+               opacity-0 scale-95 translate-y-5
+               transition-all duration-300">
+
+        {{-- Header --}}
+        <div class="flex items-center justify-between
+                    px-6 py-5 border-b border-slate-100">
+
+            <div>
+                <h2
+                    id="keyPointModalTitle"
+                    class="text-xl font-black text-slate-800">
+                    Key Points
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    AI generated lesson highlights
+                </p>
+            </div>
+
+            <button
+                type="button"
+                onclick="closeKeyPointModal()"
+                class="w-10 h-10 rounded-xl
+                       bg-slate-100 hover:bg-slate-200
+                       flex items-center justify-center">
+
+                <i class="ri-close-line text-xl"></i>
+            </button>
+        </div>
+
+        {{-- Content --}}
+        <div
+            id="keyPointModalBody"
+            class="p-6 overflow-y-auto max-h-[65vh]">
+
+        </div>
+
+    </div>
+</div>
 {{-- =============================================================
     EDIT MODAL
 ============================================================== --}}
@@ -1094,51 +948,154 @@
     JAVASCRIPT
 ============================================================== --}}
 <script>
-    let activePoint = null;
+    let activeKeyPointLesson = null;
 
-    function togglePoints(id) {
+    function openKeyPointModal(id) {
 
-        const box = document.getElementById('points-' + id);
-        const icon = document.getElementById('icon-' + id);
+        const lesson = document.getElementById('lesson-' + id);
 
-
-        // Close previous opened box
-        if (activePoint && activePoint !== id) {
-
-            const oldBox = document.getElementById('points-' + activePoint);
-            const oldIcon = document.getElementById('icon-' + activePoint);
-
-            if (oldBox) {
-                oldBox.style.maxHeight = "0px";
-                oldBox.style.opacity = "0";
-            }
-
-            if (oldIcon) {
-                oldIcon.style.transform = "rotate(0deg)";
-            }
+        if (!lesson) {
+            console.error('Lesson not found:', id);
+            return;
         }
 
+        let points = [];
 
-        // Toggle current box
-        if (box.style.maxHeight && box.style.maxHeight !== "0px") {
+        try {
+            points = JSON.parse(lesson.dataset.points || '[]');
+        } catch (error) {
+            console.error('Key point JSON error:', error);
+            points = [];
+        }
 
-            box.style.maxHeight = "0px";
-            box.style.opacity = "0";
+        const modal = document.getElementById('keyPointModal');
+        const content = document.getElementById('keyPointModalContent');
+        const body = document.getElementById('keyPointModalBody');
+        const title = document.getElementById('keyPointModalTitle');
 
-            icon.style.transform = "rotate(0deg)";
+        activeKeyPointLesson = id;
 
-            activePoint = null;
+        title.textContent = lesson.dataset.title || 'Key Points';
+
+        if (!points.length) {
+
+            body.innerHTML = `
+            <div class="py-12 text-center">
+
+                <div class="w-16 h-16 mx-auto rounded-2xl
+                            bg-slate-100 flex items-center justify-center">
+
+                    <i class="ri-sparkling-line
+                              text-3xl text-slate-400"></i>
+                </div>
+
+                <p class="mt-4 text-sm font-semibold text-slate-500">
+                    No key points available.
+                </p>
+
+            </div>
+        `;
 
         } else {
 
-            box.style.maxHeight = box.scrollHeight + "px";
-            box.style.opacity = "1";
+            body.innerHTML = points.map((point, index) => `
+            <div class="flex items-start gap-3
+                        p-4 mb-3 rounded-2xl
+                        bg-gradient-to-r from-indigo-50 to-sky-50
+                        border border-indigo-100">
 
-            icon.style.transform = "rotate(180deg)";
+                <div class="w-7 h-7 flex-shrink-0
+                            rounded-full bg-indigo-600
+                            text-white text-sm font-bold
+                            flex items-center justify-center">
 
-            activePoint = id;
+                    ${index + 1}
+
+                </div>
+
+                <p class="text-sm leading-6 text-slate-700">
+                    ${escapeHtml(point)}
+                </p>
+
+            </div>
+        `).join('');
         }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        document.body.classList.add('overflow-hidden');
+
+        requestAnimationFrame(() => {
+
+            content.classList.remove(
+                'opacity-0',
+                'scale-95',
+                'translate-y-5'
+            );
+
+            content.classList.add(
+                'opacity-100',
+                'scale-100',
+                'translate-y-0'
+            );
+
+        });
     }
+
+
+    function closeKeyPointModal() {
+
+        const modal = document.getElementById('keyPointModal');
+        const content = document.getElementById('keyPointModalContent');
+
+        if (!modal || !content) {
+            return;
+        }
+
+        content.classList.add(
+            'opacity-0',
+            'scale-95',
+            'translate-y-5'
+        );
+
+        content.classList.remove(
+            'opacity-100',
+            'scale-100',
+            'translate-y-0'
+        );
+
+        setTimeout(() => {
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
+            document.body.classList.remove('overflow-hidden');
+
+            activeKeyPointLesson = null;
+
+        }, 300);
+    }
+
+
+    document.addEventListener('click', function(event) {
+
+        const modal = document.getElementById('keyPointModal');
+
+        if (modal && event.target === modal) {
+            closeKeyPointModal();
+        }
+
+    });
+
+
+    document.addEventListener('keydown', function(event) {
+
+        if (event.key === 'Escape') {
+            closeKeyPointModal();
+        }
+
+    });
 
 
 
@@ -1740,34 +1697,197 @@
     /* ============================================================
        ESC KEY
     ============================================================ */
+    document.addEventListener('DOMContentLoaded', function() {
 
-    document.addEventListener(
-        'keydown',
-        function(event) {
+        const videos = document.querySelectorAll('.lesson-video');
+
+        videos.forEach(video => {
+
+            const lessonId = video.dataset.lessonId;
+
+            if (!lessonId) {
+                return;
+            }
+
+            loadLessonProgress(video);
+
+            let lastSaved = -1;
+
+            video.addEventListener('timeupdate', function() {
+
+                if (!video.duration || !isFinite(video.duration)) {
+                    return;
+                }
+
+                const progress = Math.floor(
+                    (video.currentTime / video.duration) * 100
+                );
+
+                // Don't send request every millisecond
+                if (progress === lastSaved) {
+                    return;
+                }
+
+                // Save every 5%
+                if (progress % 5 !== 0 && progress !== 100) {
+                    return;
+                }
+
+                lastSaved = progress;
+
+                saveLessonProgress(
+                    video,
+                    progress
+                );
+            });
+
+
+            video.addEventListener('ended', function() {
+
+                saveLessonProgress(video, 100);
+
+            });
+
+        });
+
+    });
+    async function loadLessonProgress(video) {
+
+        const url = video.dataset.progressGet;
+
+        if (!url) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
+            });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = await response.json();
 
             if (
-                event.key === 'Escape'
+                data.success &&
+                data.progress &&
+                video.duration
             ) {
 
-                const modal =
-                    document.getElementById(
-                        'editModal'
-                    );
+                const percent = Number(data.progress);
 
+                video.addEventListener('loadedmetadata', function() {
 
-                if (
-                    modal &&
-                    !modal.classList.contains('hidden')
-                ) {
+                    if (
+                        percent > 0 &&
+                        percent < 100
+                    ) {
 
-                    closeEditModal();
+                        video.currentTime =
+                            (percent / 100) * video.duration;
 
-                }
+                    }
+
+                }, {
+                    once: true
+                });
 
             }
 
+        } catch (error) {
+
+            console.error(
+                'Load lesson progress failed:',
+                error
+            );
+
         }
-    );
+
+    }
+    async function saveLessonProgress(video, progress) {
+
+        const url = video.dataset.progressUrl;
+
+        if (!url) {
+            return;
+        }
+
+        try {
+
+            await fetch(url, {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type': 'application/json',
+
+                    'X-CSRF-TOKEN': document.querySelector(
+                        'meta[name="csrf-token"]'
+                    ).content,
+
+                    'Accept': 'application/json'
+
+                },
+
+                credentials: 'same-origin',
+
+                body: JSON.stringify({
+
+                    progress: progress,
+
+                    current_time: video.currentTime,
+
+                    duration: video.duration || 0
+
+                })
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                'Save lesson progress failed:',
+                error
+            );
+
+        }
+
+    }
+    // document.addEventListener(
+    //     'keydown',
+    //     function(event) {
+
+    //         if (
+    //             event.key === 'Escape'
+    //         ) {
+
+    //             const modal =
+    //                 document.getElementById(
+    //                     'editModal'
+    //                 );
+
+
+    //             if (
+    //                 modal &&
+    //                 !modal.classList.contains('hidden')
+    //             ) {
+
+    //                 closeEditModal();
+
+    //             }
+
+    //         }
+
+    //     }
+    // );
 </script>
 
 @endsection

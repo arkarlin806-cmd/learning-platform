@@ -470,7 +470,7 @@
 
             {{-- Seal --}}
 
-            @if($certificate->frame->seal)
+
 
             @if($images['seal'])
             <img class="seal" src="{{ $images['seal'] }}">

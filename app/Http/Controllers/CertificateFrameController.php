@@ -759,31 +759,84 @@ class CertificateFrameController extends Controller
                 'private, max-age=3600'
             );
     }
-
     public function downloadPdf(Certificate $certificate)
     {
-
         $certificate->load([
             'user',
             'course',
             'frame',
             'instructor'
         ]);
+
+        $images = [
+            'background' => $this->certificateImageBase64(
+                $certificate->frame->background
+            ),
+
+            'watermark' => $this->certificateImageBase64(
+                $certificate->frame->watermark
+            ),
+
+            'logo' => $this->certificateImageBase64(
+                $certificate->frame->logo
+            ),
+
+            'signature' => $this->certificateImageBase64(
+                $certificate->signature
+            ),
+
+            'seal' => $this->certificateImageBase64(
+                $certificate->frame->seal
+            ),
+
+            'qr' => $this->certificateImageBase64(
+                $certificate->qr_code
+            ),
+
+            'border' => $this->certificateImageBase64(
+                $certificate->frame->border_image
+            ),
+        ];
+
         $pdf = Pdf::loadView(
             'instructor.certificate.pdf',
             compact(
-                'certificate'
+                'certificate',
+                'images'
             )
-        )
-            ->setPaper(
-                'a4',
-                'landscape'
-            );
+        )->setPaper(
+            'a4',
+            'landscape'
+        );
+
         return $pdf->download(
-            $certificate->certificate_id
-                . '.pdf'
+            $certificate->certificate_id . '.pdf'
         );
     }
+    // public function downloadPdf(Certificate $certificate)
+    // {
+
+    //     $certificate->load([
+    //         'user',
+    //         'course',
+    //         'frame',
+    //         'instructor'
+    //     ]);
+    //     $pdf = Pdf::loadView(
+    //         'instructor.certificate.pdf',
+    //         compact(
+    //             'certificate'
+    //         )
+    //     )
+    //         ->setPaper(
+    //             'a4',
+    //             'landscape'
+    //         );
+    //     return $pdf->download(
+    //         $certificate->certificate_id
+    //             . '.pdf'
+    //     );
+    // }
 
     //learner
     public function myCertificate(Course $course) //learner show certificate
@@ -798,5 +851,51 @@ class CertificateFrameController extends Controller
         }
 
         return $this->certificate_show($certificate);
+    }
+    private function certificateImageBase64(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        try {
+            /*
+         * B2
+         */
+            $disk = Storage::disk('b2');
+
+            if ($disk->exists($path)) {
+
+                $content = $disk->get($path);
+
+                $mime = $disk->mimeType($path);
+
+                return 'data:' . $mime . ';base64,' .
+                    base64_encode($content);
+            }
+
+            /*
+         * Fallback: local public storage
+         */
+            $disk = Storage::disk('public');
+
+            if ($disk->exists($path)) {
+
+                $content = $disk->get($path);
+
+                $mime = $disk->mimeType($path);
+
+                return 'data:' . $mime . ';base64,' .
+                    base64_encode($content);
+            }
+        } catch (\Throwable $e) {
+
+            Log::error('Certificate image loading failed', [
+                'path' => $path,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return null;
     }
 }

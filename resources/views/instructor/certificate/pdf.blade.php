@@ -367,14 +367,12 @@
 
         {{-- Background --}}
 
-        @if($certificate->frame->background)
+
+        @if($images['background'])
 
         <div class="background">
 
-            <img src="{{ route('instructor.certificate.file', [
-            'certificate' => $certificate->id,
-            'type' => 'background'
-        ]) }}">
+            <img src="{{ $images['background'] }}">
 
         </div>
 
@@ -385,14 +383,9 @@
 
         {{-- Watermark --}}
 
-        @if($certificate->frame->watermark)
-
-        <img class="watermark"
-            src="{{ route('instructor.certificate.file', [
-            'certificate' => $certificate->id,
-            'type' => 'watermark'
-        ]) }}">
-
+        @if($images['watermark'])
+        <img class="watermark" src="{{ $images['watermark'] }}"
+            class="watermark">
         @endif
 
 
@@ -405,13 +398,8 @@
 
             {{-- Logo --}}
 
-            @if($certificate->frame->logo)
-
-            <img class="logo"
-                src="{{ route('instructor.certificate.file', [
-            'certificate' => $certificate->id,
-            'type' => 'logo'
-        ]) }}">
+            @if($images['logo'])
+            <img class="logo" src="{{ $images['logo'] }}">
 
             @endif
 
@@ -472,14 +460,8 @@
 
             {{-- Signature --}}
 
-            @if($certificate->signature)
-
-            <img class="signature"
-                src="{{ route('instructor.certificate.file', [
-            'certificate' => $certificate->id,
-            'type' => 'signature'
-        ]) }}">
-
+            @if($images['signature'])
+            <img class="signature" src="{{ $images['signature'] }}">
             @endif
 
 
@@ -490,12 +472,8 @@
 
             @if($certificate->frame->seal)
 
-            <img class="seal"
-                src="{{ route('instructor.certificate.file', [
-            'certificate' => $certificate->id,
-            'type' => 'seal'
-        ]) }}">
-
+            @if($images['seal'])
+            <img class="seal" src="{{ $images['seal'] }}">
             @endif
 
 
@@ -504,14 +482,8 @@
 
             {{-- QR --}}
 
-            @if($certificate->qr_code)
-
-            <img class="qr"
-                src="{{ route('instructor.certificate.file', [
-            'certificate' => $certificate->id,
-            'type' => 'qr'
-        ]) }}">
-
+            @if($images['qr'])
+            <img class="qr" src="{{ $images['qr'] }}">
             @endif
 
 
@@ -552,17 +524,10 @@
 
         {{-- Border Last --}}
 
-        @if($certificate->frame->border_image)
-
+        @if($images['border'])
         <div class="border">
-
-            <img src="{{ route('instructor.certificate.file', [
-            'certificate' => $certificate->id,
-            'type' => 'border'
-        ]) }}">
-
+            <img src="{{ $images['border'] }}">
         </div>
-
         @endif
 
 

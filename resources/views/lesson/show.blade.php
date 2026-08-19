@@ -521,7 +521,7 @@
 
                         <button
                             type="button"
-                            onclick="togglePoints('{{ $lesson->id }}')"
+                            onclick="openKeyPointModal('{{ $lesson->id }}')"
                             class="flex items-center gap-2
                                            text-indigo-700
                                            font-semibold
@@ -558,14 +558,82 @@
             </article>
 
             @endforeach
+            {{-- =========================================================
+    CENTER KEY POINT MODAL
+========================================================= --}}
+
+            <div
+                id="keyPointModal"
+                class="fixed inset-0 z-[99999] hidden
+           items-center justify-center
+           bg-black/50 backdrop-blur-sm
+           px-4 py-6">
+
+                <div
+                    id="keyPointModalContent"
+                    class="w-full max-w-2xl
+               max-h-[85vh]
+               bg-white
+               rounded-3xl
+               shadow-2xl
+               overflow-hidden
+               opacity-0
+               scale-95
+               translate-y-5
+               transition-all duration-300">
+
+                    {{-- Header --}}
+                    <div
+                        class="flex items-center justify-between
+                   px-6 py-5
+                   border-b border-slate-100">
+
+                        <div>
+                            <h2
+                                id="keyPointModalTitle"
+                                class="text-xl font-black text-slate-800">
+                                Key Points
+                            </h2>
+
+                            <p class="text-sm text-slate-500 mt-1">
+                                AI generated lesson highlights
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            onclick="closeKeyPointModal()"
+                            class="w-10 h-10
+                       rounded-xl
+                       bg-slate-100
+                       hover:bg-slate-200
+                       flex items-center justify-center">
+
+                            <i class="ri-close-line text-xl"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    {{-- Body --}}
+                    <div
+                        id="keyPointModalBody"
+                        class="p-6
+                   overflow-y-auto
+                   max-h-[65vh]">
+
+                    </div>
+
+                </div>
+
+            </div>
 
 
         </div>
 
 
-        {{-- =========================================================
-                PAGINATION
-            ========================================================== --}}
+
         <div class="mt-10">
 
             {{ $lessons->withQueryString()->links() }}
@@ -575,9 +643,9 @@
 
         @else
 
-        {{-- =========================================================
-                EMPTY STATE
-            ========================================================== --}}
+
+        <!-- EMPTY STATE -->
+
         <div
             class="bg-white/80
                        rounded-3xl
@@ -646,62 +714,7 @@
 </div>
 
 
-<!-- Key point modal  -->
-{{-- =========================================================
-    KEY POINT CENTER MODAL
-========================================================= --}}
-<div
-    id="keyPointModal"
-    class="fixed inset-0 z-[99999] hidden items-center justify-center
-           bg-black/50 backdrop-blur-sm px-4 py-6">
-
-    <div
-        id="keyPointModalContent"
-        class="w-full max-w-2xl max-h-[85vh]
-               bg-white rounded-3xl shadow-2xl
-               overflow-hidden
-               opacity-0 scale-95 translate-y-5
-               transition-all duration-300">
-
-        {{-- Header --}}
-        <div class="flex items-center justify-between
-                    px-6 py-5 border-b border-slate-100">
-
-            <div>
-                <h2
-                    id="keyPointModalTitle"
-                    class="text-xl font-black text-slate-800">
-                    Key Points
-                </h2>
-
-                <p class="text-sm text-slate-500 mt-1">
-                    AI generated lesson highlights
-                </p>
-            </div>
-
-            <button
-                type="button"
-                onclick="closeKeyPointModal()"
-                class="w-10 h-10 rounded-xl
-                       bg-slate-100 hover:bg-slate-200
-                       flex items-center justify-center">
-
-                <i class="ri-close-line text-xl"></i>
-            </button>
-        </div>
-
-        {{-- Content --}}
-        <div
-            id="keyPointModalBody"
-            class="p-6 overflow-y-auto max-h-[65vh]">
-
-        </div>
-
-    </div>
-</div>
-{{-- =============================================================
-    EDIT MODAL
-============================================================== --}}
+<!-- EDIT MODAL -->
 @if($isInstructor)
 
 <div
@@ -941,88 +954,186 @@
 
 
 
-{{-- =============================================================
-    JAVASCRIPT
-============================================================== --}}
+<!-- JAVASCRIPT -->
 <script>
-    let activeKeyPointLesson = null;
-
     function openKeyPointModal(id) {
 
-        const lesson = document.getElementById('lesson-' + id);
+        console.log('Opening key points for lesson:', id);
+
+        const lesson =
+            document.getElementById('lesson-' + id);
 
         if (!lesson) {
-            console.error('Lesson not found:', id);
+
+            console.error(
+                'Lesson data not found:',
+                'lesson-' + id
+            );
+
             return;
         }
+
+
+        const modal =
+            document.getElementById('keyPointModal');
+
+        const content =
+            document.getElementById('keyPointModalContent');
+
+        const body =
+            document.getElementById('keyPointModalBody');
+
+        const title =
+            document.getElementById('keyPointModalTitle');
+
+
+        if (!modal || !content || !body || !title) {
+
+            console.error(
+                'Key Point modal elements not found.'
+            );
+
+            return;
+        }
+
+
+        // =========================
+        // GET KEY POINTS
+        // =========================
 
         let points = [];
 
         try {
-            points = JSON.parse(lesson.dataset.points || '[]');
+
+            points = JSON.parse(
+                lesson.dataset.points || '[]'
+            );
+
         } catch (error) {
-            console.error('Key point JSON error:', error);
+
+            console.error(
+                'Invalid key points JSON:',
+                error
+            );
+
             points = [];
         }
 
-        const modal = document.getElementById('keyPointModal');
-        const content = document.getElementById('keyPointModalContent');
-        const body = document.getElementById('keyPointModalBody');
-        const title = document.getElementById('keyPointModalTitle');
 
-        activeKeyPointLesson = id;
+        console.log(
+            'Lesson:',
+            id,
+            'Key Points:',
+            points
+        );
 
-        title.textContent = lesson.dataset.title || 'Key Points';
 
-        if (!points.length) {
+        // =========================
+        // TITLE
+        // =========================
+
+        title.textContent =
+            lesson.dataset.title ||
+            'Key Points';
+
+
+        // =========================
+        // CONTENT
+        // =========================
+
+        if (!Array.isArray(points) || points.length === 0) {
 
             body.innerHTML = `
-            <div class="py-12 text-center">
 
-                <div class="w-16 h-16 mx-auto rounded-2xl
-                            bg-slate-100 flex items-center justify-center">
+        <div class="py-12 text-center">
 
-                    <i class="ri-sparkling-line
-                              text-3xl text-slate-400"></i>
-                </div>
+            <div
+                class="w-16 h-16
+                       mx-auto
+                       rounded-2xl
+                       bg-slate-100
+                       flex items-center justify-center">
 
-                <p class="mt-4 text-sm font-semibold text-slate-500">
-                    No key points available.
-                </p>
+                <i
+                    class="ri-sparkling-line
+                           text-3xl
+                           text-slate-400">
+                </i>
 
             </div>
-        `;
+
+            <p
+                class="mt-4
+                       text-sm
+                       font-semibold
+                       text-slate-500">
+
+                No key points available.
+
+            </p>
+
+        </div>
+
+    `;
 
         } else {
 
-            body.innerHTML = points.map((point, index) => `
-            <div class="flex items-start gap-3
-                        p-4 mb-3 rounded-2xl
-                        bg-gradient-to-r from-indigo-50 to-sky-50
-                        border border-indigo-100">
+            body.innerHTML = points.map(
+                (point, index) => `
 
-                <div class="w-7 h-7 flex-shrink-0
-                            rounded-full bg-indigo-600
-                            text-white text-sm font-bold
-                            flex items-center justify-center">
+            <div
+                class="flex items-start gap-3
+                       p-4 mb-3
+                       rounded-2xl
+                       bg-gradient-to-r
+                       from-indigo-50
+                       to-sky-50
+                       border border-indigo-100">
+
+                <div
+                    class="w-8 h-8
+                           flex-shrink-0
+                           rounded-full
+                           bg-indigo-600
+                           text-white
+                           text-sm
+                           font-bold
+                           flex items-center justify-center">
 
                     ${index + 1}
 
                 </div>
 
-                <p class="text-sm leading-6 text-slate-700">
+                <p
+                    class="text-sm
+                           leading-6
+                           text-slate-700">
+
                     ${escapeHtml(point)}
+
                 </p>
 
             </div>
-        `).join('');
+
+        `
+            ).join('');
         }
 
+
+        // =========================
+        // OPEN MODAL
+        // =========================
+
         modal.classList.remove('hidden');
+
         modal.classList.add('flex');
 
-        document.body.classList.add('overflow-hidden');
+        document.body.classList.add(
+            'overflow-hidden'
+        );
 
+
+        // Animation
         requestAnimationFrame(() => {
 
             content.classList.remove(
@@ -1038,23 +1149,27 @@
             );
 
         });
+
     }
 
 
     function closeKeyPointModal() {
 
-        const modal = document.getElementById('keyPointModal');
-        const content = document.getElementById('keyPointModalContent');
+        const modal =
+            document.getElementById(
+                'keyPointModal'
+            );
+
+        const content =
+            document.getElementById(
+                'keyPointModalContent'
+            );
+
 
         if (!modal || !content) {
             return;
         }
 
-        content.classList.add(
-            'opacity-0',
-            'scale-95',
-            'translate-y-5'
-        );
 
         content.classList.remove(
             'opacity-100',
@@ -1062,39 +1177,76 @@
             'translate-y-0'
         );
 
+        content.classList.add(
+            'opacity-0',
+            'scale-95',
+            'translate-y-5'
+        );
+
+
         setTimeout(() => {
 
             modal.classList.add('hidden');
+
             modal.classList.remove('flex');
 
-            document.body.classList.remove('overflow-hidden');
-
-            activeKeyPointLesson = null;
+            document.body.classList.remove(
+                'overflow-hidden'
+            );
 
         }, 300);
+
     }
 
 
-    document.addEventListener('click', function(event) {
+    // Close when clicking backdrop
+    document.addEventListener(
+        'click',
+        function(event) {
 
-        const modal = document.getElementById('keyPointModal');
+            const modal =
+                document.getElementById(
+                    'keyPointModal'
+                );
 
-        if (modal && event.target === modal) {
-            closeKeyPointModal();
+            if (
+                modal &&
+                event.target === modal
+            ) {
+
+                closeKeyPointModal();
+
+            }
+
         }
+    );
 
-    });
 
+    // Close with ESC
+    document.addEventListener(
+        'keydown',
+        function(event) {
 
-    document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
 
-        if (event.key === 'Escape') {
-            closeKeyPointModal();
+                const modal =
+                    document.getElementById(
+                        'keyPointModal'
+                    );
+
+                if (
+                    modal &&
+                    !modal.classList.contains('hidden')
+                ) {
+
+                    closeKeyPointModal();
+
+                }
+
+            }
+
         }
-
-    });
-
-
+    );
 
     /* ============================================================
        DELETE LESSON

@@ -22,12 +22,12 @@
                     <h1 class="text-4xl font-bold text-white mt-5 leading-tight">
                         Share Your Knowledge
                         <br>
-                        With Thousands of Students
+                        With Thousands of Learners
                     </h1>
 
                     <p class="text-blue-100 mt-5 leading-8">
 
-                        Join our instructor community and inspire students around
+                        Join our instructor community and inspire learners around
                         the world by creating high-quality online courses.
 
                     </p>

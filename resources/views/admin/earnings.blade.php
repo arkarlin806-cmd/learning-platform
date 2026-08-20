@@ -1,9 +1,8 @@
 @extends('layout.admin')
-
+@section('page_title','Eanrings Analysis')
+@section('page','Admin earnings analysis and instructor.')
 @section('content')
-@section('page_title')
-Eanrings Analysis
-@endsection
+
 <style>
     .chart-container {
         position: relative;
@@ -27,7 +26,7 @@ Eanrings Analysis
             Admin Eanrings Analysis
         </h1>
         <p class="mt-1 text-slate-500 text-sm">
-            Create and manage intelligent learning roadmaps for every learner.
+            Admin earning analysis for admin and monitor every instructors earning.
         </p>
     </div>
 </div>
@@ -173,14 +172,7 @@ Eanrings Analysis
     <canvas id="earningChart" height="460"></canvas>
 
 </div>
-<div class="
-
-bg-white/10
-backdrop-blur-xl
-border border-white/10
-rounded-3xl
-p-6
-">
+<div class="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 ">
 
     <canvas id="instructorChart"
         height="">
@@ -216,33 +208,6 @@ p-6
             data: {
                 labels: json.labels,
 
-                // datasets: [{
-
-                //     label: 'Admin Earnings',
-
-                //     data: json.earnings,
-
-                //     fill: true,
-
-                //     backgroundColor: gradient,
-
-                //     borderColor: '#4F8CFF',
-
-                //     borderWidth: 4,
-
-                //     tension: .45,
-
-                //     pointRadius: 0,
-
-                //     pointHoverRadius: 8,
-
-                //     pointHoverBorderWidth: 3,
-
-                //     pointHoverBackgroundColor: '#fff',
-
-                //     pointHoverBorderColor: '#4F8CFF'
-
-                // }]
                 datasets: [{
                     label: 'Registered Users',
                     data: json.earnings,
@@ -272,87 +237,6 @@ p-6
                     }
                 }
             }
-            // options: {
-
-            //     responsive: true,
-
-            //     maintainAspectRatio: false,
-
-            //     interaction: {
-            //         intersect: false,
-            //         mode: 'index'
-            //     },
-
-            //     animation: {
-            //         duration: 1800,
-            //         easing: 'easeOutQuart'
-            //     },
-
-            //     plugins: {
-
-            //         legend: {
-            //             display: false
-            //         },
-
-            //         tooltip: {
-
-            //             backgroundColor: 'rgba(15,23,42,.95)',
-
-            //             padding: 14,
-
-            //             cornerRadius: 15,
-
-            //             displayColors: false,
-
-            //             titleColor: '#fff',
-
-            //             bodyColor: '#dbeafe',
-
-            //             callbacks: {
-            //                 label: (ctx) => 'MMK ' + Number(ctx.raw).toLocaleString()
-            //             }
-
-            //         }
-
-            //     },
-
-            //     scales: {
-
-            //         x: {
-
-            //             grid: {
-            //                 display: false
-            //             },
-
-            //             ticks: {
-            //                 color: '#cbd5e1'
-            //             }
-
-            //         },
-
-            //         y: {
-
-            //             beginAtZero: true,
-
-            //             border: {
-            //                 dash: [6, 6]
-            //             },
-
-            //             grid: {
-            //                 display: true
-            //             },
-
-            //             ticks: {
-            //                 color: '#cbd5e1',
-
-            //                 callback: (v) => Number(v).toLocaleString()
-            //             }
-
-            //         }
-
-            //     }
-
-            // }
 
         });
 

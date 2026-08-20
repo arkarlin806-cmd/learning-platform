@@ -21,17 +21,7 @@
                         {{-- Overlay --}}
                         <div class=" absolute inset-0 bg-gradient-to-t from-black/60 via-transparent ">
                         </div>
-                        {{-- Play Button --}}
-                        <button
-                            class=" absolute top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2  w-20h-20rounded-full bg-white/90 shadow-xl flex
-                                    items-center justify-center hover:scale-110 transition duration-500 ">
-                            <svg
-                                class="w-10 h-10 text-indigo-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path d="M6.3 3.7a1 1 0 011.4-.1l7 5a1 1 0 010 1.6l-7 5a1 1 0 01-1.6-.8V4.5a1 1 0 01.2-.8z" />
-                            </svg>
-                        </button>
+
                     </div>
                     {{-- Stats --}}
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
@@ -100,7 +90,7 @@
 
                     <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border  border-white hover:-translate-y-2 transition duration-500">
                         <h2 class="text-2xl font-extrabold text-indigo-600">
-                            ${{ number_format($course->price,2) }}
+                            {{ number_format($course->price,2) }} MMK
                         </h2>
 
                         <div class="mt-5 flex items-center gap-2">

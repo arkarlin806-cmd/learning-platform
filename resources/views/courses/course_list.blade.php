@@ -24,7 +24,11 @@
                 @endif
                 <div class="absolute top-4 left-4">
                     <span class="bg-white/90 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-                        {{ $course->level }}
+                        @if($course->price < 1)
+                            <span>Free</span>
+                    @else
+                    {{ $course->level }}
+                    @endif
                     </span>
                 </div>
 

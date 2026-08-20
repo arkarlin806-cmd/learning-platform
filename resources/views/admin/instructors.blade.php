@@ -1,9 +1,8 @@
 @extends('layout.admin')
-
+@section('page_title','Instructors Management')
+@section('page','Admin analysis all instructors management.')
 @section('content')
-@section('page_title')
-Instructor Management
-@endsection
+
 <!-- HEADER -->
 <div
     class="flex flex-col md:flex-row bg-white/80 rounded-3xl shadow-lg shadow-blue-300 p-6
@@ -14,7 +13,7 @@ Instructor Management
             Instructor Management
         </h1>
         <p class="text-gray-500 mt-2">
-            Modern Realtime Users Table
+            Realtime Instructors Table
         </p>
 
     </div>

@@ -17,7 +17,7 @@
         <div class="bg-white rounded-3xl p-6 shadow-md border-l-4 border-blue-500 transition">
 
             <h2 class="text-lg font-semibold text-slate-700 mb-4">
-                👤 Student Information
+                👤 Learner Information
             </h2>
 
             <div class="space-y-2 text-gray-600">
@@ -93,9 +93,9 @@
                 <select name="status"
                     class="w-full border border-indigo-200 rounded-2xl p-3 focus:ring-2 focus:ring-indigo-300">
 
-                    <option value="paid" class="rounded-2xl">💚 Paid</option>
-                    <option value="failed">❌ Failed</option>
-                    <option value="refund">💸 Refund</option>
+                    <option value="paid" class="rounded-2xl"> Paid</option>
+                    <option value="failed"> Failed</option>
+                    <option value="refund"> Refund</option>
 
                 </select><button class="w-full mt-4 py-3 rounded-2xl
                                    bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500

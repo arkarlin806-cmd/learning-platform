@@ -1,9 +1,8 @@
 @extends('layout.admin')
-
+@section('page_title','Course Orders')
+@section('page','Admin analysis course orders and accept or reject.')
 @section('content')
-@section('page_title')
-Course Orders
-@endsection
+
 
 
 <!-- Hero Header -->
@@ -20,7 +19,7 @@ Course Orders
                     Course Orders
                 </h2>
                 <p class="text-slate-500 mt-3 max-w-2xl text-sm md:text-base">
-                    Track course purchases, review payment statuses, and manage student order activity from one clean dashboard.
+                    Track course purchases, review payment statuses, and manage learner order activity from one clean dashboard.
                 </p>
             </div>
 

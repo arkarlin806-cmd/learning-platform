@@ -1,6 +1,7 @@
 @extends('layout.admin')
 
-@section('title','Instructor Request Details')
+@section('page_title','Instructor Request Details')
+@section('page','Admin analysis all instructors management.')
 
 @section('content')
 
@@ -16,7 +17,7 @@
             </h1>
 
             <p class="text-gray-500 mt-2">
-                Review instructor application details.
+                Review instructor request details.
             </p>
 
         </div>

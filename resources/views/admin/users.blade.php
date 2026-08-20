@@ -1,9 +1,11 @@
 @extends('layout.admin')
 
+@section('page_title','User Management')
+@section('page','Admin analysis all user management.')
+
 @section('content')
-@section('page_title')
-User Management
-@endsection
+
+
 
 <!-- HEADER -->
 <div
@@ -16,7 +18,7 @@ User Management
         </h1>
 
         <p class="text-gray-500 mt-2">
-            Modern Realtime Users Table
+            Realtime Users Table
         </p>
 
     </div>

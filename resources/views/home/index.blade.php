@@ -48,27 +48,6 @@
 
             </div>
 
-            <div class="flex gap-10 mt-14">
-
-                <div>
-                    <h2 class="text-4xl font-bold text-white">50K+</h2>
-                    <p data-en="Students"
-                        data-mm="သင်တန်းသားများ" class="text-gray-400">Students</p>
-                </div>
-
-                <div>
-                    <h2 class="text-4xl font-bold text-white">120+</h2>
-                    <p data-en="Courses"
-                        data-mm="ဘာသာရပ်များ" class="text-gray-400">Courses</p>
-                </div>
-
-                <div>
-                    <h2 class="text-4xl font-bold text-white">98%</h2>
-                    <p data-en="Success"
-                        data-mm="အောင်မြင်ပြီး" class="text-gray-400">Success</p>
-                </div>
-
-            </div>
         </div>
 
         <!-- Right -->

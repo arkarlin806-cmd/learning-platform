@@ -173,20 +173,14 @@
 
 </div>
 <h1 class="my-3 text-2xl font-bold">Each Instructor Eanrings and Available</h1>
-<div class="flex justify-between">
-    <div class="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 ">
+<div class="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 ">
 
-        <canvas id="instructorChart"
-            height="">
-        </canvas>
+    <canvas id="instructorChart"
+        height="">
+    </canvas>
 
-    </div>
-    <div class="w-40 flex items-center justify-center space-y-3">
-        <div class="h-4 w-10 bg-blue-700 rounded-xl"></div><span class="text-sm"> Total Earnings</span>
-        <div class="h-4 w-10 bg-green-700 rounded-xl"></div><span class="text-sm"> Total Avaiable</span>
-        <div class="h-4 w-10 bg-yellow-700 rounded-xl"></div><span class="text-sm"> Total Withdraw</span>
-    </div>
 </div>
+
 <script>
     let chart;
 
@@ -304,6 +298,8 @@
 
                             borderRadius: 12,
 
+                            color: '#000000',
+
                         },
 
 
@@ -315,6 +311,8 @@
                             backgroundColor: '#10B981',
 
                             borderRadius: 12,
+                            color: '#000000',
+
 
                         },
 
@@ -327,6 +325,8 @@
                             backgroundColor: '#F59E0B',
 
                             borderRadius: 12,
+                            color: '#000000',
+
 
                         }
 

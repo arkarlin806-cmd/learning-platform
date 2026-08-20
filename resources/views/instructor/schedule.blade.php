@@ -258,7 +258,7 @@
                                     @elseif($schedule->start_time > now()->timezone('Asia/Yangon')->format('H:i:s'))
                                     <span class="shrink-0 inline-flex items-center gap-2 rounded-full bg-amber-50 border border-amber-100 px-3 py-1.5 text-xs font-bold text-amber-700">
                                         <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                                        Upcoming {{ now()->timezone('Asia/Yangon')->format('H:i:s') }}
+                                        Upcoming
                                     </span>
                                     @else
                                     <span class="shrink-0 inline-flex items-center gap-2 rounded-full bg-slate-100 border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-700">

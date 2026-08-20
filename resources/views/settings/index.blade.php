@@ -335,7 +335,7 @@
                     @endif
 
                     <div class="bg-white/80 dark:bg-slate-100/8 dark:border-slate-700  rounded-3xl shadow-xl p-4 md:p-8 border border-gray-100 transition hover:shadow-2xl ">
-                        <div class="flex-col md:flex items-center justify-between gap-4 mb-6">
+                        <div class="flex items-center justify-between gap-4 mb-6">
                             <div class="">
                                 <div class="md:w-14 md:h-14 w-10 h-10 md:rounded-2xl rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-lg md:text-3xl">
                                     🌐

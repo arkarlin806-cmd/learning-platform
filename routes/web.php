@@ -268,17 +268,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// #lesson upload
-// Route::middleware(['auth'])->group(function () {
-//     Route::prefix('lesson')->group(function () {
-//         Route::get('/lesson/create/{id}', [LessonController::class, 'create'])->name('lesson.create');
-//         Route::get('/status/{id}', [LessonController::class, 'status'])->name('lesson.status');
-//         Route::get('/preview/{id}/{course_id}', [LessonController::class, 'aiPreview'])->name('lesson.preview');
-//         Route::post('/{id}/save-summary', [LessonController::class, 'saveSummary'])->name('lesson.save.summary');
-//         Route::get('/lesson/show/{id}', [LessonController::class, 'show'])->name('lesson.show');
-//         Route::post('/store', [LessonController::class, 'store'])->name('lesson.store');
-//     });
-// });
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/lesson/create/{id}', [LessonController::class, 'create'])
@@ -323,7 +312,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
-    Route::get('/admin/contact', [ContactController::class, 'adimn_create'])->name('contact.adimn_create');
+    Route::get('/admin/contact/{id}', [ContactController::class, 'adimn_create'])->name('contact.adimn_create');
     Route::post('/contact/send', [ContactController::class, 'store'])->name('contact.store');
     Route::get('/contact/inbox', [ContactController::class, 'inbox'])->name('contact.inbox');
     Route::get('/contact/read/{id}', [ContactController::class, 'read'])->name('contact.read');

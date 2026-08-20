@@ -120,7 +120,7 @@
                                 Send your message to admin team
                             </p>
                         </div>
-                        [8/17/2026 10:37 PM] 💕 ပူတူးလေး💕: @if(session('success'))
+                        @if(session('success'))
                         <div class="mb-6 p-4 rounded-xl bg-green-100 text-green-700 animate-pulse">
                             {{session('success')}}
                         </div>

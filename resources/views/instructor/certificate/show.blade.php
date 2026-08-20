@@ -24,7 +24,7 @@
         @if(auth()->user()->role != 2)
         <a
             href="{{ route('instructor.certificates.pdf',$certificate->id) }}"
-            class="md:px-6 md:py-3 md:text-md text-xs px-3 py-1 rounded-xl bg-indigo-600 text-white font-semibold ">
+            class="md:px-6 md:py-3 md:text-lg text-xs px-3 py-1 rounded-xl bg-indigo-600 text-white font-semibold ">
             Download PDF
         </a>
         @endif
@@ -66,7 +66,7 @@
         {{-- Content --}}
 
         <div
-            class="relative z-20 text-center pt-10 ">
+            class="relative z-20 text-center pt-10 md:pt-42">
             <h1 class="text-lg md:text-4xl font-bold" style="color:{{ $certificate->frame->primary_color }}">
                 Certificate Of Completion
             </h1>

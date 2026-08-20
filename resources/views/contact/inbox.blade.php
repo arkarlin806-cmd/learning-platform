@@ -116,11 +116,12 @@
                             </p>
                         </div>
 
-
+                        @if(auth()->user()->role != 1)
                         <a href="{{route('contact.create')}}"
                             class="px-6 py-3 rounded-2xl bg-gradient-to-r from-sky-600 to-blue-600 text-white font-bold shadow-xl hover:scale-105 transition">
                             + New Message
                         </a>
+                        @endif
                     </div>
 
                     @if(session('success'))

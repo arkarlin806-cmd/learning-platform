@@ -31,7 +31,9 @@
         </div>
 
         <img
-            src="{{ asset('uploads/group/man-suit-with-shirt-that-says-word-it_833755-19054.avif') }}"
+            src="{{ auth()->user()->avatar
+                                            ? asset('images/avatars/' . auth()->user()->avatar)
+                                            : asset('images/avatars/avatar1.png') }}"
             class="w-8 h-8 rounded-2xl shadow-lg object-cover" />
 
     </div>

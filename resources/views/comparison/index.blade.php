@@ -41,7 +41,7 @@
             <section id="Registration"
                 class="glass rounded-3xl shadow-xl p-8 fade">
                 <h2
-                    class="text-3xl text-slate-600 font-semibold mb-8 ">
+                    class="text-lg md:text-3xl text-slate-600 font-semibold mb-8 ">
                     Feature 01 :
                     <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                         Registration
@@ -97,7 +97,7 @@
             <section id="CRUD"
                 class="glass rounded-3xl shadow-xl p-8 fade ">
                 <h2
-                    class="text-3xl text-slate-600 font-semibold mb-8">
+                    class="text-lg md:text-3xl text-slate-600 font-semibold mb-8">
                     Feature 02 :
                     <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                         CRUD
@@ -153,7 +153,7 @@
             <section id="Chat"
                 class="glass rounded-3xl shadow-xl p-8 fade ">
                 <h2
-                    class="text-3xl text-slate-600 font-semibold mb-8">
+                    class="text-lg md:text-3xl text-slate-600 font-semibold mb-8">
                     Feature 03 :
                     <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                         Chat
@@ -210,7 +210,7 @@
             <section id="Summary"
                 class="glass rounded-3xl shadow-xl p-8 ">
                 <h2
-                    class="text-3xl font-black mb-8">
+                    class="text-lg md:text-3xl font-black mb-8">
                     Feature <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                         Summary
                     </span>

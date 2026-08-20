@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{csrf_token()}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     @vite(['resources/css/app.css','resources/js/app.js'])
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -80,7 +82,7 @@
 
                     </button>
                     <div class="">
-                        <h1 class="font-bold text-2xl text-slate-600 font-semibold">
+                        <h1 class="font-bold text-xl md:text-2xl text-slate-600 font-semibold">
                             Contact
                         </h1>
                         <p class="text-sm text-slate-500">
@@ -105,7 +107,7 @@
                     <div class="flex justify-between items-center mb-10">
                         <div>
 
-                            <h1 class="text-4xl font-black bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
+                            <h1 class="text-xl md:text-4xl font-black bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
                                 Contact Center
                             </h1>
 

@@ -9,7 +9,7 @@
 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
 
     <div>
-        <h1 class="text-3xl font-bold text-slate-800">
+        <h1 class="text-lg md:text-3xl font-bold text-slate-800">
             My <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                 Orders
             </span>

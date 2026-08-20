@@ -182,7 +182,7 @@
 <!-- Hero -->
 <section class="relative overflow-hidden bg-gradient-to-r from-blue-700 via-indigo-700 to-pink-700 py-20">
 
-    <div class="absolute w-96 h-96 bg-white/10 rounded-full blur-3xl -top-20 -left-20"></div>
+    <div class="absolute w-96 h-60 md:h-96 bg-white/10 rounded-full blur-3xl -top-20 -left-20"></div>
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
 
@@ -190,7 +190,7 @@
 
             <h1 data-en="Explore Amazing Courses"
                 data-mm="သင်တန်းများကို ရှာရန်"
-                class="text-4xl md:text-6xl font-bold text-white"
+                class="text-2xl md:text-5xl font-bold text-white"
                 data-aos="fade-up">
                 Explore Amazing Courses
             </h1>
@@ -249,13 +249,13 @@ $c = [
 <div class="flex flex-wrap justify-center gap-3 mb-10 max-w-7xl mx-auto">
 
     <button
-        class="course-filter bg-indigo-600 border border-slate-300 text-white shadow-lg scale-105 ring-2 ring-indigo-300 px-5 py-2 rounded-full transition-all duration-300"
+        class="course-filter bg-indigo-600 border border-slate-300 text-sm md:text-lg text-white shadow-lg scale-105 ring-2 ring-indigo-300 px-5 py-2 rounded-full transition-all duration-300"
         data-category="all">
         All
     </button>
     @foreach ($c as $category )
     <button
-        class="course-filter bg-white/70 border text-lg border-slate-300 text-slate-700 px-5 py-2 rounded-full transition-all duration-300"
+        class="course-filter bg-white/70 border text-sm md:text-lg border-slate-300 text-slate-700 px-5 py-2 rounded-full transition-all duration-300"
         data-category="{{ $category }}">
         {{ $category }}
     </button>
@@ -286,7 +286,7 @@ $c = [
             data-aos="zoom-in">
 
             <h2 data-en="Start Learning Today"
-                data-mm="ယနေ့မှစ၍ လေ့လာရန်" class="text-4xl font-bold text-white">
+                data-mm="ယနေ့မှစ၍ လေ့လာရန်" class="text-2xl md:text-4xl font-bold text-white">
                 Start Learning Today
             </h2>
 

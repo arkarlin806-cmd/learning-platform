@@ -85,7 +85,7 @@
             <span class="inline-flex items-center rounded-full bg-white/20 backdrop-blur-xl px-4 py-2 text-sm text-white">
                 🚀 AI Personalized Learning
             </span>
-            <h1 class="mt-6 text-4xl md:text-6xl font-black text-white leading-tight">
+            <h1 class="mt-6 text-xl md:text-4xl md:text-6xl font-black text-white leading-tight">
                 My Learning
                 <span class="block">
                     Roadmaps
@@ -112,14 +112,14 @@
         <div class="group rounded-3xl bg-white/50 backdrop-blur-xl p-6 shadow-lg transition duration-500 hover:-translate-y-2">
             <div class="flex justify-between">
                 <div>
-                    <p class="text-gray-500">
+                    <p class="text-gray-500 md:text-md text-xs">
                         Active Goals
                     </p>
-                    <h2 data-counter="{{ $goals->where('status','active')->count() }}" class="counter mt-3 text-2xl font-bold text-indigo-600">
+                    <h2 data-counter="{{ $goals->where('status','active')->count() }}" class="counter mt-3 text-md md:text-2xl font-bold text-indigo-600">
                         0
                     </h2>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center text-2xl">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center text-lg md:text-2xl">
                     🎯
                 </div>
             </div>
@@ -129,14 +129,14 @@
         <div class="group rounded-3xl bg-white/50 backdrop-blur-xl p-6 shadow-lg transition duration-500 hover:-translate-y-2">
             <div class="flex justify-between">
                 <div>
-                    <p class="text-gray-500">
+                    <p class="text-gray-500 md:text-md text-xs">
                         Total Goals
                     </p>
-                    <h2 data-counter="{{ $goals->count() }}" class="counter mt-3 text-2xl font-bold text-purple-600">
+                    <h2 data-counter="{{ $goals->count() }}" class="counter mt-3 text-md md:text-2xl font-bold text-purple-600">
                         0
                     </h2>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-cyan-100 flex items-center justify-center text-2xl">
+                <div class="w-14 h-14 rounded-2xl bg-cyan-100 flex items-center justify-center text-lg md:text-2xl">
                     📚
                 </div>
             </div>
@@ -146,14 +146,14 @@
         <div class="group rounded-3xl bg-white/50 backdrop-blur-xl p-6 shadow-lg transition duration-500 hover:-translate-y-2">
             <div class="flex justify-between">
                 <div>
-                    <p class="text-gray-500">
+                    <p class="text-gray-500 md:text-md text-xs">
                         Estimated Days
                     </p>
-                    <h2 data-counter="{{ $goals->sum('estimated_days') }}" class="counter mt-3 text-2xl font-bold text-orange-600">
+                    <h2 data-counter="{{ $goals->sum('estimated_days') }}" class="counter mt-3 text-md md:text-2xl font-bold text-orange-600">
                         0
                     </h2>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-violet-100 flex items-center justify-center text-2xl">
+                <div class="w-14 h-14 rounded-2xl bg-violet-100 flex items-center justify-center text-lg md:text-2xl">
                     ⏳
                 </div>
             </div>
@@ -163,14 +163,14 @@
         <div class="group rounded-3xl bg-white/50 backdrop-blur-xl p-6 shadow-lg transition duration-500 hover:-translate-y-2">
             <div class="flex justify-between">
                 <div>
-                    <p class="text-gray-500">
+                    <p class="text-gray-500 md:text-md text-xs">
                         Study Hours
                     </p>
-                    <h2 data-counter="{{ $goals->sum('daily_hours') }}" class="counter mt-3 text-2xl font-bold text-pink-600">
+                    <h2 data-counter="{{ $goals->sum('daily_hours') }}" class="counter mt-3 text-md md:text-2xl font-bold text-pink-600">
                         0
                     </h2>
                 </div>
-                <div class="w-14 h-14 rounded-2xl bg-pink-100 flex items-center justify-center text-2xl">
+                <div class="w-14 h-14 rounded-2xl bg-pink-100 flex items-center justify-center text-lg md:text-2xl">
                     🔥
                 </div>
             </div>

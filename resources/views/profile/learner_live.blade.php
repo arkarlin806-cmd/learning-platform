@@ -1,5 +1,6 @@
 @extends('layout.course_ins')
 @section('title','Live Room')
+@section('page','Learner show single live room.')
 
 @section('content')
 

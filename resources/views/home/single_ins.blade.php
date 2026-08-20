@@ -3,12 +3,8 @@
 @section('title')
 
 {{ $instructor->name }} - Instructor
-
 @endsection
-
-
 @section('content')
-
 
 <!-- Hero Cover -->
 <div class="max-w-7xl mx-auto px-6 py-8">
@@ -20,11 +16,11 @@
                 @if($instructor->profile_photo)
                 <img
                     src="{{asset('storage/'.$instructor->profile_photo)}}"
-                    class="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover border-8 border-white/80 shadow-2xl group-hover:scale-110
+                    class="w-30 h-30 md:w-48 md:h-48 rounded-full object-cover border-8 border-white/80 shadow-2xl group-hover:scale-110
                             transition duration-500">
                 @else
                 <div class="w-40 h-40 md:w-48 md:h-48 rounded-full bg-white/20 backdrop-blur-xl text-white flex items-center
-                            justify-center text-6xl font-black border-8 border-white/80 shadow-2xl">
+                            justify-center text-2xl md:text-5xl font-black border-8 border-white/80 shadow-2xl">
                     {{strtoupper(substr($instructor->name,0,1))}}
                 </div>
                 @endif
@@ -44,7 +40,7 @@
                         Professional Instructor
                     </span>
                 </div>
-                <h1 class=" text-4xl md:text-6xl font-black tracking-tight">
+                <h1 class="text-2xl md:text-4xl md:text-6xl font-black tracking-tight">
                     {{$instructor->name}}
                 </h1>
 
@@ -96,7 +92,7 @@
                             <span class="w-2 h-2 rounded-full uppercas bg-indigo-500 animate-pulse"></span>
                             Students
                         </span>
-                        <h2 class="mt-3 text-3xl font-black bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+                        <h2 class="mt-3 text-lg md:text-2xl font-black bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
                             {{ $totalStudents }}
                         </h2>
 
@@ -131,7 +127,7 @@
                             <span class="w-2 h-2 rounded-full uppercas bg-pink-500 animate-pulse"></span>
                             Courses
                         </span>
-                        <h2 class="mt-3 text-3xl font-black bg-gradient-to-r from-pink-500 via-pink-500 to-red-600 bg-clip-text text-transparent">
+                        <h2 class="mt-3 text-lg md:text-2xl font-black bg-gradient-to-r from-pink-500 via-pink-500 to-red-600 bg-clip-text text-transparent">
                             {{ number_format($totalCourses) }}
                         </h2>
 
@@ -166,7 +162,7 @@
                             <span class="w-2 h-2 rounded-full uppercas bg-orange-500 animate-pulse"></span>
                             Ratings
                         </span>
-                        <h2 class="mt-3 text-3xl font-black bg-gradient-to-r from-yellow-600 via-orange-600 to-orange-700 bg-clip-text text-transparent">
+                        <h2 class="mt-3 text-lg md:text-2xl font-black bg-gradient-to-r from-yellow-600 via-orange-600 to-orange-700 bg-clip-text text-transparent">
                             {{ number_format($averageRating ?? 0,1) }}
                         </h2>
 
@@ -193,7 +189,7 @@
     <section class="mt-12">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
+                <h2 class="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">
                     Courses By <span class="text-blue-700">{{ $instructor->name }}</span>
                 </h2>
                 <p class="text-gray-500 dark:text-white/70 mt-2">
@@ -203,7 +199,7 @@
         </div>
         <!-- Courses -->
         <section class="py-4">
-            <div class="max-w-7xl mx-auto px-6">
+            <div class="">
                 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
                     @foreach($courses as $course)
 
@@ -223,7 +219,7 @@
                             </div>
 
                             <div class="flex justify-between px-6 pt-4">
-                                <h2 class="text-xl font-bold text-gray-700 dark:text-white mb-4">
+                                <h2 class="text-sm font-bold text-gray-700 dark:text-white mb-4">
                                     {{ $course->title }}
                                 </h2>
 
@@ -287,10 +283,10 @@
                             </div>
 
                             <div class="flex justify-between px-6 mb-6">
-                                <a href="{{ route('course.show', $course->id) }}" class="px-5 py-2 border border-blue-300 rounded-xl dark:bg-white bg-blue-100/50 text-blue-700 font-semibold transition duration-300 hover:bg-blue-100/30 hover:scale-105">
+                                <a href="{{ route('course.show', $course->id) }}" class="px-5 py-1 border border-blue-300 rounded-md dark:bg-white bg-blue-100/50 text-blue-700 font-semibold transition duration-300 hover:bg-blue-100/30 hover:scale-105">
                                     Learn More
                                 </a>
-                                <p class="mt-5">
+                                <p class="mt-2">
                                     <span class="text-gray-500 dark:text-white text-xs">Start date - </span> <i class="text-sm dark:text-white">{{ $course->start_date }}</i>
                                 </p>
                             </div>
@@ -306,10 +302,10 @@
 
     </section>
 
-    <section class="py-14">
-        <div class="max-w-7xl mx-auto px-6">
+    <section class="py-10">
+        <div class="">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-gray-800 dark:text-white">
+                <h2 class="text-xl md:text-3xl font-black text-gray-800 dark:text-white">
                     Student Reviews
                 </h2>
                 <p class="text-gray-500 mt-3 dark:text-white">
@@ -319,10 +315,10 @@
             <div class="grid lg:grid-cols-3 gap-8">
                 <!-- Rating Summary -->
                 <div class=" bg-gradient-to-br from-blue-600 to-purple-600 rounded-[35px] p-8 text-white shadow-2xl">
-                    <h3 class="text-6xl font-black counter">
+                    <h3 class="text-lg md:text-3xl font-black counter">
                         {{number_format($averageRating ?? 0,1)}}
                     </h3>
-                    <div class="text-yellow-300 text-3xl mt-3">
+                    <div class="text-yellow-300 text-md md:text-2xl mt-3">
                         ★★★★★
                     </div>
                     <p class="mt-5 text-white/80">
@@ -332,13 +328,13 @@
                 <!-- Rating Progress -->
                 <div class=" lg:col-span-2 bg-white rounded-[35px] shadow-xl p-8">
                     @foreach([
-                    20=>100,
-                    15=>75,
-                    10=>50,
-                    5=>25,
-                    1=>5
+                    50=>100,
+                    40=>75,
+                    30=>50,
+                    20=>25,
+                    10=>5
                     ] as $star=>$percent)
-                    <div class="flex items-center gap-4 mb-5">
+                    <div class="flex items-center gap-4 mb-3 md:mb-5">
                         <span class="font-bold w-10">
                             {{$star}}★
                         </span>
@@ -358,79 +354,30 @@
 
 
     <section class="pb-10">
-        <div class="max-w-7xl mx-auto px-6">
+        <div class="">
             <div class="grid md:grid-cols-3 gap-6">
-
-
                 @foreach($topRatedStudents as $review)
-
-
-                <div class="
-                        bg-white
-                        rounded-3xl
-                        p-6
-                        shadow-xl
-                        hover:-translate-y-3
-                        transition
-                        duration-500
-                        ">
-
-
+                <div class=" bg-white rounded-3xl p-6 shadow-xl hover:-translate-y-3 transition duration-500">
                     <div class="flex items-center gap-4">
-
-
                         @if($review->user->profile_photo)
-
                         <img
                             src="{{asset('storage/'.$review->user->profile_photo)}}"
-                            class="
-                                w-14
-                                h-14
-                                rounded-full
-                                object-cover
-                                ">
-
-
+                            class="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover">
                         @else
-
-                        <div class="
-                                w-14
-                                h-14
-                                rounded-full
-                                bg-blue-600
-                                text-white
-                                flex
-                                items-center
-                                justify-center
-                                font-bold
-                                ">
-
+                        <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
                             {{substr($review->user->name,0,1)}}
-
                         </div>
 
                         @endif
-
-
-
                         <div>
-
                             <h3 class="font-bold text-gray-800">
-
                                 {{$review->user->name}}
-
                             </h3>
-
-
                             <div class="text-yellow-400">
-
                                 {{str_repeat('★',$review->rating)}}
-
                             </div>
-                            <div class="text-slate-400">
-
+                            <div class="text-slate-400 md:text-md text-xs">
                                 Created_at : {{$review->created_at}}
-
                             </div>
 
 
@@ -463,9 +410,5 @@
 
 
 </div>
-
-
-
-
 
 @endsection

@@ -76,20 +76,20 @@
 
             <!-- Topbar -->
             <header
-                class="h-20 bg-white shadow-sm dark:bg-slate-900
+                class="h-14 md:h-20 bg-white shadow-sm dark:bg-slate-900
                         flex items-center justify-between
                         px-6 sticky top-0 z-30">
 
                 <div class="flex items-center gap-4">
 
                     <button id="openSidebar"
-                        class="lg:hidden text-3xl">
+                        class="lg:hidden text-xl md:text-3xl">
 
                         ☰
 
                     </button>
                     <div class="">
-                        <h1 class="text-slate-700 dark:text-white text-2xl font-extrabold">
+                        <h1 class="text-slate-700 dark:text-white text-lg md:text-2xl font-extrabold">
                             Settings
                         </h1>
                         <p class="text-slate-500 text-sm dark:text-white ">Edit Profile and Password</p>
@@ -97,38 +97,19 @@
                 </div>
 
                 <div class="flex items-center gap-5">
-
-                    <button class="relative">
-
-                        <i class="ri-notification-2-line text-lg"></i>
-
-                        <span
-                            class="absolute -top-2 -right-2
-            bg-red-500 text-white
-            text-[10px]
-            px-1.5 rounded-full">
-
-                            3
-
-                        </span>
-
-                    </button>
-
                     <div class="relative">
 
                         <button id="profileBtn"
                             class="flex items-center gap-3">
 
                             <img
-                                src="{{ asset('uploads/group/man-suit-with-shirt-that-says-word-it_833755-19054.avif') }}"
+                                src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}"
                                 class="w-10 h-10 rounded-full">
 
                         </button>
 
                         <div id="profileMenu"
-                            class="hidden absolute right-0 mt-3
-            w-52 bg-white rounded-2xl
-            shadow-xl overflow-hidden">
+                            class="hidden absolute right-0 mt-3  w-52 bg-white rounded-2xl shadow-xl overflow-hidden">
 
                             <a href="#"
                                 class="block px-4 py-3 hover:bg-gray-100">
@@ -150,7 +131,7 @@
                 </div>
 
             </header>
-            <main class="flex-1 p-12 min-h-screen overflow-y-auto bg-gradient-to-r from-sky-100 via-white to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-slate-900">
+            <main class="flex-1 p-4 md:p-12 min-h-screen overflow-y-auto bg-gradient-to-r from-sky-100 via-white to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-slate-900">
 
 
                 <!-- Language Section -->
@@ -158,7 +139,7 @@
                 <section class="space-y-6">
 
 
-                    <div class="grid md:grid-cols-2 gap-8 grid-cols-1">
+                    <div class="grid md:grid-cols-2 gap-3 md:gap-8 grid-cols-1">
                         <!-- Card -->
                         <div class="w-full max-w-xl bg-white/40 dark:bg-slate-800 rounded-3xl shadow-md p-6 sm:p-10 animate-[fadeIn_0.6s_ease-out]">
                             <!-- Header -->
@@ -180,8 +161,8 @@
                                 </div>
 
 
-                                <h2 class="text-2xl sm:text-3xl font-bold dark:text-white">
-                                    Edit Profile
+                                <h2 class="md:text-2xl text-lg font-bold dark:text-white">
+                                    Edit Name and Email
                                 </h2>
                                 <p class="text-gray-700 dark:text-white mt-2 text-sm">
                                     Update your personal information securely
@@ -258,7 +239,7 @@
                                     class="w-full relative overflow-hidden rounded-2xl py-4 font-semibold text-white bg-blue-700 shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-purple-500/30 active:scale-95
                                         ">
                                     <span class="relative z-10">
-                                        Update Profile
+                                        Update
                                     </span>
                                 </button>
                             </form>
@@ -268,7 +249,7 @@
                             <div class="min-h-screen rounded-3xl bg-white/20 dark:bg-slate-800 flex items-center justify-center px-4">
                                 <div class="w-full max-w-md">
                                     <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
-                                        <h2 class="text-3xl font-bold dark:text-white text-center mb-8">
+                                        <h2 class="text-lg md:text-3xl font-bold dark:text-white text-center mb-8">
                                             Change Password
                                         </h2>
                                         <form method="POST"
@@ -353,24 +334,24 @@
                     </script>
                     @endif
 
-                    <div class="bg-white/80 dark:bg-slate-100/8 dark:border-slate-700  rounded-3xl shadow-xl p-8 border border-gray-100 transition hover:shadow-2xl ">
-                        <div class="flex items-center justify-between gap-4 mb-6">
+                    <div class="bg-white/80 dark:bg-slate-100/8 dark:border-slate-700  rounded-3xl shadow-xl p-4 md:p-8 border border-gray-100 transition hover:shadow-2xl ">
+                        <div class="flex-col md:flex items-center justify-between gap-4 mb-6">
                             <div class="">
-                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-3xl">
+                                <div class="md:w-14 md:h-14 w-10 h-10 md:rounded-2xl rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-lg md:text-3xl">
                                     🌐
                                 </div>
                                 <div>
                                     <h2 data-en="Language"
-                                        data-mm="ဘာသာစကား" class="text-2xl font-bold dark:text-white">
+                                        data-mm="ဘာသာစကား" class="text-md md:text-2xl font-bold dark:text-white">
                                         Language
                                     </h2>
                                     <p data-en="Choose your platform language"
-                                        data-mm="ဘာသာစကားရွေးချယ်ပါ" class="text-gray-500 dark:text-white/70">
+                                        data-mm="ဘာသာစကားရွေးချယ်ပါ" class="text-gray-500 text-xs md:text-md dark:text-white/70">
                                         Choose your platform language
                                     </p>
                                 </div>
                             </div>
-                            <select onchange="setLanguage(this.value)" class="py-3 px-14 rounded-md bg-slate-200  border border-slate-300">
+                            <select onchange="setLanguage(this.value)" class="py-2 md:py-3 px-8 text-sm md:px-14 rounded-md bg-slate-200  border border-slate-300">
 
                                 <option value="en" class="text-slate-700 dark:text-white">
                                     English
@@ -392,16 +373,16 @@
                         <div class="bg-white/80 dark:bg-slate-100/8 dark:border-slate-700 rounded-3xl shadow-xl p-8 border border-gray-100 transition hover:shadow-2xl ">
                             <div class="flex justify-between gap-4 mb-6">
                                 <div class="">
-                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-3xl">
+                                    <div class="md:w-14 md:h-14 w-10 h-10 md:rounded-2xl rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-3xl">
                                         🎨
                                     </div>
                                     <div>
                                         <h2 data-en="Theme"
-                                            data-mm="အသွင်အပြင်" class="text-xl font-bold dark:text-white">
+                                            data-mm="အသွင်အပြင်" class="md:text-2xl text-sm font-bold dark:text-white">
                                             Theme
                                         </h2>
                                         <p data-en="Customize your learning experience"
-                                            data-mm="သင်ကြိုက်နှစ်သက်ရာ အသွင်ပြင်ရွေးပါ" class="text-gray-500 mt-1 dark:text-white">
+                                            data-mm="သင်ကြိုက်နှစ်သက်ရာ အသွင်ပြင်ရွေးပါ" class="text-xs md:text-md text-gray-500 mt-1 dark:text-white">
                                             Customize your learning experience
                                         </p>
                                     </div>

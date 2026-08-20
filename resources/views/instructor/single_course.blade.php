@@ -6,7 +6,7 @@
 <div
     class="relative overflow-hidden rounded-[32px] bg-white-80 border border-slate-200 shadow-lg">
     <div
-        class="relative p-8 lg:p-10">
+        class="relative p-4 md:p-8 lg:p-10">
 
         <div
             class="grid lg:grid-cols-3 gap-8 items-center">
@@ -45,6 +45,13 @@
 
                         </span>
 
+                        @elseif($course->status=='completed')
+                        <span
+                            class="px-4 py-2 rounded-full bg-slate-500 text-white font-semibold shadow-lg">
+
+                            ✅ Completed
+
+                        </span>
                         @else
 
                         <span
@@ -65,17 +72,12 @@
             <!-- Course Details -->
 
             <div class="lg:col-span-2 text-white">
-
                 <div
                     class="flex flex-wrap gap-3 mb-5">
-
                     <span
                         class="px-4 py-2 rounded-full bg-sky-100 text-blue-700 text-sm">
-
                         {{ $course->category }}
-
                     </span>
-
                     <span
                         class="px-4 py-2 rounded-full bg-cyan-500 text-sm">
 
@@ -169,7 +171,7 @@
                 <!-- Statistics -->
 
                 <div
-                    class="grid grid-cols-2 md:grid-cols-3 gap-5 mt-10">
+                    class="grid grid-cols-2 md:grid-cols-3 gap-5 mt-4 md:mt-10">
                     <div
                         class="rounded-2xl bg-blue-100/50 backdrop-blur p-5">
                         <p class="text-slate-600 text-sm font-semibold">
@@ -206,7 +208,7 @@
 </div>
 
 
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mt-10">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mt-5 sm:px-3 md:mt-10">
 
     <!-- Total Learners -->
     <div
@@ -316,7 +318,7 @@
     </div>
 </div>
 
-<div class="mt-10">
+<div class="mt-5 sm:px-3 md:mt-10">
 
     <label class="text-slate-700 text-xl font-bold">
 
@@ -335,7 +337,7 @@
 
 
 
-<div class="mt-10">
+<div class="mt-5 sm:px-3 md:mt-10">
 
     <div class="bg-white rounded-[32px] shadow-xl border border-gray-100 overflow-hidden">
 

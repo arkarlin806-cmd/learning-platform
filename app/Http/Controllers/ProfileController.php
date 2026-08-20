@@ -73,7 +73,7 @@ class ProfileController extends Controller
                 'user',
                 'enrolledCourses',
                 'completedCourses',
-                // 'certificates',
+                'certificates',
                 'Courses',
                 'scheduleCount',
                 'streak',

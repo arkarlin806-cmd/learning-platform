@@ -11,7 +11,7 @@
     <div class="flex justify-between mb-6">
 
 
-        <h1 class="text-3xl ">
+        <h1 class="text-md md:text-3xl ">
             <span class="font-bold">
                 Certificate</span>
             @if(auth()->user()->role != 2)
@@ -24,7 +24,7 @@
         @if(auth()->user()->role != 2)
         <a
             href="{{ route('instructor.certificates.pdf',$certificate->id) }}"
-            class="px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold ">
+            class="md:px-6 md:py-3 md:text-md text-xs px-3 py-1 rounded-xl bg-indigo-600 text-white font-semibold ">
             Download PDF
         </a>
         @endif
@@ -52,13 +52,13 @@
 
         {{-- Watermark --}}
         @if($certificate->frame->watermark)
-        <div class="absolute top-50 left-90 z-10 overflow-hidden">
+        <div class="absolute md:top-50 md:left-90 top-40 left-100 z-10 overflow-hidden">
             <img
                 src="{{ route('instructor.certificate.file', [
             'certificate' => $certificate->id,
             'type' => 'watermark'
         ]) }}"
-                class="w-100 h-100 object-contain opacity-10">
+                class="w-80 h-80 md:w-100 md:h-100 object-contain opacity-10">
         </div>
         @endif
 
@@ -67,14 +67,14 @@
 
         <div
             class="relative z-20 text-center pt-42 ">
-            <h1 class="text-4xl font-bold" style="color:{{ $certificate->frame->primary_color }}">
+            <h1 class="text-lg md:text-4xl font-bold" style="color:{{ $certificate->frame->primary_color }}">
                 Certificate Of Completion
             </h1>
-            <p class="text-xl font-serif font-semibold mt-4">AI Power Learing Platform</p>
-            <h2 class="text-5xl mt-8 font-serif" style="color:{{ $certificate->frame->secondary_color }}">
+            <p class="text-sm md:text-xl font-serif font-semibold mt-4">AI Power Learing Platform</p>
+            <h2 class="text-md md:text-5xl mt-8 font-serif" style="color:{{ $certificate->frame->secondary_color }}">
                 {{ $certificate->user->name }}
             </h2>
-            <p class=" mt-6 text-md text-slate-800">
+            <p class=" mt-6 text-xs md:text-md text-slate-800">
                 has successfully completed
             </p>
 
@@ -107,7 +107,7 @@
             'certificate' => $certificate->id,
             'type' => 'qr'
         ]) }}"
-            class="absolute bottom-30 right-30 w-18 z-40 ">
+            class="absolute md:bottom-30 md:right-30 md:w-18 w-8 bottom-8 right-8 z-40 ">
         @endif
 
         {{-- Signature --}}
@@ -118,7 +118,7 @@
             'certificate' => $certificate->id,
             'type' => 'signature'
         ]) }}"
-            class="absolute bottom-48 left-40 w-32 z-10 ">
+            class="absolute md:bottom-48 md:left-40 md:w-32 bottom-12 left-12 w-10 z-10 ">
 
         @endif
 
@@ -129,9 +129,9 @@
             'certificate' => $certificate->id,
             'type' => 'logo'
         ]) }}"
-            class="absolute top-24 left-24 w-26 z-10 ">
+            class="absolute md:top-24 md:left-24 md:w-26 top-8 right-8 w-8 z-10 ">
         @endif
-        <div class="absolute text-sm bottom-30 left-30 z-10 text-slate-600">
+        <div class="absolute text-sm md:bottom-30 md:left-30 bottom-7 left-7 z-10 text-slate-600">
             Instrucor :
             <span class="font-semibold">
                 {{ $certificate->instructor->name }}

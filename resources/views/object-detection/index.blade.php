@@ -41,7 +41,7 @@
             <section id="object_detection">
 
                 <header class="mb-4">
-                    <h1 class="text-3xl font-bold mb-2">Object <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                    <h1 class="text-xl md:text-3xl font-bold mb-2">Object <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                             Detection
                         </span></h1>
                     <div class="text-slate-500">
@@ -50,8 +50,6 @@
                 </header>
                 <!-- explain -->
                 <div class="my-8">
-
-
                     <!-- GRID -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -235,7 +233,7 @@
 
             <section id="color">
 
-                <h1 class="text-3xl font-bold">
+                <h1 class="text-xl md:text-3xl font-bold">
                     Image
                     <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                         Colorization
@@ -361,7 +359,7 @@
 
             <section id="negative" class="my-8">
                 <div class="mt-10 bg-white rounded-3xl shadow-xl p-8">
-                    <h2 class="text-3xl font-bold mb-5">
+                    <h2 class="text-xl md:text-3xl font-bold mb-5">
                         Negative Transformation Explanation
                     </h2>
                     <div class="space-y-4">
@@ -399,7 +397,7 @@
 
             <section id="log" class="">
                 <div class="bg-white rounded-3xl shadow-xl p-8 mt-10">
-                    <h2 class="text-3xl font-bold mb-5">
+                    <h2 class="text-xl md:text-3xl font-bold mb-5">
                         Log Transformation Explanation
                     </h2>
                     <div class="space-y-4">
@@ -443,7 +441,7 @@
 
             <section id="power-law" class="my-">
                 <div class="bg-white rounded-3xl shadow-xl p-8 mt-10">
-                    <h2 class="text-3xl font-bold mb-5">
+                    <h2 class="text-xl md:text-3xl font-bold mb-5">
                         Power Law Transformation Explanation
                     </h2>
                     <div class="space-y-4 text-gray-700">
@@ -514,7 +512,7 @@
 
             <section id="histogram" class="">
                 <div class="bg-white rounded-3xl shadow-xl p-10 mt-10">
-                    <h2 class="text-3xl font-bold mb-6">
+                    <h2 class="text-xl md:text-3xl font-bold mb-6">
                         Histogram Equalization Theory
                     </h2>
                     <div class="space-y-5 text-gray-700 leading-8">
@@ -589,37 +587,21 @@
                     <div class="bg-white/60 backdrop-blur-xl border border-white rounded-3xl shadow-2xl p-10">
                         <!-- Title -->
                         <div class="text-center mb-10">
-                            <h2 class="text-3xl font-black text-purple-700">
+                            <h2 class="text-xl md:text-3xl font-black text-purple-700">
                                 AI Image Restoration
                             </h2>
                             <p class="mt-4 text-gray-600 text-lg">
                                 Restore damaged old photos using Computer Vision techniques
                             </p>
                         </div>
-
-
-
-
-
                         <!-- Process Flow -->
-
-
                         <div class="grid md:grid-cols-5 gap-5 items-center mb-12">
-
-
-
                             <div class="bg-purple-100 rounded-2xl p-6 text-center">
-
-
                                 <div class="text-4xl mb-3">
                                     📷
                                 </div>
-
-
                                 <h3 class="font-bold">
-
                                     Input Image
-
                                 </h3>
 
 
@@ -727,25 +709,11 @@
 
                         </div>
 
-
-
-
-
-
                         <!-- Algorithm Cards -->
-
-
-                        <div class="grid md:grid-cols-3 gap-8">
-
-
-
-                            <div class="rounded-3xl bg-purple-50 p-8">
-
-
-                                <h3 class="text-2xl font-bold text-purple-700">
-
+                        <div class="grid md:grid-cols-3 gap-3 md:gap-8">
+                            <div class="rounded-3xl bg-purple-50 p-3 md:p-8">
+                                <h3 class="text-md md:text-2xl font-bold text-purple-700">
                                     1. Noise Reduction
-
                                 </h3>
 
 
@@ -885,161 +853,63 @@
 
                         </div>
 
-
-
-
-
-
                         <!-- Formula -->
-
-
                         <div class="mt-12 bg-gray-900 text-white rounded-3xl p-10">
-
-
-                            <h3 class="text-3xl font-black mb-6">
-
+                            <h3 class="text-md md:text-3xl font-black mb-6">
                                 Image Enhancement Formula
-
                             </h3>
-
-
 
                             <div class="grid md:grid-cols-2 gap-8">
-
-
-
                                 <div>
-
-
                                     <p class="text-gray-300">
-
                                         Sharpening Operation:
-
                                     </p>
-
-
-                                    <p class="text-3xl font-bold mt-3">
-
+                                    <p class="md:text-2xl tex-sm font-bold mt-3">
                                         g(x,y)=K*f(x,y)
-
                                     </p>
-
-
                                 </div>
-
-
-
 
                                 <div>
-
-
                                     <p class="text-gray-300">
-
                                         Contrast Enhancement:
-
                                     </p>
-
-
-                                    <p class="text-3xl font-bold mt-3">
-
+                                    <p class="md:text-2xl tex-sm font-bold mt-3">
                                         CLAHE(I)
-
                                     </p>
-
-
                                 </div>
-
-
-
                             </div>
-
-
                         </div>
-
-
-
-
-
-
 
                         <!-- Applications -->
-
-
                         <div class="mt-12">
-
-
-                            <h3 class="text-3xl font-black mb-8">
-
+                            <h3 class="text-md md:text-3xl font-black mb-8">
                                 Real World Applications
-
                             </h3>
-
-
-
                             <div class="grid md:grid-cols-4 gap-5">
-
-
-
                                 <div class="p-6 bg-white rounded-2xl shadow">
-
                                     👵
-
                                     <br>
-
                                     Old Family Photos
-
                                 </div>
-
-
-
                                 <div class="p-6 bg-white rounded-2xl shadow">
-
                                     🏥
-
                                     <br>
-
                                     Medical Image Enhancement
-
                                 </div>
-
-
-
                                 <div class="p-6 bg-white rounded-2xl shadow">
-
                                     🕵️
-
                                     <br>
-
                                     Forensic Images
-
                                 </div>
-
-
-
                                 <div class="p-6 bg-white rounded-2xl shadow">
-
                                     🏛️
-
                                     <br>
-
                                     Historical Documents
-
                                 </div>
-
-
-
                             </div>
-
-
                         </div>
 
-
-
-
-
                     </div>
-
-
                 </div>
 
             </section>

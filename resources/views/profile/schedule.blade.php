@@ -19,7 +19,7 @@ $weekDays = [
 
 <div class="mb-8">
 
-    <h1 class="text-4xl font-bold text-slate-800">
+    <h1 class="text-xl md:text-4xl font-bold text-slate-800">
         <span class="text-slate-800 dark:text-white">My Learning</span> <span class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
             Schedule
         </span>

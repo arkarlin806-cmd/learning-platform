@@ -36,7 +36,7 @@
     <div class="flex justify-between gap-2">
 
         <!-- left site -->
-        <div id="content" class="overflow-y-auto h-screen space-y-16 ml-14 pr-8 pt-4 pb-40 w-full">
+        <div id="content" class="overflow-y-auto h-screen space-y-16 ml-3 md:ml-14 pr-3 md:pr-8 pt-4 pb-20 md:pb-40 w-full">
 
             @php
 
@@ -774,13 +774,13 @@
 
             <section class="py-10 px-10 bg-white/80 rounded-4xl shadow-xl" id="{{ $phase['id'] }}">
 
-                <h1 class="text-3xl font-bold mb-6 text-blue-700">
+                <h1 class="text-xl md:text-3xl font-bold mb-6 text-blue-700">
                     {{ $phase['title'] }}
                 </h1>
 
                 @foreach($phase['parts'] as $part)
 
-                <h2 class="text-2xl font-semibold mb-5">
+                <h2 class="text-lg md:text-2xl font-semibold mb-5">
                     {{ $part['title'] }}
                 </h2>
 
@@ -788,7 +788,7 @@
 
                 <div class="bg-white rounded-2xl shadow p-6 mb-6">
 
-                    <h3 class="text-xl font-bold mb-4">
+                    <h3 class="text-md md:text-xl font-bold mb-4">
                         {{ $item['title'] }}
                     </h3>
 
@@ -798,16 +798,16 @@
                         @endforeach
                     </ul>
 
-                    <div class="bg-gray-900 text-white rounded-xl p-5 relative">
+                    <div class="bg-gray-900 text-white rounded-xl p-5 relative overflow-x-auto overflow-y-auto">
 
                         <button
                             class="absolute right-3 top-3 bg-blue-500 px-3 py-1 rounded text-xs">
                             Copy
                         </button>
 
-                        <p class="text-gray-400 mb-2">SQL Example</p>
+                        <p class="text-gray-400 mb-2 text-xs md:text-md">SQL Example</p>
 
-                        <pre>{{ $item['example'] }}</pre>
+                        <pre class="overflow-x-auto">{{ $item['example'] }}</pre>
 
                     </div>
 

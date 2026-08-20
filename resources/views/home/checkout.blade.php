@@ -242,9 +242,8 @@
                                 id="image"
                                 name="payment_screenshot"
                                 accept="image/*"
-                                class="p-4 rounded-2xl ml-3 border border-dashed border-indigo-300
-                    bg-white hover:bg-indigo-50 transition
-                    hover:scale-[1.02] duration-300">
+                                class="p-4 rounded-2xl ml-3 border border-dashed border-indigo-300 md:max-w-md max-w-sm
+                                        bg-white hover:bg-indigo-50 transition hover:scale-[1.02] duration-300">
 
                             <img
                                 id="preview"
@@ -258,7 +257,7 @@
                             class="bg-pink-300 rounded-3xl p-6">
 
                             <div
-                                class="flex justify-between text-lg">
+                                class="flex justify-between text-sm md:text-lg">
 
                                 <span data-en="Course Price" data-mm="ကုန်ကျငွေ">
                                     Course Price
@@ -271,7 +270,7 @@
                             </div>
 
                             <div
-                                class="border-t mt-4 pt-4 flex justify-between font-bold text-xl">
+                                class="border-t mt-4 pt-4 flex justify-between font-bold text-sm md:text-lg">
 
                                 <span data-en="Total" data-mm="စုစုပေါင်း">Total</span>
 

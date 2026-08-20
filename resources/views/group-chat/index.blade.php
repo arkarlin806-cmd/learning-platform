@@ -478,7 +478,7 @@
                 <div class="flex items-center gap-4">
 
                     <button id="openSidebar"
-                        class="lg:hidden text-3xl">
+                        class="lg:hidden text-xl md:text-3xl">
 
                         ☰
 
@@ -502,7 +502,7 @@
                 <section class="">
                     <div class="chat-area h-[695px]">
 
-                        <div class="messages pl-16 pr-4 pt-2" id="messagesBox">
+                        <div class="messages pl-3 md:pl-16 pr-4 pt-2" id="messagesBox">
                             @forelse($messages as $message)
                             @php
                             $currentUserId = request()->query('user_id', auth()->id());

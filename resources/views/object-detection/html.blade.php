@@ -783,14 +783,14 @@
                                                                     <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-7">
                                                                         <div class="flex items-center justify-between">
                                                                             <div>
-                                                                                <h2 class="text-3xl  font-black text-white">
+                                                                                <h2 class="text-xl md:text-3xl  font-black text-white">
                                                                                     {{ $section['title'] }}
                                                                                 </h2>
-                                                                                <p class="text-blue-100 mt-2">
+                                                                                <p class="text-blue-100 mt-2 md:text-md text-xs">
                                                                                     Learn · Practice · Live Preview
                                                                                 </p>
                                                                             </div>
-                                                                            <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-3xl">
+                                                                            <div class="w-8 h-8 md:w-16 md:h-16 rounded-lg md:rounded-2xl bg-white/20 flex items-center justify-center text-lg md:text-3xl">
                                                                                 💻
                                                                             </div>
                                                                         </div>
@@ -800,14 +800,14 @@
 
                                                                         <!-- LEFT -->
 
-                                                                        <div class="p-8">
+                                                                        <div class="p-2 md:p-8">
                                                                             <h3 class="font-bold text-xl">
                                                                                 Explanation
                                                                             </h3>
                                                                             <p class="mt-4 text-slate-600 leading-8">
                                                                                 {{ $section['description'] }}
                                                                             </p>
-                                                                            <div class="space-y-4 mt-8">
+                                                                            <div class="space-y-1 md:space-y-4 mt-8">
 
                                                                                 @foreach($section['points'] as $point)
                                                                                 <div class="rounded-2xl bg-slate-50 p-4 flex gap-3 items-center hover:bg-blue-50 duration-300">
@@ -842,34 +842,34 @@
 
                                                                                 <div class="flex flex-wrap gap-2">
 
-                                                                                    <button class="fontMinus px-3 py-2 rounded-lg bg-slate-700 text-white">
+                                                                                    <button class="fontMinus md:px-3 md:py-2 py-1 px-2 text-xs md:text-md rounded-lg bg-slate-700 text-white">
                                                                                         A-
                                                                                     </button>
 
-                                                                                    <button class="fontPlus px-3 py-2 rounded-lg bg-slate-700 text-white">
+                                                                                    <button class="fontPlus md:px-3 md:py-2 py-1 px-2 text-xs md:text-md rounded-lg bg-slate-700 text-white">
                                                                                         A+
                                                                                     </button>
 
-                                                                                    <button class="wrapBtn hidden px-3 py-2 rounded-lg bg-slate-700 text-white">
+                                                                                    <button class="wrapBtn hidden md:px-3 md:py-2 py-1 px-2 text-xs md:text-md rounded-lg bg-slate-700 text-white">
                                                                                         Wrap
                                                                                     </button>
-                                                                                    <button class="fullscreenBtn px-3 py-2 rounded-lg bg-indigo-600 text-white">
+                                                                                    <button class="fullscreenBtn md:px-3 md:py-2 py-1 px-2 text-xs md:text-md rounded-lg bg-indigo-600 text-white">
                                                                                         Fullscreen
                                                                                     </button>
 
-                                                                                    <button class="runBtn px-4 py-2 rounded-lg bg-green-600 text-white">
+                                                                                    <button class="runBtn md:px-3 md:py-2 py-1 px-2 text-xs md:text-md rounded-lg bg-green-600 text-white">
                                                                                         ▶ Run
                                                                                     </button>
 
-                                                                                    <button class="copyBtn px-4 py-2 rounded-lg bg-sky-600 text-white">
+                                                                                    <button class="copyBtn md:px-3 md:py-2 py-1 px-2 text-xs md:text-md rounded-lg bg-sky-600 text-white">
                                                                                         Copy
                                                                                     </button>
 
-                                                                                    <button class="resetBtn px-4 py-2 rounded-lg bg-amber-500 text-white">
+                                                                                    <button class="resetBtn md:px-3 md:py-2 py-1 px-2 text-xs md:text-md rounded-lg bg-amber-500 text-white">
                                                                                         Reset
                                                                                     </button>
 
-                                                                                    <button class="downloadBtn px-4 py-2 rounded-lg bg-purple-600 text-white">
+                                                                                    <button class="downloadBtn md:px-3 md:py-2 py-1 px-2 text-xs md:text-md rounded-lg bg-purple-600 text-white">
                                                                                         Download
                                                                                     </button>
 

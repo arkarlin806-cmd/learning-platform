@@ -62,7 +62,7 @@
                         @if($instructor->avatar)
                         <img
                             src="{{ asset('storage/'.$instructor->avatar) }}"
-                            class="w-full h-full object-cover rounded-full ring-4 ring-indigo-200 group-hover:ring-purple-400 transition">
+                            class="md:w-full md:h-full w-26 h-26 object-cover rounded-full ring-4 ring-indigo-200 group-hover:ring-purple-400 transition">
 
                         @else
                         <div
@@ -141,13 +141,13 @@
                     data-aos="zoom-in">
 
                     <h2 data-en="Become an Instructor"
-                        data-mm="ကြိုဆိုပါတယ်" class="text-3xl font-bold text-white">
+                        data-mm="ကြိုဆိုပါတယ်" class="text-2xl md:text-3xl font-bold text-white">
                         🚀 Become an Instructor
                     </h2>
 
                     <p data-en="Share Your Knowledge
                         With Thousands of Students."
-                        data-mm="မင်းရဲ့ အသိပညာတေကို သင်ကြားသူများစွာကို သင်ပေးပါ။" class="text-white/80 text-lg mt-6">
+                        data-mm="မင်းရဲ့ အသိပညာတေကို သင်ကြားသူများစွာကို သင်ပေးပါ။" class="text-white/80 text-md md:text-lg mt-6">
                         Share Your Knowledge
                         With Thousands of Students.
                     </p>

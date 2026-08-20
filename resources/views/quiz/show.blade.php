@@ -3,75 +3,76 @@
 @section('page','Assignment show and submit.')
 
 @section('content')
+<div class="max-w-7xl mx-auto px-6">
 
-<div class=" bg-white/70 border border-white/40 shadow-xl shadow-pink-100 rounded-3xl p-6 mb-8 animate-fade-in">
+    <div class=" bg-white/70 border border-white/40 shadow-xl shadow-pink-100 rounded-3xl p-6 mb-8 animate-fade-in">
 
-    <h1 class="text-4xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">
-        {{ $quiz->title }}
-    </h1>
+        <h1 class="text-4xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">
+            {{ $quiz->title }}
+        </h1>
 
-    <div class="flex justify-between items-center my-3">
+        <div class="flex justify-between items-center my-3">
 
-        <div class="text-sm text-slate-500">
-            🧠 Questions:
-            <span class="font-bold text-slate-800">
-                {{ $quiz->questions->count() }}
-            </span>
+            <div class="text-sm text-slate-500">
+                🧠 Questions:
+                <span class="font-bold text-slate-800">
+                    {{ $quiz->questions->count() }}
+                </span>
+            </div>
+
+            @if(!$alreadyAnswered && $quiz->status != 'expired')
+            <div id="countdown"
+                class="px-5 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold shadow-lg">
+            </div>
+            @endif
+
         </div>
 
-        @if(!$alreadyAnswered && $quiz->status != 'expired')
-        <div id="countdown"
-            class="px-5 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold shadow-lg">
+        @if($quiz->status == 'expired')
+        <div class="mt-6 p-4 rounded-2xl bg-red-100 text-red-600 font-semibold">
+            ⛔ Quiz Expired
+        </div>
+        @endif
+
+        @if($alreadyAnswered)
+        <div class="mt-6 p-6 rounded-2xl bg-green-100/50 border border-green-300">
+            <h2 class="text-xl font-bold mb-2">🎯 Your Score</h2>
+            <div class="text-3xl font-black text-green-800">
+                {{ $score }} / {{ $quiz->questions->count() }}
+            </div>
         </div>
         @endif
 
     </div>
 
-    @if($quiz->status == 'expired')
-    <div class="mt-6 p-4 rounded-2xl bg-red-100 text-red-600 font-semibold">
-        ⛔ Quiz Expired
-    </div>
-    @endif
+    <form id="quizForm" class="space-y-6">
 
-    @if($alreadyAnswered)
-    <div class="mt-6 p-6 rounded-2xl bg-green-100/50 border border-green-300">
-        <h2 class="text-xl font-bold mb-2">🎯 Your Score</h2>
-        <div class="text-3xl font-black text-green-800">
-            {{ $score }} / {{ $quiz->questions->count() }}
-        </div>
-    </div>
-    @endif
+        @csrf
 
-</div>
+        @foreach($quiz->questions as $index => $question)
 
-<form id="quizForm" class="space-y-6">
+        @php
+        $studentAnswer = $answers[$question->id] ?? null;
+        @endphp
 
-    @csrf
+        <div class="group backdrop-blur-xl bg-white/50 border border-white rounded-3xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 animate-fade-in">
 
-    @foreach($quiz->questions as $index => $question)
+            <h3 class="text-lg font-bold my-2 text-slate-700">
+                {{ $index + 1 }}. {{ $question->question }}
+            </h3>
 
-    @php
-    $studentAnswer = $answers[$question->id] ?? null;
-    @endphp
+            <div class="grid gap-3">
 
-    <div class="group backdrop-blur-xl bg-white/50 border border-white rounded-3xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 animate-fade-in">
+                @foreach($question->options as $option)
 
-        <h3 class="text-lg font-bold my-2 text-slate-700">
-            {{ $index + 1 }}. {{ $question->question }}
-        </h3>
-
-        <div class="grid gap-3">
-
-            @foreach($question->options as $option)
-
-            @php
-            $isCorrect = $option->is_correct == 1;
-            $is = $option->option_text == $option->is_correct;
-            $isSelected = $studentAnswer && $studentAnswer->answer == $option->option_text;
-            @endphp
-            @if($question->type != "fill_blank")
-            <label
-                class="cursor-pointer flex items-center gap-3 p-4 rounded-2xl border  transition-all duration-300
+                @php
+                $isCorrect = $option->is_correct == 1;
+                $is = $option->option_text == $option->is_correct;
+                $isSelected = $studentAnswer && $studentAnswer->answer == $option->option_text;
+                @endphp
+                @if($question->type != "fill_blank")
+                <label
+                    class="cursor-pointer flex items-center gap-3 p-4 rounded-2xl border  transition-all duration-300
                                 hover:scale-[1.02] hover:shadow-md
                                 @if($alreadyAnswered)
                                     @if($isCorrect)
@@ -86,36 +87,36 @@
                                 @endif
                                 ">
 
-                <input
-                    type="radio" required
-                    name="answers[{{$question->id}}]"
-                    value="{{$option->option_text}}"
-                    class="w-5 h-5 accent-indigo-600"
-                    @if($isSelected) checked @endif
-                    @if($alreadyAnswered || $quiz->status=='expired') disabled @endif
-                >
-                <span class="font-semibold">
-                    {{ $option->option_text }}
-                </span>
-
-            </label>
-            @else
-            <!-- fill blank answer -->
-            @if($alreadyAnswered)
-            <div class="flex gap-6">
-                <label class="cursor-pointer flex items-center gap-3 p-4 rounded-2xl border border-pink-200 transition-all duration-300
-                                hover:scale-[1.02] hover:shadow-md">Your answer :
                     <input
-                        type="text"
+                        type="radio" required
                         name="answers[{{$question->id}}]"
-                        class="font-semibold"
-                        value="{{$studentAnswer->answer}}"
+                        value="{{$option->option_text}}"
+                        class="w-5 h-5 accent-indigo-600"
                         @if($isSelected) checked @endif
                         @if($alreadyAnswered || $quiz->status=='expired') disabled @endif
                     >
+                    <span class="font-semibold">
+                        {{ $option->option_text }}
+                    </span>
+
                 </label>
-                <label
-                    class="cursor-pointer flex items-center gap-3 px-4 py-3 rounded-2xl border border-blue-500 transition-all duration-300
+                @else
+                <!-- fill blank answer -->
+                @if($alreadyAnswered)
+                <div class="flex gap-6">
+                    <label class="cursor-pointer flex items-center gap-3 p-4 rounded-2xl border border-pink-200 transition-all duration-300
+                                hover:scale-[1.02] hover:shadow-md">Your answer :
+                        <input
+                            type="text"
+                            name="answers[{{$question->id}}]"
+                            class="font-semibold"
+                            value="{{$studentAnswer->answer}}"
+                            @if($isSelected) checked @endif
+                            @if($alreadyAnswered || $quiz->status=='expired') disabled @endif
+                        >
+                    </label>
+                    <label
+                        class="cursor-pointer flex items-center gap-3 px-4 py-3 rounded-2xl border border-blue-500 transition-all duration-300
                                     hover:scale-[1.02] hover:shadow-md
                                         @if($alreadyAnswered)
                                             @if($option->option_text == $studentAnswer->answer)
@@ -130,111 +131,112 @@
                                     ">
 
 
-                    <input
-                        type="text"
-                        name="answers[{{$question->id}}]"
-                        class="w-full accent-indigo-600 font-semibold"
-                        value="{{$option->option_text}}"
-                        @if($isSelected) checked @endif
-                        @if($alreadyAnswered || $quiz->status=='expired') disabled @endif
-                    >
+                        <input
+                            type="text"
+                            name="answers[{{$question->id}}]"
+                            class="w-full accent-indigo-600 font-semibold"
+                            value="{{$option->option_text}}"
+                            @if($isSelected) checked @endif
+                            @if($alreadyAnswered || $quiz->status=='expired') disabled @endif
+                        >
 
-                </label>
+                    </label>
+
+                </div>
+                <!-- fill blank not answer -->
+                @else
+                <input
+                    type="text" required
+                    name="answers[{{$question->id}}]"
+                    class="w-full accent-indigo-600 border border-pink-200 py-3 px-5 rounded-xl"
+                    @if($isSelected) checked @endif
+                    @if($alreadyAnswered || $quiz->status=='expired') disabled @endif
+                >
+                @endif
+                <!-- fill blank not answer -->
+                @endif
+
+                @endforeach
 
             </div>
-            <!-- fill blank not answer -->
-            @else
-            <input
-                type="text" required
-                name="answers[{{$question->id}}]"
-                class="w-full accent-indigo-600 border border-pink-200 py-3 px-5 rounded-xl"
-                @if($isSelected) checked @endif
-                @if($alreadyAnswered || $quiz->status=='expired') disabled @endif
-            >
-            @endif
-            <!-- fill blank not answer -->
-            @endif
-
-            @endforeach
 
         </div>
 
-    </div>
+        @endforeach
 
-    @endforeach
-
-    @if(auth()->user()->role == 2)
-    <div
-        onclick="showScores('{{ $quiz->id }}')"
-        class="mt-5 bottom-5 w-full py-4 rounded-3xl font-bold text-white flex justify-center
+        @if(auth()->user()->role == 2)
+        <div
+            onclick="showScores('{{ $quiz->id }}')"
+            class="mt-5 bottom-5 w-full py-4 rounded-3xl font-bold text-white flex justify-center
                     bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-500
                     shadow-xl hover:scale-[1.01] transition-all duration-300">
-        All Learner Score
-    </div>
-    @if($quiz->status == 'draft')
-    <div class="psticky bottom-5 w-full py-4 rounded-3xl font-bold text-white
+            All Learner Score
+        </div>
+        @if($quiz->status == 'draft')
+        <div class="psticky bottom-5 w-full py-4 rounded-3xl font-bold text-white
                     bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500
                     shadow-xl hover:scale-[1.01] transition-all duration-300 flex justify-center"><a href="{{ route('quiz.edit',$quiz->id) }}">Edit</a>
-    </div>
-    @endif
-    @else
-    @if(!$alreadyAnswered && $quiz->status != 'expired')
+        </div>
+        @endif
+        @else
+        @if(!$alreadyAnswered && $quiz->status != 'expired')
 
-    <button
-        id="submitBtn"
-        type="submit"
-        class="sticky bottom-5 w-full py-4 rounded-3xl font-bold text-white
+        <button
+            id="submitBtn"
+            type="submit"
+            class="sticky bottom-5 w-full py-4 rounded-3xl font-bold text-white
                     bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500
                     shadow-xl hover:scale-[1.01] transition-all duration-300">
-        🚀 Submit Quiz
-    </button>
+            🚀 Submit Quiz
+        </button>
 
-    @endif
-    @endif
+        @endif
+        @endif
 
-</form>
-<div id="scoreModal"
-    class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    </form>
+    <div id="scoreModal"
+        class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
 
-    <div class="bg-white w-11/12 md:w-3/5 rounded-xl shadow-xl">
+        <div class="bg-white w-11/12 md:w-3/5 rounded-xl shadow-xl">
 
-        <div class="flex justify-between p-5 border-b">
+            <div class="flex justify-between p-5 border-b">
 
-            <h2 class="text-xl font-bold">
-                Learner Scores
-            </h2>
+                <h2 class="text-xl font-bold">
+                    Learner Scores
+                </h2>
 
-            <button onclick="closeModal()">✕</button>
+                <button onclick="closeModal()">✕</button>
 
-        </div>
+            </div>
 
-        <div class="p-5 overflow-auto max-h-[70vh]">
+            <div class="p-5 overflow-auto max-h-[70vh]">
 
-            <table class="w-full">
+                <table class="w-full">
 
-                <thead>
+                    <thead>
 
-                    <tr>
-                        <th>Name</th>
-                        <th>Score</th>
-                        <th>%</th>
-                        <th>Status</th>
-                    </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Score</th>
+                            <th>%</th>
+                            <th>Status</th>
+                        </tr>
 
-                </thead>
+                    </thead>
 
-                <tbody id="scoreBody">
+                    <tbody id="scoreBody">
 
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
+
+            </div>
 
         </div>
 
     </div>
 
 </div>
-
 <script>
     let endTime = new Date("{{ $quiz->end_at }}").getTime();
 

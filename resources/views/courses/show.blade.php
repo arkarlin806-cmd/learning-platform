@@ -2,10 +2,10 @@
 
 @section('content')
 
-<div class="max-w-7xl mx-auto px-6">
+<div class="max-w-7xl mx-auto px-1 md:px-6">
 
     <section class="relative py-10">
-        <div class="max-w-7xl mx-auto px-6">
+        <div class="">
             {{-- HERO --}}
             <div class="grid lg:grid-cols-3 gap-10 items-start">
                 {{-- LEFT CONTENT --}}
@@ -213,17 +213,17 @@
                     <div class="bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-3xl p-6 shadow-md hover:-translate-y-2 transition duration-500">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                             <div>
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                                <h3 class="text-sm md:text-xl font-bold text-gray-900 dark:text-white">
                                     {{ $schedule->day ?? 'Lesson Schedule' }}
                                 </h3>
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex-col md:flex gap-2">
                                 <div
-                                    class="mt-4 md:mt-0 px-5 py-2 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
+                                    class="mt-4 md:mt-0 px-5 py-2 text-xs md:text-md rounded-lg md:rounded-full bg-indigo-100 text-indigo-700 font-semibold">
                                     Start Time : {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }}
                                 </div>
                                 <div
-                                    class="mt-4 md:mt-0 px-5 py-2 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
+                                    class="mt-4 md:mt-0 px-5 py-2 text-xs md:text-md rounded-full bg-indigo-100 text-indigo-700 font-semibold">
                                     End Time : {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i A') }}
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                 <div class="relative inline-block">
                     <img
                         src="https://ui-avatars.com/api/?name={{ $course->instructor->name }}"
-                        class="w-44 h-44 rounded-full object-cover ring-8 ring-indigo-100 shadow-xl hover:scale-105 transition">
+                        class="w-30 h-30 md:w-44 md:h-44 rounded-full object-cover ring-8 ring-indigo-100 shadow-xl hover:scale-105 transition">
                     <div
                         class="absolute bottom-2 right-2 bg-emerald-500 text-white rounded-full px-3 py-1 text-sm">
                         Verified
@@ -254,7 +254,7 @@
                 </div>
             </div>
             <div class="md:col-span-2">
-                <h3 class="text-3xl font-bold dark:text-white">
+                <h3 class="text-xl md:text-3xl font-bold dark:text-white">
                     {{ $course->instructor->name }}
                 </h3>
 
@@ -271,7 +271,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
                     <div class="p-4 rounded-2xl bg-indigo-50 border border-indigo-100">
                         <h4
-                            class="text-2xl font-bold text-indigo-600">
+                            class="text-lg md:text-2xl font-bold text-indigo-600">
                             {{ $courseCount ?? 0 }}
                         </h4>
                         <p class="text-gray-500 " data-en="Courses" data-mm="ဘာသာရပ်များ">
@@ -281,7 +281,7 @@
                     <div
                         class="p-4 rounded-2xl bg-pink-50 border border-pink-100">
                         <h4
-                            class="text-2xl font-bold text-pink-600 ">
+                            class="text-lg md:text-2xl font-bold text-pink-600 ">
                             {{ $course->ratings_count }}
                         </h4>
                         <p class="text-gray-500" data-en="Reviews" data-mm="ကြိုက်နှစ်သက်သူ">
@@ -305,165 +305,27 @@
 
 
                 </p>
-
-
-
-                {{-- Social Links --}}
-
-                <!-- <div class="flex gap-4 mt-6">
-
-
-                    <a href="#"
-                        class="
-w-12
-h-12
-
-rounded-full
-
-bg-gray-100
-
-flex
-
-items-center
-
-justify-center
-
-hover:bg-indigo-600
-
-hover:text-white
-
-transition">
-
-                        f
-
-                    </a>
-
-
-                    <a href="#"
-                        class="
-w-12
-h-12
-
-rounded-full
-
-bg-gray-100
-
-flex
-
-items-center
-
-justify-center
-
-hover:bg-pink-600
-
-hover:text-white
-
-transition">
-
-                        in
-
-                    </a>
-
-
-                    <a href="#"
-                        class="
-w-12
-h-12
-
-rounded-full
-
-bg-gray-100
-
-flex
-
-items-center
-
-justify-center
-
-hover:bg-black
-
-hover:text-white
-
-transition">
-
-                        X
-
-                    </a>
-
-
-                </div> -->
-
-
-
             </div>
-
-
-
         </div>
-
-
-
     </section>
 
     <section class="mt-20">
 
 
-        <div class="
-grid
-lg:grid-cols-3
-gap-10
-items-center">
-
-
+        <div class="grid lg:grid-cols-3 gap-10 items-center">
             {{-- Average Rating --}}
-
             <div
-                class="
-bg-white/80
-
-backdrop-blur-xl
-
-rounded-3xl
-
-p-10
-
-shadow-xl
-
-text-center">
-
-
+                class="bg-white/80 backdrop-blur-xl rounded-3xl p-10 shadow-xl text-center">
                 <h2
-                    class="
-text-6xl
-
-font-extrabold
-
-text-indigo-600">
-
-
+                    class="text-xl md:text-3xl font-extrabold text-indigo-600">
                     {{ number_format($course->ratings_avg_rating ?? 0,1) }}
-
-
                 </h2>
-
-
-
-                <div class="
-text-yellow-400
-
-text-3xl
-
-mt-3">
-
+                <div class="text-yellow-400 text-3xl mt-3">
                     ★★★★★
-
                 </div>
 
-
                 <p class="mt-3 text-gray-500">
-
                     Based on {{ $course->ratings_count }} reviews
-
                 </p>
 
 
@@ -476,30 +338,10 @@ mt-3">
             {{-- Rating Progress --}}
 
             <div
-                class="
-lg:col-span-2
-
-bg-white/80
-
-backdrop-blur-xl
-
-rounded-3xl
-
-p-8
-
-shadow-xl">
-
-
+                class="lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl">
                 <h3
-                    class="
-text-2xl
-
-font-bold
-
-mb-8" data-en="Rating Breakdown" data-mm="ကြိုက်နှစ်သက်မှု့">
-
+                    class="text-xl md:text-2xl font-bold mb-8" data-en="Rating Breakdown" data-mm="ကြိုက်နှစ်သက်မှု့">
                     Rating Breakdown
-
                 </h3>
 
 
@@ -516,89 +358,32 @@ mb-8" data-en="Rating Breakdown" data-mm="ကြိုက်နှစ်သက�
 
                 @endphp
 
-
-
                 @foreach($ratingData as $star=>$percent)
-
-
                 <div class="flex items-center gap-4 mb-5">
-
-
                     <span class="w-10 font-bold">
-
                         {{$star}}★
-
                     </span>
-
-
-
                     <div
-                        class="
-flex-1
-
-h-4
-
-bg-gray-200
-
-rounded-full
-
-overflow-hidden">
-
-
+                        class="flex-1 h-3 md:h-4 bg-gray-200 rounded-full overflow-hidden">
                         <div
-
-                            class="
-h-full
-
-bg-gradient-to-r
-
-from-yellow-400
-
-to-orange-400
-
-rounded-full
-
-rating-bar"
-
+                            class="h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full rating-bar"
                             style="width:0%"
                             data-width="{{$percent}}%">
-
-
                         </div>
-
-
                     </div>
-
-
                     <span class="w-12 text-gray-500">
-
                         {{$percent}}%
-
                     </span>
-
-
-
                 </div>
-
-
                 @endforeach
-
-
-
             </div>
-
-
-
         </div>
-
-
     </section>
 
-
-    <section class="mt-20">
+    <section class="mt-12">
         <div class="flex justify-between items-center mb-10">
             <h2
-                class="text-3xl md:text-2xl dark:text-white font-extrabold" data-en="Student Reviews" data-mm="သင်တန်းသားများ၏ ကြိုက်နှစ်သက်မှု့">
+                class="text-xl md:text-2xl dark:text-white font-extrabold" data-en="Student Reviews" data-mm="သင်တန်းသားများ၏ ကြိုက်နှစ်သက်မှု့">
                 Student Reviews
             </h2>
         </div>
@@ -627,37 +412,15 @@ rating-bar"
             @empty
 
 
-            <div class="
-col-span-full
-
-text-center
-
-py-10
-
-text-gray-500">
-
-
+            <div class="col-span-full text-center py-10 text-gray-500">
                 No reviews yet
-
-
             </div>
-
-
             @endforelse
-
-
-
-
         </div>
-
-
     </section>
 
     {{-- SIMILAR COURSES --}}
-
     <section class="py-16">
-
-
         <h2
             class="text-xl md:text-2xl dark:text-white font-extrabold mb-10" data-en="Related Courses" data-mm="ဆက်စပ် ဘာသာရပ်များ">
             Related Courses

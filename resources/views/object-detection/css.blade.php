@@ -1378,14 +1378,14 @@
                                                         <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-7">
                                                             <div class="flex items-center justify-between">
                                                                 <div>
-                                                                    <h2 class="text-3xl  font-black text-white">
+                                                                    <h2 class="text-xl md:text-3xl  font-black text-white">
                                                                         {{ $section['title'] }}
                                                                     </h2>
-                                                                    <p class="text-blue-100 mt-2">
+                                                                    <p class="text-blue-100 mt-2 md:text-md text-xs">
                                                                         Learn · Practice · Live Preview
                                                                     </p>
                                                                 </div>
-                                                                <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-3xl">
+                                                                <div class="md:w-16 md:h-16 w-8 h-8 rounded-lg md:rounded-2xl bg-white/20 flex items-center justify-center text-lg md:text-3xl">
                                                                     💻
                                                                 </div>
                                                             </div>
@@ -1396,7 +1396,7 @@
                                                             <!-- LEFT -->
 
                                                             <div class="p-8">
-                                                                <h3 class="font-bold text-xl">
+                                                                <h3 class="font-bold text-md md:text-xl">
                                                                     Explanation
                                                                 </h3>
                                                                 <p class="mt-4 text-slate-600 leading-8">

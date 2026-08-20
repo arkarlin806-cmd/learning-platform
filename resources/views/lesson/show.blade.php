@@ -1,18 +1,17 @@
 @extends('layout.course_ins')
 
 @section("title","LESSON")
+@section("page","All lessons show video and AI summary.")
 
 @section('content')
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    {{-- =========================================================
-        HEADER
-    ========================================================== --}}
+    <!-- header  -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
 
         <div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-700">
+            <h1 class="text-3xl sm:text-xl font-extrabold text-slate-700">
                 All Lessons ({{ $course->title }})
             </h1>
 
@@ -42,9 +41,7 @@
     </div>
 
 
-    {{-- =========================================================
-        STATISTICS
-    ========================================================== --}}
+    <!-- staticts -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
 
         {{-- Total Lessons --}}
@@ -61,12 +58,12 @@
                         Total Lessons
                     </p>
 
-                    <h2 class="text-3xl font-black mt-2 text-yellow-600">
+                    <h2 class="text-lg md:text-3xl font-black mt-2 text-yellow-600">
                         {{ $totalLessons }}
                     </h2>
                 </div>
 
-                <div class="w-14 h-14 rounded-2xl
+                <div class="md:w-14 md:h-14 md:rounded-2xl w-10 h-10 rounded-lg
                             bg-gradient-to-r from-yellow-400 to-orange-400
                             flex items-center justify-center text-3xl">
 
@@ -103,13 +100,13 @@
                         Video Lessons
                     </p>
 
-                    <h2 class="text-3xl font-black mt-2 text-green-600">
+                    <h2 class="text-lg md:text-3xl font-black mt-2 text-green-600">
                         {{ $videoLessons ?? $lessons->where('lesson_type','video')->count() }}
                     </h2>
 
                 </div>
 
-                <div class="w-14 h-14 rounded-2xl
+                <div class="md:w-14 md:h-14 md:rounded-2xl w-10 h-10 rounded-lg
                             bg-gradient-to-r from-sky-500 to-green-500
                             flex items-center justify-center text-3xl">
 
@@ -153,13 +150,13 @@
                         PDF Lessons
                     </p>
 
-                    <h2 class="text-3xl font-black mt-2 text-red-600">
+                    <h2 class="text-lg md:text-3xl font-black mt-2 text-red-600">
                         {{ $pdfLessons ?? $lessons->where('lesson_type','pdf')->count() }}
                     </h2>
 
                 </div>
 
-                <div class="w-14 h-14 rounded-2xl
+                <div class="md:w-14 md:h-14 md:rounded-2xl w-10 h-10 rounded-lg
                             bg-gradient-to-r from-pink-500 to-red-500
                             flex items-center justify-center text-3xl">
 
@@ -190,9 +187,7 @@
     </div>
 
 
-    {{-- =========================================================
-        LESSON LIST
-    ========================================================== --}}
+    <!-- lesson list  -->
     <div class="mt-10">
 
         @if($lessons->count() > 0)
@@ -244,9 +239,7 @@
                                    hover:-translate-y-1
                                    hover:shadow-2xl">
 
-                    {{-- =================================================
-                                TOP SECTION
-                            ================================================== --}}
+                    <!-- top section  -->
                     <div class="flex items-start justify-between gap-4 p-5">
 
                         <div class="min-w-0">
@@ -269,12 +262,7 @@
                                 @elseif($lesson->lesson_type === 'pdf')
 
                                 <span
-                                    class="inline-flex items-center gap-1
-                                                       px-2.5 py-1
-                                                       rounded-full
-                                                       bg-red-50
-                                                       text-red-600
-                                                       text-xs font-bold">
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-50 text-red-600 text-xs font-bold">
                                     <i class="ri-file-pdf-2-line"></i>
                                     PDF
                                 </span>
@@ -284,18 +272,14 @@
                             </div>
 
                             <h2
-                                class="text-xl font-bold
-                                               text-slate-800
-                                               break-words">
+                                class="text-md md:text-xl font-bold  text-slate-800 break-words">
                                 {{ $lesson->title }}
                             </h2>
 
                         </div>
 
 
-                        {{-- =================================================
-                                    INSTRUCTOR ACTIONS
-                                ================================================== --}}
+                        <!-- instructor action -->
                         @if($isInstructor)
 
                         <div class="flex items-center gap-3 flex-shrink-0">
@@ -388,9 +372,7 @@
                     </div>
 
 
-                    {{-- =================================================
-                                MEDIA
-                            ================================================== --}}
+                    <!-- media -->
                     <div class="px-0">
 
                         @if($lesson->lesson_type === 'video')
@@ -401,9 +383,7 @@
                             controls
                             preload="metadata"
                             playsinline
-                            class="w-full h-52 lesson-video
-                                                   object-cover
-                                                   bg-black"
+                            class="w-full h-40 md:h-52 lesson-video object-cover bg-black"
                             data-lesson-id="{{ $lesson->id }}">
                             <source
                                 src="{{ $lesson->video_url }}"
@@ -417,41 +397,20 @@
                         @else
 
                         <div
-                            class="h-52 w-full
-                                                   bg-gradient-to-br
-                                                   from-red-50
-                                                   to-orange-50
-                                                   flex flex-col
-                                                   items-center
-                                                   justify-center">
-
+                            class="h-52 w-full bg-gradient-to-br from-red-50 to-orange-50 flex flex-col items-center justify-center">
                             <i
-                                class="ri-video-off-line
-                                                       text-5xl
-                                                       text-red-400"></i>
-
+                                class="ri-video-off-line text-5xl text-red-400"></i>
                             <p
-                                class="mt-3
-                                                       text-sm
-                                                       text-red-500
-                                                       font-semibold">
+                                class="mt-3 text-sm text-red-500 font-semibold">
                                 Video unavailable
                             </p>
-
                             <p
-                                class="text-xs
-                                                       text-slate-400
-                                                       mt-1">
+                                class="text-xs text-slate-400 mt-1">
                                 File could not be loaded from B2
                             </p>
-
                         </div>
-
                         @endif
-
-
                         @elseif($lesson->lesson_type === 'pdf')
-
                         <div
                             class="h-52 w-full
                                                bg-gradient-to-br

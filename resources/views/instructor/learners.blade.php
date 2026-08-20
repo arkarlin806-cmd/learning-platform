@@ -3,7 +3,7 @@
 @section("page","Single Course Learners Show and Monitor.")
 
 @section('content')
-<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
+<div class="flex flex-col sm:px-5 lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
     <div>
         <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-200/50 border border-sky-300 text-sky-800 text-sm font-semibold"> <i class="ri-bank-card-line"></i> Learner Management </span>
         <h1 class="mt-4 text-xl lg:text-3xl font-black text-gray-800">{{$course->title}} Learnes </h1>
@@ -35,10 +35,10 @@
                     placeholder="Search learner name..."
 
                     class="w-full
-                            rounded-2xl
+                            md:rounded-2xl rounded-xl
                             border-2 
                             bg-blue-100/50 border border-slate-300
-                            py-4
+                            md:py-4 py-2
                             pl-14
                             pr-5
                             outline-none
@@ -49,8 +49,8 @@
             </div>
 
             <button
-                class="px-8 py-4
-                        rounded-2xl
+                class="px-8 md:py-4 py-2
+                        md:rounded-2xl rounded-xl
                         text-white
                         font-bold
                         bg-blue-700
@@ -70,7 +70,7 @@
 
 
 
-<div class="mt-8">
+<div class="mt-8 sm:px-5">
 
     <div class="bg-white/80 backdrop-blur-xl rounded-[32px] border border-white shadow-2xl overflow-hidden">
 
@@ -78,7 +78,7 @@
         <div class="px-8 py-6 border-b border-slate-100">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-black text-slate-800">
+                    <h2 class="text-lg md:text-2xl font-black text-slate-800">
                         Course Learners
                     </h2>
                     <p class="text-slate-500 mt-1">
@@ -135,7 +135,7 @@
                             <div class="flex items-center gap-4">
                                 <img
                                     src="https://ui-avatars.com/api/?background=4f46e5&color=fff&size=200&name={{ urlencode($learner->user->name) }}"
-                                    class="w-12 h-12 rounded-2xl shadow-lg group-hover:scale-110 duration-300">
+                                    class="md:w-12 md:h-12 w-8 h-8 rounded-xl md:rounded-2xl shadow-lg group-hover:scale-110 duration-300">
                                 <div>
                                     <h3 class="font-bold text-slate-800">
                                         {{ $learner->user->name }}
@@ -260,9 +260,9 @@
                 <div class="flex items-center gap-4">
                     <img
                         src="https://ui-avatars.com/api/?background=4f46e5&color=fff&size=200&name={{ urlencode($learner->user->name) }}"
-                        class="w-16 h-16 rounded-2xl">
+                        class="w-10 h-10 rounded-xl">
                     <div class="flex-1">
-                        <h3 class="font-bold">
+                        <h3 class="font-bold text-sm">
                             {{ $learner->user->name }}
                         </h3>
                         <p class="text-sm text-slate-500">
@@ -275,18 +275,51 @@
                         <p class="text-xs text-slate-400">
                             Purchase
                         </p>
-                        <h4 class="font-semibold">
+                        <h4 class="font-semibold text-xs">
                             {{ $learner->created_at->format('d M Y') }}
                         </h4>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-400">
-                            Status
-                        </p>
+                        @if($learner->user->id == auth()->id())
+                        <a href="{{ route('instructor.learner.profile', [
+                                        'course' => $course,
+                                        'user' => $learner->user
+                                    ]) }}"
+                            class="inline-flex items-center gap-2 px-3 py-2.5 rounded-lg 
+                                bg-indigo-600 text-white font-semibold
+                                hover:bg-indigo-700 transition-all duration-300
+                                shadow-lg hover:shadow-indigo-200">
+
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="w-5 h-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+
+                            </svg>
+
+                            View
+
+                        </a>
+                        @else
                         <span
-                            class="inline-flex mt-1 px-3 py-1 rounded-full bg-green-100 text-green-600 text-sm">
+                            class="inline-flex items-center gap-2  px-4 py-2 rounded-full bg-emerald-100 text-emerald-600 font-semibold">
+                            <span
+                                class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse">
+                            </span>
                             Active
                         </span>
+                        @endif
                     </div>
                 </div>
             </div>

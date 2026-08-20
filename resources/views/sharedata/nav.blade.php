@@ -32,15 +32,15 @@
                 <!-- EnviroStruct Wave Logo SVG -->
                 <div class="flex items-center gap-3 cursor-pointer group">
 
-                    <div class="w-11 h-11 rounded-2xl bg-blue-600 flex items-center justify-center
+                    <div class="md:w-11 md:h-11 w-8 h-8 rounded-2xl bg-blue-600 flex items-center justify-center
                                 group-hover:rotate-12 transition duration-500">
 
-                        <i class="ri-graduation-cap-fill text-white text-2xl"></i>
+                        <i class="ri-graduation-cap-fill text-white text-lg md:text-2xl"></i>
 
                     </div>
 
                     <div>
-                        <h1 class="text-2xl font-black text-gray-800">
+                        <h1 class="text-lg md:text-2xl font-black text-gray-800">
                             LearnX
                         </h1>
 
@@ -139,7 +139,7 @@
             </div>
             <!-- MOBILE BUTTON -->
             <button id="menu-btn"
-                class="lg:hidden text-3xl text-gray-700">
+                class="lg:hidden text-xl md:text-3xl text-gray-700">
 
                 <i class="ri-menu-3-line"></i>
 

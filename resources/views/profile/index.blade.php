@@ -14,7 +14,7 @@
                 {{ strtoupper(substr($user->name, 0, 1)) }}
             </div>
             <div>
-                <h1 class="text-2xl md:text-4xl font-bold text-gray-800 dark:text-white">
+                <h1 class="text-lg md:text-2xl md:text-4xl font-bold text-gray-800 dark:text-white">
                     {{ $user->name }}
                 </h1>
                 <p class="text-gray-600 text-sm mt-1 dark:text-white/70">
@@ -28,11 +28,6 @@
             </div>
 
         </div>
-
-        <button class="px-6 py-3 rounded-2xl bg-white/60 backdrop-blur-xl border border-white/40 text-blue-600 font-semibold hover:scale-105 transition shadow-md">
-            Continue Learning
-        </button>
-
     </div>
 
 

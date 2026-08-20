@@ -487,14 +487,10 @@
             </div>
 
             <!-- Menu -->
-            <nav class="p-4 space-y-2">
+            <nav class="p-4 md:space-y-2">
 
                 <a href="{{ route('chat.index') }}"
-                    class="menu-item flex items-center gap-4
-                        px-4 py-3 rounded-2xl
-                        hover:bg-indigo-50
-                        hover:translate-x-2
-                        transition-all duration-300">
+                    class="menu-item flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-indigo-50 hover:translate-x-2 transition-all duration-300">
 
                     <i class="ri-bard-fill text-xl"></i>
                     <span class="menu-text">AI Chatbot</span>
@@ -505,7 +501,7 @@
 
                 <a href="{{ route('ai-images.img') }}"
                     class="menu-item flex items-center gap-4
-                        px-4 py-3 rounded-2xl
+                        px-4 py-1 md:py-3 rounded-2xl
                         hover:bg-indigo-50
                         hover:translate-x-2
                         transition-all duration-300">
@@ -517,7 +513,7 @@
                 <hr class="text-slate-300">
                 <a href="{{ route('object-detection') }}"
                     class="menu-item flex items-center gap-4
-                            px-4 py-3 rounded-2xl
+                            px-4 py-1 md:py-3 rounded-2xl
                             hover:bg-indigo-50
                             hover:translate-x-2
                             transition-all duration-300">
@@ -529,7 +525,7 @@
                 <hr class="text-slate-300">
                 <a href="{{ route('sql-editor') }}"
                     class="menu-item flex items-center gap-4
-                            px-4 py-3 rounded-2xl
+                            px-4 py-1 md:py-3 rounded-2xl
                             hover:bg-indigo-50
                             hover:translate-x-2
                             transition-all duration-300">
@@ -542,7 +538,7 @@
                 <hr class="text-slate-300">
                 <div onclick="toggleSidebarDropdown('courseMenu',this)"
                     class="menu-item flex items-center gap-4
-                px-4 py-2 rounded-2xl
+                px-4 py-1 md:py-3 rounded-2xl
                 hover:bg-indigo-50
                 hover:translate-x-2 flex justify-between
                 transition-all duration-300">
@@ -603,7 +599,7 @@
 
                 <a href="{{ route('comparison.index') }}"
                     class="menu-item flex items-center gap-4
-                            px-4 py-3 rounded-2xl
+                            px-4 py-1 md:py-3 rounded-2xl
                             hover:bg-indigo-50
                             hover:translate-x-2
                             transition-all duration-300 flex justify-between">

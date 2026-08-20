@@ -123,6 +123,40 @@
 
         </a>
         <hr class="text-indigo-200">
+        <a href="{{ route('notification') }}"
+            class="menu-item flex items-center gap-4 dark:text-white
+                px-4 py-3 rounded-2xl
+                hover:bg-indigo-100 hover:text-blue-800
+                hover:translate-x-2
+                transition-all duration-300">
+
+            <i class="ri-contacts-line text-lg"></i>
+            <span data-en="Notification"
+                data-mm="သတိပေးစာများ" class="menu-text">Notification</span>
+            @php
+            $unreadNotifications = auth()->user()
+            ->unreadNotifications;
+            @endphp
+            <span
+                id="notificationCount"
+                class="
+                       
+                        min-w-[18px]
+                        h-[18px]
+                        px-1
+                        rounded-full
+                        bg-red-500
+                        text-white
+                        text-[10px]
+                        font-bold
+                        flex
+                        items-center
+                        justify-center">
+                {{ $unreadNotifications->count() }}
+            </span>
+
+        </a>
+        <hr class="text-indigo-200">
 
 
         <a href="{{ route('settings.index') }}"

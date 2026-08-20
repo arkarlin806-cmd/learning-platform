@@ -41,6 +41,10 @@ class HomeController extends Controller
     {
         return view('comparison.index');
     }
+    public function notification()
+    {
+        return view('home.notification');
+    }
     public function create()    //instructro request form
     {
         return view('home.request');

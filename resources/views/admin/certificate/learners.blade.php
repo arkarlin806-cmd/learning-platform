@@ -1,10 +1,10 @@
 @extends('layout.admin')
 
-@section('title', 'Certificate Learners')
-
+@section('page_title','Certificate')
+@section('page','Admin show and analysis learner certificate.')
 @section('content')
 
-<div class="min-h-screen bg-[#f6f7fb] px-4 sm:px-6 lg:px-8 py-8">
+<div class="min-h-screen px-4 sm:px-6 lg:px-8 py-8">
 
     <div class="max-w-[1500px] mx-auto">
         <div class="relative overflow-hidden rounded-[30px] bg-slate-950 text-white p-7 sm:p-9 mb-7 shadow-xl">
@@ -159,9 +159,7 @@
 
 
 
-        {{-- ========================================================= --}}
-        {{-- FILTER AREA --}}
-        {{-- ========================================================= --}}
+        <!-- filter area  -->
 
         <div class="bg-white
                     rounded-[26px]
@@ -513,9 +511,7 @@
 
 
 
-        {{-- ========================================================= --}}
-        {{-- TABLE --}}
-        {{-- ========================================================= --}}
+        <!-- Table  -->
 
         <div class="bg-white
                     rounded-[26px]
@@ -584,10 +580,7 @@
 
 
 
-            {{-- ===================================================== --}}
-            {{-- TABLE --}}
-            {{-- ===================================================== --}}
-
+            <!-- Table  -->
             <div class="overflow-x-auto">
 
                 <table class="w-full min-w-[1000px]">
@@ -692,9 +685,7 @@
                                        duration-200">
 
 
-                            {{-- ================================================= --}}
-                            {{-- LEARNER --}}
-                            {{-- ================================================= --}}
+                            <!-- learner  -->
 
                             <td class="px-6 py-5">
 
@@ -707,14 +698,7 @@
                                     <div class="relative">
 
                                         <img
-                                            src="{{ $learner->avatar
-                                                    ? asset(
-                                                        'images/avatars/'
-                                                        . $learner->avatar
-                                                    )
-                                                    : asset(
-                                                        'images/avatars/avatar1.png'
-                                                    ) }}"
+                                            src="https://ui-avatars.com/api/?name={{ $learner->name }}"
                                             class="w-12 h-12
                                                        rounded-full
                                                        object-cover
@@ -763,39 +747,19 @@
                                 </div>
 
                             </td>
-
-
-
-                            {{-- ================================================= --}}
-                            {{-- COURSE --}}
-                            {{-- ================================================= --}}
-
+                            <!-- course -->
                             <td class="px-6 py-5">
 
-                                <p class="font-bold
-                                              text-slate-800
-                                              max-w-[240px]">
-
+                                <p class="font-bold text-slate-800 max-w-[240px]">
                                     {{ $learner->course_title }}
-
                                 </p>
 
-                                <p class="text-xs
-                                              text-slate-400
-                                              mt-1">
-
+                                <p class="text-xs text-slate-400 mt-1">
                                     Course completed
-
                                 </p>
-
                             </td>
 
-
-
-                            {{-- ================================================= --}}
-                            {{-- CATEGORY --}}
-                            {{-- ================================================= --}}
-
+                            <!-- category  -->
                             <td class="px-6 py-5">
 
                                 <span
@@ -814,11 +778,7 @@
 
                             </td>
 
-
-
-                            {{-- ================================================= --}}
-                            {{-- ORDER --}}
-                            {{-- ================================================= --}}
+                            <!-- order -->
 
                             <td class="px-6 py-5">
 
@@ -844,12 +804,7 @@
                                 </span>
 
                             </td>
-
-
-
-                            {{-- ================================================= --}}
-                            {{-- CERTIFICATE --}}
-                            {{-- ================================================= --}}
+                            <!-- certificate  -->
 
                             <td class="px-6 py-5">
 
@@ -935,13 +890,7 @@
                                 @endif
 
                             </td>
-
-
-
-                            {{-- ================================================= --}}
-                            {{-- ACTION --}}
-                            {{-- ================================================= --}}
-
+                            <!-- action -->
                             <td class="px-6 py-5 text-right">
 
 
@@ -1132,12 +1081,7 @@
                 </table>
 
             </div>
-
-
-
-            {{-- ========================================================= --}}
-            {{-- PAGINATION --}}
-            {{-- ========================================================= --}}
+            <!-- pagination  -->
 
             @if($learners->hasPages())
 
@@ -1159,11 +1103,6 @@
 
 </div>
 
-
-
-{{-- ============================================================= --}}
-{{-- PAGE ANIMATION --}}
-{{-- ============================================================= --}}
 
 <style>
     @keyframes pageEnter {

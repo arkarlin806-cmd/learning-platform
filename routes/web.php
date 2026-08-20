@@ -142,7 +142,8 @@ Route::middleware(['auth'])->group(function () {
     //profile edit
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
     Route::get('/settings/index', [HomeController::class, 'set_index'])->name('settings.index');
-
+    //notification
+    Route::get('/notification', [HomeController::class, 'notification'])->name('notification');
     // instructor and learner single course show
     Route::get('/instructor/single_course/{course}', [InstructorController::class, 'single_course'])->name('instructor.single_course');
     Route::get('/instructor/learners/{id}', [InstructorController::class, 'learners'])->name('instructor.learners');

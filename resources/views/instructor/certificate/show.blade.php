@@ -52,7 +52,7 @@
 
         {{-- Watermark --}}
         @if($certificate->frame->watermark)
-        <div class="absolute md:top-50 md:left-90 top-40 left-100 z-10 overflow-hidden">
+        <div class="absolute md:top-50 md:left-90 top-15 left-15 z-10 overflow-hidden">
             <img
                 src="{{ route('instructor.certificate.file', [
             'certificate' => $certificate->id,
@@ -66,7 +66,7 @@
         {{-- Content --}}
 
         <div
-            class="relative z-20 text-center pt-42 ">
+            class="relative z-20 text-center pt-10 ">
             <h1 class="text-lg md:text-4xl font-bold" style="color:{{ $certificate->frame->primary_color }}">
                 Certificate Of Completion
             </h1>
@@ -118,7 +118,7 @@
             'certificate' => $certificate->id,
             'type' => 'signature'
         ]) }}"
-            class="absolute md:bottom-48 md:left-40 md:w-32 bottom-12 left-12 w-10 z-10 ">
+            class="absolute md:bottom-48 md:left-40 md:w-32 bottom-20 left-12 w-14 z-10 ">
 
         @endif
 
@@ -129,9 +129,9 @@
             'certificate' => $certificate->id,
             'type' => 'logo'
         ]) }}"
-            class="absolute md:top-24 md:left-24 md:w-26 top-8 right-8 w-8 z-10 ">
+            class="absolute md:top-24 md:left-24 md:w-26 top-8 left-8 w-8 z-10 ">
         @endif
-        <div class="absolute text-sm md:bottom-30 md:left-30 bottom-7 left-7 z-10 text-slate-600">
+        <div class="absolute text-xs md:text-sm md:bottom-30 md:left-30 bottom-7 left-7 z-10 text-slate-600">
             Instrucor :
             <span class="font-semibold">
                 {{ $certificate->instructor->name }}
@@ -154,7 +154,7 @@
             'certificate' => $certificate->id,
             'type' => 'seal'
         ]) }}"
-            class="absolute bottom-20 right-122 w-34 z-50 ">
+            class="absolute md:bottom-20 md:right-122 md:w-34 bottom-10 right-32 w-10 z-50 ">
         @endif
         {{-- Border PNG --}}
         @if($certificate->frame->border_image)

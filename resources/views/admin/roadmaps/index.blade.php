@@ -1,6 +1,7 @@
 @extends('layout.admin')
 
 @section('page_title','Learning Roadmaps')
+@section('page','Admin analysis roadmaps and show.')
 
 @section('content')
 

@@ -206,7 +206,7 @@
 
                             <td class="px-6 py-5">
                                 <span class="inline-flex items-center rounded-2xl bg-emerald-50 border border-emerald-100 px-3 py-2 text-sm font-bold text-emerald-700">
-                                    ${{ number_format($order->instructor_amount, 2) }}
+                                    {{ number_format($order->instructor_amount, 2) }}
                                 </span>
                             </td>
 
@@ -429,7 +429,7 @@
 
                                     label: function(context) {
 
-                                        return '$' + Number(context.raw).toLocaleString();
+                                        return Number(context.raw).toLocaleString();
 
                                     }
 

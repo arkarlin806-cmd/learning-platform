@@ -282,7 +282,7 @@
                     </div>
 
                     <div class="flex justify-between px-6 pt-4">
-                        <h2 class="text-xl font-bold text-gray-700 mb-4">
+                        <h2 class="text-sm font-bold text-gray-700 mb-4">
                             {{ $course->title }}
                         </h2>
 

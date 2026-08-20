@@ -11,7 +11,7 @@
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
 
         <div>
-            <h1 class="text-3xl sm:text-xl font-extrabold text-slate-700">
+            <h1 class="md:text-3xl text-xl font-extrabold text-slate-700">
                 All Lessons ({{ $course->title }})
             </h1>
 

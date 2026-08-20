@@ -6,7 +6,7 @@ $side = [
 ['name' => 'Earnings', 'route' => 'instructor.earnings', 'icon' => 'ri-cash-line','mya' => 'ဝင်ငွေ' ],
 ['name' => 'Withdraw', 'route' => 'instructor.withdraw', 'icon' => 'ri-git-pull-request-line','mya' => 'ငွေထုပ်မှတ်တမ်း' ],
 ['name' => 'Contact', 'route' => 'contact.inbox', 'icon' => 'ri-contacts-line','mya' => 'ဆက်သွယ်ရန်' ],
-['name' => 'Notification', 'route' => 'notification', 'icon' => 'ri-contacts-line','mya' => 'သတိပေးစာများ' ],
+['name' => 'Notification', 'route' => 'notification', 'icon' => 'ri-notification-3-line','mya' => 'သတိပေးစာများ' ],
 ['name' => 'Setting', 'route' => 'settings.index', 'icon' => 'ri-settings-3-line','mya' => 'စက်တင်' ],
 
 ];

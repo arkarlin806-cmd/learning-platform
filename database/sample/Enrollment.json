@@ -1,0 +1,27 @@
+[
+  {
+    "EnrollmentID": 1,
+    "StudentID": 101,
+    "Course": "Database"
+  },
+  {
+    "EnrollmentID": 2,
+    "StudentID": 101,
+    "Course": "Programming"
+  },
+  {
+    "EnrollmentID": 3,
+    "StudentID": 102,
+    "Course": "Programming"
+  },
+  {
+    "EnrollmentID": 4,
+    "StudentID": 103,
+    "Course": "Networking"
+  },
+  {
+    "EnrollmentID": 5,
+    "StudentID": 106,
+    "Course": "Web Development"
+  }
+]

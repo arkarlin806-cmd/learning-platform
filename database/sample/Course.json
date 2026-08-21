@@ -1,0 +1,20 @@
+[
+    {
+        "id": "101",
+        "course_name": "Database System",
+        "duration": "3 Months",
+        "fee": "150"
+    },
+    {
+        "id": "102",
+        "course_name": "Web Development",
+        "duration": "4 Months",
+        "fee": "200"
+    },
+    {
+        "id": "103",
+        "course_name": "UI/UX Design",
+        "duration": "2 Months",
+        "fee": "120"
+    }
+]

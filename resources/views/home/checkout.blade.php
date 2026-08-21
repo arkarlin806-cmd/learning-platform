@@ -185,6 +185,8 @@
 
                         </div>
 
+                        @if ($course->price >= 1)
+
                         <!-- Payment Method -->
 
                         <div>
@@ -251,6 +253,7 @@
 
                         </div>
 
+                        @endif
                         <!-- Summary -->
 
                         <div

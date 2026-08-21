@@ -1,0 +1,12 @@
+[
+    {
+        "id": "1",
+        "department_name": "Computer Science",
+        "building": "Building A"
+    },
+    {
+        "id": "2",
+        "department_name": "Information Technology",
+        "building": "Building B"
+    }
+]

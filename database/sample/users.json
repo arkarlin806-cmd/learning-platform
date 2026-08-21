@@ -1,14 +1,17 @@
 [
-    {
-        "id": "1",
-        "name": "arkarlin",
-        "email": "john@gmail.com",
-        "age": "25"
-    },
-    {
-        "id": "2",
-        "name": "Mary",
-        "email": "mary@gmail.com",
-        "age": "30"
-    }
+  {
+    "id": "1",
+    "Name": "Alice",
+    "Email": "alice@gmail.com"
+  },
+  {
+    "id": "2",
+    "Name": "Bob",
+    "Email": "bob@gmail.com"
+  },
+  {
+    "id": "3",
+    "Name": "Charlie",
+    "Email": "charlie@gmail.com"
+  }
 ]

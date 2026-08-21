@@ -496,11 +496,10 @@
                     <span class="menu-text">AI Chatbot</span>
 
                 </a>
-                <hr class="text-slate-300">
 
 
                 <a href="{{ route('ai-images.img') }}"
-                    class="menu-item flex items-center gap-4
+                    class="menu-item flex items-center gap-4 hidden
                         px-4 py-1 md:py-3 rounded-2xl
                         hover:bg-indigo-50
                         hover:translate-x-2
@@ -510,9 +509,8 @@
                     <span class="menu-text">Image Generator</span>
 
                 </a>
-                <hr class="text-slate-300">
                 <a href="{{ route('object-detection') }}"
-                    class="menu-item flex items-center gap-4
+                    class="menu-item flex items-center gap-4 hidden
                             px-4 py-1 md:py-3 rounded-2xl
                             hover:bg-indigo-50
                             hover:translate-x-2

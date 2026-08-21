@@ -280,10 +280,10 @@ class CourseController extends Controller
             'required|exists:courses,id',
 
             'payment_method' =>
-            'required',
+            'nullable',
 
             'payment_screenshot' =>
-            'required|image|mimes:jpg,jpeg,png|max:4096'
+            'nullable|image|mimes:jpg,jpeg,png|max:4096'
 
         ]);
 
@@ -306,14 +306,16 @@ class CourseController extends Controller
                     'Order already exists.'
                 );
         }
+        $image = '';
+        if ($course->price >= 1) {
 
-        $image = $request
-            ->file('payment_screenshot')
-            ->store(
-                'payment-screenshots',
-                'public'
-            );
-
+            $image = $request
+                ->file('payment_screenshot')
+                ->store(
+                    'payment-screenshots',
+                    'public'
+                );
+        }
         $adminAmount =
             $course->price * 0.20;
 

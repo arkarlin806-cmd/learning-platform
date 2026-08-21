@@ -10,5 +10,29 @@
         "name": "Phone",
         "price": "800",
         "category": "Mobile"
+    },
+    {
+        "id": "3",
+        "name": "Tablet",
+        "price": "500",
+        "category": "Mobile"
+    },
+    {
+        "id": "4",
+        "name": "Headphones",
+        "price": "150",
+        "category": "Accessories"
+    },
+    {
+        "id": "5",
+        "name": "Smartwatch",
+        "price": "250",
+        "category": "Accessories"
+    },
+    {
+        "id": "6",
+        "name": "Monitor",
+        "price": "300",
+        "category": "Computer"
     }
 ]

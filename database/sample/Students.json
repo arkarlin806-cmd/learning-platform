@@ -1,0 +1,37 @@
+[
+  {
+    "StudentID": 101,
+    "Name": "Alice",
+    "Age": 20,
+    "Department": "Computer Science",
+    "GPA": 3.80
+  },
+  {
+    "StudentID": 102,
+    "Name": "Bob",
+    "Age": 22,
+    "Department": "Computer Science",
+    "GPA": 3.20
+  },
+  {
+    "StudentID": 103,
+    "Name": "Charlie",
+    "Age": 21,
+    "Department": "Civil Engineering",
+    "GPA": 3.50
+  },
+  {
+    "StudentID": 104,
+    "Name": "David",
+    "Age": 23,
+    "Department": "Electronic Engineering",
+    "GPA": 2.90
+  },
+  {
+    "StudentID": 105,
+    "Name": "Emma",
+    "Age": 20,
+    "Department": "Computer Science",
+    "GPA": 3.70
+  }
+]

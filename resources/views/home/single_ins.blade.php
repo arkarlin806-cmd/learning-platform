@@ -1,9 +1,5 @@
 @extends('layout.master')
 
-@section('title')
-
-{{ $instructor->name }} - Instructor
-@endsection
 @section('content')
 
 <!-- Hero Cover -->

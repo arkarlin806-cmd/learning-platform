@@ -1,7 +1,4 @@
 @extends('layout.master')
-
-@section('title','All Instructors')
-
 @section('content')
 
 <div class="min-h-screen py-12">

@@ -1,6 +1,5 @@
 @extends('layout.master')
 
-@section('title','Become an Instructor')
 
 @section('content')
 

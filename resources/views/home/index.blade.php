@@ -39,12 +39,7 @@
                         data-mm="စတင်လေ့လာရန်">Start Learning</a>
                 </button>
 
-                <button
-                    data-en="Explore Courses"
-                    data-mm="သင်တန်းများကို ရှာရန်"
-                    class="px-8 py-4 rounded-2xl glass text-white hover:bg-white/10 transition">
-                    Explore Courses
-                </button>
+
 
             </div>
 
@@ -61,12 +56,7 @@
 
             </div>
 
-            <div class="absolute -bottom-6 -left-6 bg-white p-5 rounded-3xl shadow-2xl">
-                <h3 class="font-bold text-xl">10K+</h3>
-                <p class="text-gray-500 text-sm">
-                    Active Students
-                </p>
-            </div>
+
 
         </div>
 

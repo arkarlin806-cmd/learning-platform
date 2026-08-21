@@ -130,7 +130,7 @@
                 hover:translate-x-2
                 transition-all duration-300">
 
-            <i class="ri-contacts-line text-lg"></i>
+            <i class="ri-notification-3-line text-lg"></i>
             <span data-en="Notification"
                 data-mm="သတိပေးစာများ" class="menu-text">Notification</span>
             @php

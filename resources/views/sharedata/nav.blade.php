@@ -100,7 +100,7 @@
                               transition duration-300 relative after:absolute after:left-0 after:-bottom-1
                               after:w-0 after:h-[2px] after:bg-blue-600 hover:after:w-full
                               after:transition-all after:duration-300">
-                    Free Course
+                    AI Chatbot
                 </a>
 
             </div>

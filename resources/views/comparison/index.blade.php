@@ -207,6 +207,206 @@
                 </div>
             </section>
 
+
+            <section id="OTP"
+                class="glass rounded-3xl shadow-xl p-8 fade">
+
+                <h2
+                    class="text-lg md:text-3xl text-slate-600 font-semibold mb-8">
+                    Feature 03 :
+                    <span
+                        class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                        Send OTP Gmail
+                    </span>
+                </h2>
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+
+                    <button
+                        onclick="changeOtp('laravel')"
+                        class="bg-red-100 rounded-2xl p-5 font-bold hover:scale-105 transition">
+                        PHP Laravel
+                    </button>
+
+                    <button
+                        onclick="changeOtp('java')"
+                        class="bg-orange-100 rounded-2xl p-5 font-bold hover:scale-105 transition">
+                        Java Spring
+                    </button>
+
+                    <button
+                        onclick="changeOtp('csharp')"
+                        class="bg-blue-100 rounded-2xl p-5 font-bold hover:scale-105 transition">
+                        C# ASP.NET
+                    </button>
+
+                </div>
+
+                <div
+                    class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <div>
+
+                        <h3 class="text-xl font-bold mb-4">
+                            Send OTP Code
+                        </h3>
+
+                        <div
+                            id="otpCodeArea"
+                            class="code-box h-100">
+                        </div>
+
+                        <button
+                            onclick="copyOtpCode()"
+                            class="mt-4 bg-slate-900 text-white px-5 py-2 rounded-xl">
+                            Copy Code
+                        </button>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="text-xl font-bold mb-4">
+                            OTP Explanation
+                        </h3>
+
+                        <div
+                            id="otpExplainArea"
+                            class="bg-slate-100 rounded-3xl p-6 min-h-[250px]">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section id="JWT"
+                class="glass rounded-3xl shadow-xl p-8 fade">
+
+                <h2
+                    class="text-lg md:text-3xl text-slate-600 font-semibold mb-8">
+                    Feature 04 :
+                    <span
+                        class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                        JWT Login Authentication
+                    </span>
+                </h2>
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+
+                    <button onclick="changeJwt('laravel')"
+                        class="bg-red-100 rounded-2xl p-5 font-bold">
+                        PHP Laravel
+                    </button>
+
+                    <button onclick="changeJwt('java')"
+                        class="bg-orange-100 rounded-2xl p-5 font-bold">
+                        Java Spring
+                    </button>
+
+                    <button onclick="changeJwt('csharp')"
+                        class="bg-blue-100 rounded-2xl p-5 font-bold">
+                        C# ASP.NET
+                    </button>
+
+                </div>
+
+                <div
+                    class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">
+                            JWT Login Code
+                        </h3>
+                        <div id="jwtCodeArea" class="code-box h-100"></div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">
+                            Authentication Explanation
+                        </h3>
+                        <div id="jwtExplainArea"
+                            class="bg-slate-100 rounded-3xl p-6 min-h-[250px]"></div>
+                    </div>
+
+                </div>
+            </section>
+            <section id="ImageUpload"
+                class="glass rounded-3xl shadow-xl p-8 fade">
+
+                <h2
+                    class="text-lg md:text-3xl text-slate-600 font-semibold mb-8">
+                    Feature 05 :
+                    <span
+                        class="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                        Image Upload
+                    </span>
+                </h2>
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+
+                    <button
+                        onclick="changeImageUpload('laravel')"
+                        class="bg-red-100 rounded-2xl p-5 font-bold hover:scale-105 transition">
+                        PHP Laravel
+                    </button>
+
+                    <button
+                        onclick="changeImageUpload('java')"
+                        class="bg-orange-100 rounded-2xl p-5 font-bold hover:scale-105 transition">
+                        Java Spring
+                    </button>
+
+                    <button
+                        onclick="changeImageUpload('csharp')"
+                        class="bg-blue-100 rounded-2xl p-5 font-bold hover:scale-105 transition">
+                        C# ASP.NET
+                    </button>
+
+                </div>
+
+                <div
+                    class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <div>
+
+                        <h3 class="text-xl font-bold mb-4">
+                            Image Upload Code
+                        </h3>
+
+                        <div
+                            id="imageUploadCodeArea"
+                            class="code-box h-100">
+                        </div>
+
+                        <button
+                            onclick="copyImageUploadCode()"
+                            class="mt-4 bg-slate-900 text-white px-5 py-2 rounded-xl">
+                            Copy Code
+                        </button>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="text-xl font-bold mb-4">
+                            Upload Explanation
+                        </h3>
+
+                        <div
+                            id="imageUploadExplainArea"
+                            class="bg-slate-100 rounded-3xl p-6 min-h-[250px]">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
             <section id="Summary"
                 class="glass rounded-3xl shadow-xl p-8 ">
                 <h2
@@ -314,8 +514,8 @@
                     <div class="w-2 h-8 bg-orange-500 rounded-full"></div>
                     <div>
                         <h3 class="font-bold text-gray-800 group-hover:text-orange-600">
-                            <a href="#" onclick="goToSection('API')">
-                                API
+                            <a href="#" onclick="goToSection('OTP')">
+                                OTP
                             </a>
                         </h3>
                     </div>
@@ -324,8 +524,18 @@
                     <div class="w-2 h-8 bg-yellow-500 rounded-full"></div>
                     <div>
                         <h3 class="font-bold text-gray-800 group-hover:text-yellow-600">
-                            <a href="#" onclick="goToSection('error')">
-                                Error handling
+                            <a href="#" onclick="goToSection('JWT')">
+                                JWT
+                            </a>
+                        </h3>
+                    </div>
+                </li>
+                <li class="group flex items-center gap-4 px-4 py-2 rounded-xl bg-gradient-to-r from-white to-blue-100 shadow hover:shadow-lg transition">
+                    <div class="w-2 h-8 bg-yellow-500 rounded-full"></div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 group-hover:text-yellow-600">
+                            <a href="#" onclick="goToSection('ImageUpload')">
+                                Image Upload
                             </a>
                         </h3>
                     </div>
@@ -1093,6 +1303,470 @@ public class ChatHub : Hub
 
     }
 
+
+
+    //otp send
+    const otpData = {
+
+        laravel: {
+
+            code: `
+<pre><code>
+use Illuminate\\Support\\Facades\\Mail;
+
+public function sendOtp(Request $request)
+{
+$otp = rand(100000, 999999);
+
+session([
+    'otp' => $otp,
+    'otp_expires_at' => now()->addMinutes(5)
+]);
+
+Mail::raw(
+    "Your OTP Code is: {$otp}",
+    function ($message) use ($request) {
+        $message->to($request->email)
+                ->subject('Your OTP Code');
+    }
+);
+
+return response()->json([
+    'message' => 'OTP sent successfully'
+]);
+}
+</code></pre>
+    `,
+
+            explanation: `
+        <p class="mb-4">
+            <strong>PHP Laravel</strong>
+        </p>
+
+        <ul class="list-disc ml-5 space-y-2">
+            <li>Laravel generates a 6-digit OTP.</li>
+            <li>The OTP is stored temporarily in the session.</li>
+            <li>The OTP expires after 5 minutes.</li>
+            <li>Laravel Mail sends the OTP to Gmail.</li>
+            <li>Mail configuration is handled through Laravel's mail system.</li>
+        </ul>
+    `
+        },
+
+
+        java: {
+
+            code: `
+<pre><code>
+@Service
+public class OtpService {
+
+private final JavaMailSender mailSender;
+
+public OtpService(JavaMailSender mailSender) {
+    this.mailSender = mailSender;
+}
+
+public void sendOtp(String email) {
+
+    int otp =
+        ThreadLocalRandom.current()
+            .nextInt(100000, 1000000);
+
+    SimpleMailMessage message =
+        new SimpleMailMessage();
+
+    message.setTo(email);
+    message.setSubject("Your OTP Code");
+    message.setText(
+        "Your OTP Code is: " + otp
+    );
+
+    mailSender.send(message);
+}
+}
+</code></pre>
+    `,
+
+            explanation: `
+        <p class="mb-4">
+            <strong>Java Spring</strong>
+        </p>
+
+        <ul class="list-disc ml-5 space-y-2">
+            <li>Spring uses <strong>JavaMailSender</strong> to send email.</li>
+            <li>A random 6-digit OTP is generated.</li>
+            <li>The email address is passed to the mail service.</li>
+            <li>Spring Boot handles the SMTP configuration.</li>
+            <li>OTP storage and expiration can be implemented with Session, Redis or Database.</li>
+        </ul>
+    `
+        },
+
+
+        csharp: {
+
+            code: `
+<pre><code>
+public async Task SendOtp(string email)
+{
+var random = new Random();
+
+int otp =
+    random.Next(100000, 1000000);
+
+using var message =
+    new MailMessage();
+
+message.To.Add(email);
+message.Subject = "Your OTP Code";
+message.Body =
+    $"Your OTP Code is: {otp}";
+
+using var smtp =
+    new SmtpClient("smtp.gmail.com", 587);
+
+smtp.EnableSsl = true;
+smtp.Credentials =
+    new NetworkCredential(
+        "your@gmail.com",
+        "APP_PASSWORD"
+    );
+
+await smtp.SendMailAsync(message);
+}
+</code></pre>
+    `,
+
+            explanation: `
+        <p class="mb-4">
+            <strong>C# ASP.NET</strong>
+        </p>
+
+        <ul class="list-disc ml-5 space-y-2">
+            <li>ASP.NET generates a random 6-digit OTP.</li>
+            <li><strong>SmtpClient</strong> is used to connect to Gmail SMTP.</li>
+            <li>Gmail SMTP uses port 587 with SSL/TLS.</li>
+            <li>An App Password should be used instead of the normal Gmail password.</li>
+            <li>OTP can be stored using Session, Cache, Redis or Database.</li>
+        </ul>
+    `
+        }
+
+    };
+
+
+    function changeOtp(type) {
+
+        document.getElementById('otpCodeArea').innerHTML =
+            otpData[type].code;
+
+        document.getElementById('otpExplainArea').innerHTML =
+            otpData[type].explanation;
+    }
+
+
+    function copyOtpCode() {
+
+        const code =
+            document.getElementById('otpCodeArea').innerText;
+
+        navigator.clipboard.writeText(code);
+
+        alert('Code copied!');
+    }
+
+
+    // Default
+    changeOtp('laravel');
+
+
+
+    //jwt
+    const jwtData = {
+
+        laravel: {
+            code: `<pre><code>
+public function login(Request $request)
+{
+    if(!Auth::attempt($request->only('email','password')))
+    {
+        return response()->json([
+            'message'=>'Invalid credentials'
+        ],401);
+    }
+
+    $token = auth()->user()->createToken('API')->plainTextToken;
+
+    return response()->json([
+        'token'=>$token
+    ]);
+}
+</code></pre>`,
+
+            explanation: `
+<h4 class="font-bold mb-3">Laravel JWT</h4>
+<ul class="list-disc ml-5 space-y-2">
+<li>User login with email & password</li>
+<li>Laravel verifies credentials</li>
+<li>Sanctum generates API token</li>
+<li>Client stores token for future requests</li>
+</ul>`
+        },
+
+        java: {
+            code: `<pre><code>
+@PostMapping("/login")
+public ResponseEntity< ?> login(
+    @RequestBody LoginRequest request){
+
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            request.getEmail(),
+            request.getPassword()
+        )
+    );
+
+    String token =
+        jwtService.generateToken(request.getEmail());
+
+    return ResponseEntity.ok(token);
+}
+</code></pre>`,
+
+            explanation: `
+<h4 class="font-bold mb-3">Spring Security JWT</h4>
+<ul class="list-disc ml-5 space-y-2">
+<li>AuthenticationManager validates login</li>
+<li>JWT Service creates secure token</li>
+<li>Token returned to frontend</li>
+<li>Every API request includes Bearer Token</li>
+</ul>`
+        },
+
+        csharp: {
+            code: `<pre><code>
+[HttpPost("login")]
+public IActionResult Login(LoginModel model)
+{
+    if(model.Email=="admin@test.com"
+        && model.Password=="123456")
+    {
+        var token = GenerateJwtToken(model.Email);
+
+        return Ok(new { token });
+    }
+
+    return Unauthorized();
+}
+</code></pre>`,
+
+            explanation: `
+<h4 class="font-bold mb-3">ASP.NET JWT</h4>
+<ul class="list-disc ml-5 space-y-2">
+<li>Validate user credentials</li>
+<li>Create JWT token</li>
+<li>Return token to client</li>
+<li>Protect APIs with Authorize attribute</li>
+</ul>`
+        }
+
+    };
+
+    function changeJwt(type) {
+
+        document.getElementById("jwtCodeArea").innerHTML =
+            jwtData[type].code;
+
+        document.getElementById("jwtExplainArea").innerHTML =
+            jwtData[type].explanation;
+
+    }
+
+    changeJwt("laravel");
+
+    //image Upload
+    const imageUploadData = {
+
+        laravel: {
+
+            code: `
+<pre><code>
+public function upload(Request $request)
+{
+$request->validate([
+    'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
+]);
+
+$path = $request->file('image')
+    ->store('images', 'public');
+
+return response()->json([
+    'message' => 'Image uploaded successfully',
+    'path' => $path
+]);
+}
+</code></pre>
+    `,
+
+            explanation: `
+        <h4 class="font-bold mb-4">
+            PHP Laravel
+        </h4>
+
+        <ul class="list-disc ml-5 space-y-2">
+            <li>Laravel validates the uploaded file.</li>
+            <li>Only image formats such as JPG, PNG and WebP are accepted.</li>
+            <li>Maximum file size is 2 MB.</li>
+            <li>The image is stored using Laravel Storage.</li>
+            <li>The returned path can be saved in the database.</li>
+        </ul>
+    `
+        },
+
+
+        java: {
+
+            code: `
+<pre><code>
+@PostMapping("/upload")
+public ResponseEntity< ?> upload(
+    @RequestParam("image")
+    MultipartFile image)
+    throws IOException {
+
+if (image.isEmpty()) {
+    return ResponseEntity.badRequest()
+        .body("Image is required");
+}
+
+String fileName =
+    UUID.randomUUID() + "_" +
+    image.getOriginalFilename();
+
+Path path = Paths.get(
+    "uploads/images/" + fileName
+);
+
+Files.createDirectories(path.getParent());
+
+Files.copy(
+    image.getInputStream(),
+    path,
+    StandardCopyOption.REPLACE_EXISTING
+);
+
+return ResponseEntity.ok(
+    "Image uploaded successfully"
+);
+}
+</code></pre>
+    `,
+
+            explanation: `
+        <h4 class="font-bold mb-4">
+            Java Spring
+        </h4>
+
+        <ul class="list-disc ml-5 space-y-2">
+            <li>Spring receives the image using MultipartFile.</li>
+            <li>The uploaded file is checked before saving.</li>
+            <li>A unique filename is generated using UUID.</li>
+            <li>The image is stored inside the uploads folder.</li>
+            <li>The file path can be stored in the database.</li>
+        </ul>
+    `
+        },
+
+
+        csharp: {
+
+            code: `
+<pre><code>
+[HttpPost("upload")]
+public async Task<IActionResult>
+Upload(IFormFile image)
+{
+if (image == null || image.Length == 0)
+    return BadRequest("Image is required");
+
+var fileName =
+    Guid.NewGuid() +
+    Path.GetExtension(image.FileName);
+
+var folder =
+    Path.Combine(
+        Directory.GetCurrentDirectory(),
+        "wwwroot/images"
+    );
+
+Directory.CreateDirectory(folder);
+
+var filePath =
+    Path.Combine(folder, fileName);
+
+using var stream =
+    new FileStream(
+        filePath,
+        FileMode.Create
+    );
+
+await image.CopyToAsync(stream);
+
+return Ok(
+    "Image uploaded successfully"
+);
+}
+</code></pre>
+    `,
+
+            explanation: `
+        <h4 class="font-bold mb-4">
+            C# ASP.NET
+        </h4>
+
+        <ul class="list-disc ml-5 space-y-2">
+            <li>ASP.NET receives the image using IFormFile.</li>
+            <li>The uploaded file is checked for empty values.</li>
+            <li>A unique filename is generated using Guid.</li>
+            <li>The image is saved inside wwwroot/images.</li>
+            <li>The image can then be accessed as a static web resource.</li>
+        </ul>
+    `
+        }
+
+    };
+
+
+    function changeImageUpload(type) {
+
+        document.getElementById(
+                "imageUploadCodeArea"
+            ).innerHTML =
+            imageUploadData[type].code;
+
+        document.getElementById(
+                "imageUploadExplainArea"
+            ).innerHTML =
+            imageUploadData[type].explanation;
+    }
+
+
+    function copyImageUploadCode() {
+
+        const code =
+            document.getElementById(
+                "imageUploadCodeArea"
+            ).innerText;
+
+        navigator.clipboard.writeText(code);
+
+        alert("Image Upload code copied!");
+    }
+
+
+    // Default
+    changeImageUpload("laravel");
     //right side section
     function goToSection(id) {
         const container = document.getElementById('content');

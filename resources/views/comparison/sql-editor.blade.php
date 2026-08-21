@@ -801,7 +801,7 @@
                     <div class="bg-gray-900 text-white rounded-xl p-5 relative overflow-x-auto overflow-y-auto">
 
                         <button
-                            class="absolute right-3 top-3 bg-blue-500 px-3 py-1 rounded text-xs">
+                            class="absolute hidden right-3 top-3 bg-blue-500 px-3 py-1 rounded text-xs">
                             Copy
                         </button>
 

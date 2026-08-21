@@ -118,7 +118,8 @@
                             class="mt-8 block text-center py-4 rounded-2xl bg-emerald-500 text-white font-bold hover:scale-105 transition">
                             purchased
                         </a>
-                        @else<!-- order count start  -->
+                        @else
+                        <!-- order count start  -->
                         @if($course_order_count <= 50)
                             @if($course->price == 0.00)
                             <form

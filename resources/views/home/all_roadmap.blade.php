@@ -149,7 +149,7 @@
                     <p class="text-gray-500 md:text-md text-xs">
                         Estimated Days
                     </p>
-                    <h2 data-counter="{{ $goals->sum('estimated_days') }}" class="counter mt-3 text-md md:text-2xl font-bold text-orange-600">
+                    <h2 data-counter="{{ $goals->phases->sum('estimated_days') }}" class="counter mt-3 text-md md:text-2xl font-bold text-orange-600">
                         0
                     </h2>
                 </div>

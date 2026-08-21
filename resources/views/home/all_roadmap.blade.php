@@ -107,7 +107,7 @@
     </div>
 
     <!-- Stats -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-8">
         <!-- Card -->
         <div class="group rounded-3xl bg-white/50 backdrop-blur-xl p-6 shadow-lg transition duration-500 hover:-translate-y-2">
             <div class="flex justify-between">
@@ -143,13 +143,13 @@
         </div>
 
         <!-- Card -->
-        <div class="group rounded-3xl bg-white/50 backdrop-blur-xl p-6 shadow-lg transition duration-500 hover:-translate-y-2">
+        <!-- <div class="group rounded-3xl bg-white/50 backdrop-blur-xl p-6 shadow-lg transition duration-500 hover:-translate-y-2">
             <div class="flex justify-between">
                 <div>
                     <p class="text-gray-500 md:text-md text-xs">
                         Estimated Days
                     </p>
-                    <h2 data-counter="{{ $goals->phases->sum('estimated_days') }}" class="counter mt-3 text-md md:text-2xl font-bold text-orange-600">
+                    <h2 data-counter="{{ $goals->sum('estimated_days') }}" class="counter mt-3 text-md md:text-2xl font-bold text-orange-600">
                         0
                     </h2>
                 </div>
@@ -157,7 +157,7 @@
                     ⏳
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Card -->
         <div class="group rounded-3xl bg-white/50 backdrop-blur-xl p-6 shadow-lg transition duration-500 hover:-translate-y-2">

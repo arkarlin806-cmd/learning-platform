@@ -9,9 +9,11 @@
             {{-- Profile Image --}}
 
             <div class="relative group">
-                @if($instructor->profile_photo)
+                @if($instructor->avatar)
                 <img
-                    src="{{asset('storage/'.$instructor->profile_photo)}}"
+                    src="{{ $instructor->avatar
+                                            ? asset('images/avatars/' . $instructor->avatar)
+                                            : asset('images/avatars/avatar1.png') }}"
                     class="w-30 h-30 md:w-48 md:h-48 rounded-full object-cover border-8 border-white/80 shadow-2xl group-hover:scale-110
                             transition duration-500">
                 @else

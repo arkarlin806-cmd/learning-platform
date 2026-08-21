@@ -58,7 +58,9 @@
                     <div class="relative w-32 h-32 mb-5">
                         @if($instructor->avatar)
                         <img
-                            src="{{ asset('storage/'.$instructor->avatar) }}"
+                            src="{{ $instructor->avatar
+                                            ? asset('images/avatars/' . $instructor->avatar)
+                                            : asset('images/avatars/avatar1.png') }}"
                             class="md:w-full md:h-full w-26 h-26 object-cover rounded-full ring-4 ring-indigo-200 group-hover:ring-purple-400 transition">
 
                         @else

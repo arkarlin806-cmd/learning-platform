@@ -10,8 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <title>Instructor Dashboard</title>
-
+    <title>Learning Platform</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <style>
         @keyframes slideIn {
             from {

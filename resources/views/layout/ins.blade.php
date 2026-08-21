@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{csrf_token()}}">
     @vite(['resources/css/app.css','resources/js/app.js'])
+    <title>Learning Platform</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
 
-    <title>Instructor Dashboard</title>
 
 </head>
 

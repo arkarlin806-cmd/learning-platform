@@ -140,7 +140,7 @@
                                 </label>
 
                                 @if($mail == "true")
-                                <label for="">{{$admins->name}}
+                                <label for="" class="ml-3 py-3 px-16 rounded-xl border border-slate-200 bg-slate-100">{{$admins->name}}
                                     <input name="receiver_id" type="text" value="{{$admins->id}}" class="hidden"></label>
                                 @else
                                 <select

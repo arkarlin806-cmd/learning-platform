@@ -86,9 +86,9 @@
 
                         </td>
 
-                        <td class="">{{ $item->user->name }}</td>
+                        <td class="pl-5">{{ $item->user->name }}</td>
 
-                        <td class="px-4">{{ $item->user->email }}</td>
+                        <td class="pl-5">{{ $item->user->email }}</td>
 
 
 
@@ -110,7 +110,7 @@
                                 'course' => $course,
                                 'user' => $item->user
                             ]) }}"
-                                class="px-4 py-2 mr-3 rounded-lg bg-indigo-600 text-white">
+                                class="px-4 py-2 mr-1 rounded-lg bg-indigo-600 text-white">
 
                                 View
 
@@ -223,7 +223,7 @@
 
 
     <div class="
-bg-white/80
+bg-slate-300
 backdrop-blur-xl
 rounded-3xl
 shadow-xl
@@ -261,8 +261,8 @@ gap-6
                 class="
 group
 rounded-3xl
-bg-white
-border
+bg-white/40
+border border-slate-200
 shadow-md
 p-5
 
@@ -474,13 +474,12 @@ gap-3
                         class="
 flex-1
 text-center
-py-2
+py-3
 rounded-xl
-bg-blue-600
+bg-indigo-600
 text-white
 text-sm
 font-semibold
-hover:bg-indigo-700
 ">
 
                         View
@@ -560,11 +559,11 @@ text-slate-500
 
                 b.classList.remove('bg-indigo-600', 'text-white');
 
-                b.classList.add('bg-gray-100');
+                b.classList.add('bg-gray-300');
 
             });
 
-            this.classList.remove('bg-gray-100');
+            this.classList.remove('bg-gray-300');
 
             this.classList.add('bg-indigo-600', 'text-white');
 

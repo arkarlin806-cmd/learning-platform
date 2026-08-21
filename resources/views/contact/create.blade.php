@@ -1,4 +1,3 @@
-[8/17/2026 10:37 PM] 💕 ပူတူးလေး💕:
 <!DOCTYPE html>
 <html lang="en">
 
@@ -120,6 +119,10 @@
                                 Send your message to admin team
                             </p>
                         </div>
+
+
+
+
                         @if(session('success'))
                         <div class="mb-6 p-4 rounded-xl bg-green-100 text-green-700 animate-pulse">
                             {{session('success')}}

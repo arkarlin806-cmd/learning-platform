@@ -184,7 +184,7 @@
 
 
             <!-- UPGRADE CARD -->
-            <div class="backdrop-blur-xl bg-gradient-to-br from-blue-500/80 to-indigo-600/80 rounded-3xl p-6 text-white shadow-xl">
+            <div class="backdrop-blur-xl hidden bg-gradient-to-br from-blue-500/80 to-indigo-600/80 rounded-3xl p-6 text-white shadow-xl">
                 <h3 class="font-bold text-lg" data-en="Edit Notification" data-mm="သတိပေးစာများပို့ခြင်း ပြင်ရန်">Edit Notification</h3>
                 <p class="text-white/80 text-sm mt-1" data-en="Your email send Notification before 3 Minutes class schedule" data-mm="သင့်ရဲ့ မေးလ် ဆီသို့သင်တန်းချိန် ၃ မိနစ် မတိုင်မှီ သတိပေးစာပို့မည်။">
                     Your email send Notification before 3 Minutes class schedule

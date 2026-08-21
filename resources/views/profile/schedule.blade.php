@@ -25,7 +25,7 @@ $weekDays = [
         </span>
     </h1>
 
-    <p class="text-slate-600 mt-2 dark:text-white">
+    <p class="text-slate-600 mt-2 dark:text-white" data-en="Weekly course schedule and upcoming classes" data-mm="တပတ်အတွင်း သင်တန်းချိန်များ နှင့် မကြာမှီလာမည့်သင်တန်းချိန်များ">
         Weekly course schedule and upcoming classes
     </p>
 
@@ -138,7 +138,7 @@ $weekDays = [
         <!-- WEEKLY SCHEDULE -->
 
         <div class="stat-card opacity-0 animate-stat-in bg-white/80 dark:bg-white/20 p-6 border border-slate-200 rounded-3xl" style="animation-delay:450ms">
-            <h2 class="text-xl font-bold text-slate-800 mb-6 dark:text-white">
+            <h2 class="text-xl font-bold text-slate-800 mb-6 dark:text-white" data-en="Weekly Schedule" data-mm="တပတ်အတွင်း သင်တန်းများ">
                 Weekly Schedule
             </h2>
 

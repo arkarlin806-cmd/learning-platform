@@ -89,10 +89,10 @@
 
                     </button>
                     <div class="">
-                        <h1 class="text-slate-700 dark:text-white text-lg md:text-2xl font-extrabold">
+                        <h1 data-en="Settings" data-mm="စက်တင်" class="text-slate-700 dark:text-white text-lg md:text-2xl font-extrabold">
                             Settings
                         </h1>
-                        <p class="text-slate-500 text-sm dark:text-white ">Edit Profile and Password</p>
+                        <p class="text-slate-500 text-sm dark:text-white " data-en="Edit Profile and Password" data-mm="ပရိုဖိုင် နှင့် လျှို့ဝှက်ကုဒ် ပြင်ရန်">Edit Profile and Password</p>
                     </div>
                 </div>
 
@@ -111,18 +111,23 @@
                         <div id="profileMenu"
                             class="hidden absolute right-0 mt-3  w-52 bg-white rounded-2xl shadow-xl overflow-hidden">
 
-                            <a href="#"
-                                class="block px-4 py-3 hover:bg-gray-100">
-                                Profile
-                            </a>
 
-                            <a href="#"
+
+                            <a href="{{ route('settings.index') }}" data-en="Settings" data-mm="စက်တင်"
                                 class="block px-4 py-3 hover:bg-gray-100">
                                 Settings
-                            </a><a href="#"
+                            </a>
+                            <div onclick="confirmLogout()" data-en="Logout" data-mm="ထွက်ရန်"
                                 class="block px-4 py-3 hover:bg-red-50 text-red-500">
                                 Logout
-                            </a>
+                            </div>
+                            <form
+                                id="logoutForm"
+                                method="POST"
+                                action="{{ route('logout') }}"
+                                class="hidden">
+                                @csrf
+                            </form>
 
                         </div>
 
@@ -161,10 +166,10 @@
                                 </div>
 
 
-                                <h2 class="md:text-2xl text-lg font-bold dark:text-white">
+                                <h2 class="md:text-2xl text-lg font-bold dark:text-white" data-en="Edit Name and Email" data-mm="နာမည် နှင့် အီမေးလ် ပြင်ရန်">
                                     Edit Name and Email
                                 </h2>
-                                <p class="text-gray-700 dark:text-white mt-2 text-sm">
+                                <p class="text-gray-700 dark:text-white mt-2 text-sm" data-en="Update your personal information securely" data-mm="သင့်ရဲ့ ကိုယ်ရေးကိုယ်တာအချက်လက်များကိုပြုပြင်ပါ">
                                     Update your personal information securely
                                 </p>
                             </div>
@@ -177,7 +182,7 @@
                                 <!-- Name -->
 
                                 <div class="group">
-                                    <label class="text-sm text-gray-700 dark:text-white font-medium">
+                                    <label class="text-sm text-gray-700 dark:text-white font-medium" data-en="Full Name" data-mm="နာမည်အပြည့်စုံ">
                                         Full Name
                                     </label>
                                     <div class="relative mt-2">
@@ -196,7 +201,7 @@
                                     @enderror
                                 </div><!-- Email -->
                                 <div class="group">
-                                    <label class="text-sm text-gray-700 dark:text-white font-medium">
+                                    <label class="text-sm text-gray-700 dark:text-white font-medium" data-en="Email Address" data-mm="အီမေး(လ်)">
                                         Email Address
                                     </label>
                                     <input
@@ -215,10 +220,10 @@
 
                                 <!-- Password -->
                                 <div class="rounded-2xl  p-5 bg-red-500/10 border border-red-400/20">
-                                    <label class="text-sm text-red-500 font-semibold">
+                                    <label class="text-sm text-red-500 font-semibold" data-en="Confirm Password" data-mm="လျှိူ့ဝှက်ကုဒ်">
                                         Confirm Password
                                     </label>
-                                    <p class="text-xs text-gray-700 mt-1">
+                                    <p class="text-xs text-gray-700 mt-1" data-en="Enter current password to save changes" data-mm="လျှို့ဝှက်ကုဒ်ထည့်ပါ">
                                         Enter current password to save changes
                                     </p>
 
@@ -238,7 +243,7 @@
                                 <button
                                     class="w-full relative overflow-hidden rounded-2xl py-4 font-semibold text-white bg-blue-700 shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-purple-500/30 active:scale-95
                                         ">
-                                    <span class="relative z-10">
+                                    <span class="relative z-10" data-en="Update" data-mm="ပြင်ရန်">
                                         Update
                                     </span>
                                 </button>
@@ -249,7 +254,7 @@
                             <div class="min-h-screen rounded-3xl bg-white/20 dark:bg-slate-800 flex items-center justify-center px-4">
                                 <div class="w-full max-w-md">
                                     <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
-                                        <h2 class="text-lg md:text-3xl font-bold dark:text-white text-center mb-8">
+                                        <h2 class="text-lg md:text-3xl font-bold dark:text-white text-center mb-8" data-en="Change Password" data-mm="လျှို့ဝှက်ကုဒ်ပြင်ရန်">
                                             Change Password
                                         </h2>
                                         <form method="POST"
@@ -277,7 +282,7 @@
                                                     placeholder="Confirm New Password"
                                                     class="w-full rounded-2xl bg-white/10 border border-slate-300 dark:border-white/20 dark:text-white px-5 py-4 outline-none focus:ring-4 focus:ring-green-500/30">
 
-                                                <button
+                                                <button data-en="Update Password" data-mm="လျှိုဝှက်ကုဒ်ပြောင်းပါ"
                                                     class="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold hover:scale-105 transition ">
                                                     Update Password
                                                 </button>
@@ -507,6 +512,50 @@
 
             }
 
+        }
+
+        function confirmLogout() {
+            Swal.fire({
+
+                title: 'Are you sure?',
+
+                text: 'You will be logged out from your account.',
+
+                icon: 'warning',
+
+                showCancelButton: true,
+
+                confirmButtonText: 'Yes, Logout',
+
+                cancelButtonText: 'Cancel',
+
+                reverseButtons: true,
+
+                buttonsStyling: false,
+
+                customClass: {
+
+                    popup: 'rounded-3xl',
+
+                    title: 'text-xl font-bold text-slate-900',
+
+                    htmlContainer: 'text-slate-500',
+
+                    confirmButton: 'px-5 py-2.5 rounded-xl bg-red-600 text-white font-semibold mx-2 hover:bg-red-700',
+
+                    cancelButton: 'px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-semibold mx-2 hover:bg-slate-200'
+
+                }
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    document.getElementById('logoutForm').submit();
+
+                }
+
+            });
         }
     </script>
 </body>

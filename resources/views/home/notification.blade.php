@@ -60,6 +60,7 @@
         </div>
 
         <!-- Sidebar -->
+        <!-- Sidebar -->
         @if(auth()->user()->role == 1)
         @include('sharedata.admin_side')
 
@@ -98,7 +99,7 @@
 
                 <div class="flex items-center gap-5">
 
-                  
+
 
                     <div class="relative">
 
@@ -135,29 +136,28 @@
 
             </header>
             <main class="flex-1 p-12 min-h-screen overflow-y-auto bg-gradient-to-r from-sky-100 via-white to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-slate-900">
-                    <div class="space-y-2">
+                <div class="space-y-2">
 
-                        @forelse(
-                            auth()->user()->notifications
-                                ->take(10)
-                            as $notification
-                        )
+                    @forelse(
+                    auth()->user()->notifications
+                    ->take(10)
+                    as $notification
+                    )
 
-                            <div
-                                class="flex gap-3
+                    <div
+                        class="flex gap-3
                                     p-4
                                     rounded-2xl text-white
                                     {{ $notification->read_at
                                             ? 'bg-white'
                                             : 'bg-indigo-400' }}
                                     hover:bg-slate-50 hover:text-slate-700
-                                    transition"
-                            >
+                                    transition">
 
-                                {{-- ICON --}}
+                        {{-- ICON --}}
 
-                                <div
-                                    class="shrink-0
+                        <div
+                            class="shrink-0
                                         w-10 h-10
                                         rounded-xl
                                         flex
@@ -165,79 +165,78 @@
                                         justify-center
                                         {{ ($notification->data['type'] ?? '') === 'account_banned'
                                                 ? 'bg-red-100 text-red-600'
-                                                : 'bg-indigo-100 text-indigo-600' }}"
-                                >
+                                                : 'bg-indigo-100 text-indigo-600' }}">
 
-                                    @if(
-                                        ($notification->data['type'] ?? '')
-                                        === 'account_banned'
-                                    )
+                            @if(
+                            ($notification->data['type'] ?? '')
+                            === 'account_banned'
+                            )
 
-                                        🚫
+                            🚫
 
-                                    @else
+                            @else
 
-                                        🔔
+                            🔔
 
-                                    @endif
+                            @endif
 
-                                </div>
+                        </div>
 
 
-                                {{-- CONTENT --}}
+                        {{-- CONTENT --}}
 
-                                <div class="min-w-0">
+                        <div class="min-w-0">
 
-                                    <p class="font-bold text-sm">
+                            <p class="font-bold text-sm">
 
-                                        {{ $notification->data['title'] ?? 'Notification' }}
+                                {{ $notification->data['title'] ?? 'Notification' }}
 
-                                    </p>
+                            </p>
 
-                                    <p class="text-xs mt-1">
+                            <p class="text-xs mt-1">
 
-                                        {{ $notification->data['message'] ?? '' }}
+                                {{ $notification->data['message'] ?? '' }}
 
-                                    </p>
+                            </p>
 
-                                    <p class="text-[10px] mt-2">
+                            <p class="text-[10px] mt-2">
 
-                                        {{ $notification->created_at->diffForHumans() }}
+                                {{ $notification->created_at->diffForHumans() }}
 
-                                    </p>
+                            </p>
 
-                                </div>
-
-                            </div>
-
-                        @empty
-
-                            <div class="text-center py-10">
-
-                                <div class="text-4xl mb-3">
-                                    🔔
-                                </div>
-
-                                <p class="font-semibold ">
-                                    No notifications
-                                </p>
-
-                                <p class="text-xs mt-1">
-                                    You're all caught up.
-                                </p>
-
-                            </div>
-
-                        @endforelse
+                        </div>
 
                     </div>
+
+                    @empty
+
+                    <div class="text-center py-10">
+
+                        <div class="text-4xl mb-3">
+                            🔔
+                        </div>
+
+                        <p class="font-semibold ">
+                            No notifications
+                        </p>
+
+                        <p class="text-xs mt-1">
+                            You're all caught up.
+                        </p>
+
+                    </div>
+
+                    @endforelse
+
+                </div>
 
             </main>
         </div>
     </div>
 
 
-   
+
 </body>
 
 </html>

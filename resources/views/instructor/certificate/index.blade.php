@@ -5,7 +5,7 @@
 
 @if($course->status == 'completed')
 
-<div class="max-w-7xl mx-auto px-4 py-8">
+<div class="max-w-7xl mx-auto px-4 py-2">
 
 
     <div class="mb-8 flex justify-between">
@@ -13,7 +13,7 @@
         <div class="">
             <h1 class="text-3xl font-bold text-slate-800 ">
 
-                Issued Certificates
+                Create Certificates
 
             </h1>
             <p class="text-slate-500 mt-2">
@@ -28,7 +28,7 @@
 
             </p>
         </div>
-        <a href="{{ route('instructor.certificate.create',$course) }}" class="group h-10 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-5 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30">
+        <a href="{{ route('instructor.certificate.create',$course) }}" class="group h-10 inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-700 px-5 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30">
             <svg class="h-5 w-5 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>Create</a>
@@ -37,7 +37,7 @@
 
     <div class="flex gap-3 mb-6">
         <button
-            class="tabBtn bg-violet-600 text-white px-5 py-2 rounded-xl"
+            class="tabBtn bg-indigo-600 text-white px-5 py-2 rounded-xl"
             data-tab="awarded">
             Awarded ({{ $awarded->total() }})
         </button>
@@ -57,7 +57,7 @@
 
             <table class="min-w-full">
 
-                <thead class="bg-violet-600 text-white">
+                <thead class="bg-indigo-600 text-white">
 
                     <tr>
 
@@ -86,7 +86,7 @@
 
                         </td>
 
-                        <td class="w-200">{{ $item->user->name }}</td>
+                        <td class="">{{ $item->user->name }}</td>
 
                         <td class="px-4">{{ $item->user->email }}</td>
 
@@ -110,7 +110,7 @@
                                 'course' => $course,
                                 'user' => $item->user
                             ]) }}"
-                                class="px-4 py-2 rounded-lg bg-violet-600 text-white">
+                                class="px-4 py-2 mr-3 rounded-lg bg-indigo-600 text-white">
 
                                 View
 
@@ -558,7 +558,7 @@ text-slate-500
 
             document.querySelectorAll('.tabBtn').forEach(b => {
 
-                b.classList.remove('bg-violet-600', 'text-white');
+                b.classList.remove('bg-indigo-600', 'text-white');
 
                 b.classList.add('bg-gray-100');
 
@@ -566,7 +566,7 @@ text-slate-500
 
             this.classList.remove('bg-gray-100');
 
-            this.classList.add('bg-violet-600', 'text-white');
+            this.classList.add('bg-indigo-600', 'text-white');
 
         }
 

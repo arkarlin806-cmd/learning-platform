@@ -167,6 +167,10 @@
                                 @selected(old('status',$course->status)=='published')>
                                 Published
                             </option>
+                            <option value="completed"
+                                @selected(old('status',$course->status)=='completed')>
+                                Completed
+                            </option>
 
                         </select>
 

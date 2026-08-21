@@ -171,7 +171,7 @@
                         </label>
 
                         <input
-                            type="email"
+                            type="email" required
                             value="{{ auth()->user()->email }}"
                             disabled
                             class="w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-3">
@@ -187,7 +187,7 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="number" maxlength="12" required
                             name="phone"
                             value="{{ old('phone') }}"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500">
@@ -213,7 +213,7 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="text" maxlength="20" required
                             name="profession"
                             value="{{ old('profession') }}"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500">
@@ -239,7 +239,7 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="text" maxlength="20" required
                             name="experience"
                             value="{{ old('experience') }}"
                             placeholder="Example : 5 Years Laravel Developer"
@@ -266,7 +266,7 @@
                         </label>
 
                         <textarea
-                            name="bio"
+                            name="bio" maxlength="150" required
                             rows="6"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3"
                             placeholder="Introduce yourself...">{{ old('bio') }}</textarea>
@@ -293,7 +293,7 @@
                             class="border-2 border-dashed border-blue-200 rounded-2xl p-6 bg-blue-50">
 
                             <input
-                                type="file"
+                                type="file" required
                                 name="cv"
                                 accept=".pdf,.doc,.docx"
                                 class="w-full">
@@ -329,7 +329,7 @@
                             class="border-2 border-dashed border-green-200 rounded-2xl p-6 bg-green-50">
 
                             <input
-                                type="file"
+                                type="file" required
                                 name="certificate"
                                 accept=".jpg,.jpeg,.png,.pdf"
                                 class="w-full">

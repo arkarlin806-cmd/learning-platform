@@ -94,8 +94,8 @@
                     About
                 </a>
                 <a href="{{ route('chat.index') }}"
-                    data-en="Free Course"
-                    data-mm="Free Course"
+                    data-en="AI Chatbot"
+                    data-mm="AI Chatbot"
                     class="text-gray-700 dark:text-white hover:text-blue-600
                               transition duration-300 relative after:absolute after:left-0 after:-bottom-1
                               after:w-0 after:h-[2px] after:bg-blue-600 hover:after:w-full

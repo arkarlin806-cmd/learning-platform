@@ -92,9 +92,10 @@
              <div class="grid grid-cols-12 gap-6 items-center"> {{-- Instructor --}}
                  <div class="col-span-3">
                      <div class="flex items-center gap-4">
-                         <img src="{{ $withdraw->instructor->avatar ? asset('storage/'.$withdraw->instructor->avatar) : 
+                         <img src="{{ $withdraw->instructor->avatar ? asset('images/avatars/' . $withdraw->instructor->avatar) : 
                         asset('images/default-avatar.png') }}" class="h-16 w-16 rounded-2xl object-cover shadow">
                          <div>
+
                              <h3 class="font-bold text-gray-800"> {{ $withdraw->instructor->name }} </h3>
                              <p class="text-sm text-gray-500"> {{ $withdraw->instructor->email }} </p>
                              <span class="inline-flex mt-2 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs">
